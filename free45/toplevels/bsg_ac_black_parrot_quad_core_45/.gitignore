@@ -1,2 +1,10 @@
-out
-vc_hdrs.h
+# External Repos
+basejump_stl/
+board/
+pre-alpha-release/
+bsg_packaging/
+bsg_cadenv/
+bsg_14/
+bsg_40/
+bsg_45/
+bsg_fakeram/
