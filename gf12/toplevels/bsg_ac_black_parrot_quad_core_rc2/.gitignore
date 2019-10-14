@@ -1,2 +1,6 @@
-out
-vc_hdrs.h
+basejump_stl/
+board/
+bsg_14/
+bsg_cadenv/
+bsg_packaging/
+pre-alpha-release/
