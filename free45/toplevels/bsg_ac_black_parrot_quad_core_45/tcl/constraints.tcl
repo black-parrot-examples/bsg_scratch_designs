@@ -55,7 +55,7 @@ set tag_clk_uncertainty_ps     20
 ## BP Tile Constraints
 ##
 
-if { ${DESIGN_NAME} == "bp_tile_node" } {
+if { ${DESIGN_NAME} == "bp_tile_node" || ${DESIGN_NAME} == "bp_processor"} {
 
   set core_clk_name           ${bp_clk_name}
   set core_clk_period_ps      ${bp_clk_period_ps}
@@ -82,8 +82,8 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   set mem_input_delay_ps  [expr ${mem_clk_period_ps}*(${input_delay_per}/100.0)]
   set mem_output_delay_ps [expr ${mem_clk_period_ps}*(${output_delay_per}/100.0)]
 
-  set driving_lib_cell "SC7P5T_INVX2_SSC14SL"
-  set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
+  set driving_lib_cell "INV_X2"
+  set load_lib_pin     "INV_X8/A"
 
   # Reg2Reg
   #create_clock -period ${core_clk_period_ps} -name ${core_clk_name} [get_ports core_clk_i]

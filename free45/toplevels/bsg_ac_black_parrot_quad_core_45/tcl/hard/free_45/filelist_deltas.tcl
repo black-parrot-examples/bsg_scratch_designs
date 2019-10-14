@@ -19,6 +19,10 @@ set bp_me_dir     ${black_parrot_dir}/bp_me
 #  $basejump_stl_dir/hard/gf_14/bsg_clk_gen/bsg_clk_gen_osc.v
 # list of files to replace
 set HARD_SWAP_FILELIST [join "
+  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync.v
+  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
+  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_2r1w_sync.v
 "]
 
 #  $basejump_stl_dir/hard/gf_14/bsg_clk_gen/bsg_rp_clk_gen_atomic_delay_tuner.v
