@@ -158,6 +158,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cce/bp_cce_msg.v
   $bp_me_dir/src/v/cce/bp_cce_pc.v
   $bp_me_dir/src/v/cce/bp_cce_pending.v
+  $bp_me_dir/src/v/cce/bp_cce_spec.v
   $bp_me_dir/src/v/cce/bp_cce_reg.v
   $bp_me_dir/src/v/cce/bp_cce_msg_cached.v
   $bp_me_dir/src/v/cce/bp_cce_msg_uncached.v
