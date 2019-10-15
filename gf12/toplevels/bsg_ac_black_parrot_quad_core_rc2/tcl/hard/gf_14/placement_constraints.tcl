@@ -221,7 +221,7 @@ set_macro_relative_location \
 ### CCE Directory
 ###
 
-set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*bp_cce/directory/directory/*"]
+set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*cce/directory/directory/*"]
 set directory_mem_height [get_attribute -objects [index_collection $directory_mems 0] -name height]
 set directory_mem_width [get_attribute -objects [index_collection $directory_mems 0] -name width]
 set directory_ma [create_macro_array \
@@ -247,7 +247,7 @@ create_keepout_margin -type hard -outer $keepout_margins $directory_mems
 ### CCE Instance
 ###
 
-set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/bp_cce/*inst_ram*"]
+set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*cce/*inst_ram*"]
 set cce_instr_width [get_attribute -objects $cce_instr_ram -name width]
 set cce_instr_height [get_attribute -objects $cce_instr_ram -name height]
 set_macro_relative_location \
