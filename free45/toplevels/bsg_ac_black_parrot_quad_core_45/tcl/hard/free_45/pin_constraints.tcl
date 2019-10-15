@@ -3,7 +3,7 @@ remove_block_pin_constraints
 
 ### Just make sure that other layers are not used.
 
-set_block_pin_constraints -allowed_layers { C4 C5 K1 K2 K3 K4 }
+set_block_pin_constraints -allowed_layers { metal3 metal2 metal5 metal4 }
 
 # Master instance of the BP tile mibs
 set master_tile "y_0__x_0__tile_node"
@@ -84,39 +84,37 @@ set tile_mem_resp_pins_i_W [index_collection $tile_mem_resp_pins_i  [expr 3*$til
 
 # 0.04 = tile_height to track spacing
 # 0.08*N = N tracks of space
-# East/West pins - C4, K1
-set start_y [expr 0.04 + 0.8*40]
-set last_loc [bsg_pins_line_constraint $tile_req_pins_i_E      "C4" right $start_y               $master_tile $tile_req_pins_o_W      1 0]
-set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_E     "C4" right [expr $last_loc+0.160] $master_tile $tile_resp_pins_o_W     1 0]
-set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_E      "C4" right [expr $last_loc+0.160] $master_tile $tile_cmd_pins_o_W      1 0]
+# East/West pins - metal3, metal5
+set start_y [expr 0.280*40]
+set last_loc [bsg_pins_line_constraint $tile_req_pins_i_E      "metal4" right $start_y               $master_tile $tile_req_pins_o_W      1 0]
+set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_E     "metal4" right [expr $last_loc+0.560] $master_tile $tile_resp_pins_o_W     1 0]
+set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_E      "metal4" right [expr $last_loc+0.560] $master_tile $tile_cmd_pins_o_W      1 0]
 
-set last_loc [bsg_pins_line_constraint $tile_req_pins_o_E      "C4" right [expr $last_loc+0.160] $master_tile $tile_req_pins_i_W      1 0]
-set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_E     "C4" right [expr $last_loc+0.160] $master_tile $tile_resp_pins_i_W     1 0]
-set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_E      "C4" right [expr $last_loc+0.160] $master_tile $tile_cmd_pins_i_W      1 0]
+set last_loc [bsg_pins_line_constraint $tile_req_pins_o_E      "metal4" right [expr $last_loc+0.560] $master_tile $tile_req_pins_i_W      1 0]
+set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_E     "metal4" right [expr $last_loc+0.560] $master_tile $tile_resp_pins_i_W     1 0]
+set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_E      "metal4" right [expr $last_loc+0.560] $master_tile $tile_cmd_pins_i_W      1 0]
 
-set start_y [expr 0.104 + 0.128*40]
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_E  "K1" right $start_y               $master_tile $tile_mem_cmd_pins_o_W  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_E "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_o_W 1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_E  "metal4" right $start_y               $master_tile $tile_mem_cmd_pins_o_W  1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_E "metal4" right [expr $last_loc+0.560] $master_tile $tile_mem_resp_pins_o_W 1 0]
 
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o_E  "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_cmd_pins_i_W  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_E "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_i_W 1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o_E  "metal4" right [expr $last_loc+0.560] $master_tile $tile_mem_cmd_pins_i_W  1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_E "metal4" right [expr $last_loc+0.560] $master_tile $tile_mem_resp_pins_i_W 1 0]
 
-# North/South pins - C5, K2
-set start_x  [expr 0.04 + 0.8*40]
-set last_loc [bsg_pins_line_constraint $tile_req_pins_i_N      "C5" top   $start_y               $master_tile $tile_req_pins_o_S      1 0]
-set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_N     "C5" top   [expr $last_loc+0.160] $master_tile $tile_resp_pins_o_S     1 0]
-set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_N      "C5" top   [expr $last_loc+0.160] $master_tile $tile_cmd_pins_o_S      1 0]
+# North/South pins - metal2, metal4
+set start_x  [expr 0.280*40]
+set last_loc [bsg_pins_line_constraint $tile_req_pins_i_N      "metal5" top   $start_y               $master_tile $tile_req_pins_o_S      1 0]
+set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_N     "metal5" top   [expr $last_loc+0.560] $master_tile $tile_resp_pins_o_S     1 0]
+set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_N      "metal5" top   [expr $last_loc+0.560] $master_tile $tile_cmd_pins_o_S      1 0]
 
-set last_loc [bsg_pins_line_constraint $tile_req_pins_o_N      "C5" top   [expr $last_loc+0.160] $master_tile $tile_req_pins_i_S      1 0]
-set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_N     "C5" top   [expr $last_loc+0.160] $master_tile $tile_resp_pins_i_S     1 0]
-set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_N      "C5" top   [expr $last_loc+0.160] $master_tile $tile_cmd_pins_i_S      1 0]
+set last_loc [bsg_pins_line_constraint $tile_req_pins_o_N      "metal5" top   [expr $last_loc+0.560] $master_tile $tile_req_pins_i_S      1 0]
+set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_N     "metal5" top   [expr $last_loc+0.560] $master_tile $tile_resp_pins_i_S     1 0]
+set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_N      "metal5" top   [expr $last_loc+0.560] $master_tile $tile_cmd_pins_i_S      1 0]
 
-set start_x [expr 0.104 + 0.128*40]
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_N  "K2" top   $start_y               $master_tile $tile_mem_cmd_pins_o_S  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_N "K2" top   [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_o_S 1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_N  "metal5" top   $start_y               $master_tile $tile_mem_cmd_pins_o_S  1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_N "metal5" top   [expr $last_loc+0.560] $master_tile $tile_mem_resp_pins_o_S 1 0]
 
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o_N  "K2" top   [expr $last_loc+0.256] $master_tile $tile_mem_cmd_pins_i_S  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_N "K2" top   [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_i_S 1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o_N  "metal5" top   [expr $last_loc+0.560] $master_tile $tile_mem_cmd_pins_i_S  1 0]
+set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_N "metal5" top   [expr $last_loc+0.560] $master_tile $tile_mem_resp_pins_i_S 1 0]
 
 ################################################################################
 ###
@@ -125,12 +123,29 @@ set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_N "K2" top   [expr 
 
 set                  misc_pins [get_pins -hier $master_tile/* -filter "name=~*clk_i"]
 append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*reset_i"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~proc_cfg_i*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~cfg*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~my*"]
 append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*cord*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*int_i*"]
+append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*irq_i*"]
 
-set start_x [expr 0.128 * 1800]
-set last_loc [bsg_pins_line_constraint $misc_pins "K4" top $start_x $master_tile {} 2 0]
+set start_x [expr 0.280 * 1800]
+set last_loc [bsg_pins_line_constraint $misc_pins "metal5" top $start_x $master_tile {} 2 0]
+
+### Set ports for top level
+set prev_pins [get_ports "prev*"]
+set next_pins [get_ports "next_*"]
+set slow_pins [get_ports "*clk*"]
+append_to_collection slow_pins [get_ports "*reset*"]
+append_to_collection slow_pins [get_ports "*cord*"]
+
+set start_y [expr 0.280*480]
+set last_loc [bsg_pins_line_constraint $prev_pins "metal4" left $start_y self {} 1 0]
+
+set start_y [expr 2500 - 0.280*480]
+set last_loc [bsg_pins_line_constraint $next_pins "metal4" right $start_y self {} 1 0]
+
+set start_x [expr 1200]
+set last_loc [bsg_pins_line_constraint $slow_pins "metal5" top $start_x self {} 1 0]
+
+
+
+
 

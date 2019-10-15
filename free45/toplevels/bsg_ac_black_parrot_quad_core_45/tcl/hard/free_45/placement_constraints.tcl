@@ -44,7 +44,7 @@ set mem_complex_urx [expr $end_tile_llx + $tile_width]
 set mem_complex_ury [round_up_to_nearest [expr $tile_top + 200] [unit_height]]
 
 set mem_complex_bound [create_bound -name "mem_complex" -type soft -boundary [list [list $mem_complex_llx $mem_complex_lly] [list $mem_complex_urx $mem_complex_ury]]]
-add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*/mc/*"]
+add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*mc/*"]
 
 ## BP Tile bounds
 current_design bp_tile_node
@@ -268,7 +268,7 @@ create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 
 set int_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/int_regfile/*"]
 set int_regfile_ma [create_macro_array \
-  -num_rows 1 \
+  -num_rows 2 \
   -num_cols 2 \
   -align left \
   -horizontal_channel_height [expr 2*$keepout_margin_y] \
