@@ -46,18 +46,6 @@ set mem_complex_ury [round_up_to_nearest [expr $tile_top + 200] [unit_height]]
 set mem_complex_bound [create_bound -name "mem_complex" -type soft -boundary [list [list $mem_complex_llx $mem_complex_lly] [list $mem_complex_urx $mem_complex_ury]]]
 add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*/mc/*"]
 
-set prev_uplink_bound [create_bound -name "prev_uplink" -type soft -boundary {{237.0180 2014.3200} {307.1580 2763.1200}}]
-add_to_bound ${prev_uplink_bound} [get_cells -hier -filter "full_name=~prev/uplink/*"]
-
-set prev_downlink_bound [create_bound -name "prev_downlink" -type soft -boundary {{307.1580 2697.3600} {1040.0580 2763.1200}}]
-add_to_bound ${prev_downlink_bound} [get_cells -hier -filter "full_name=~prev/downlink/*"]
-
-set next_downlink_bound [create_bound -name "next_downlink" -type soft -boundary {{2692.8420 2014.3200} {2762.9820 2763.1200}}]
-add_to_bound ${next_downlink_bound} [get_cells -hier -filter "full_name=~next/downlink/*"]
-
-set next_uplink_bound [create_bound -name "next_uplink" -type soft -boundary {{1959.9420 2697.3600} {2692.8420 2763.1200}}]
-add_to_bound ${next_uplink_bound} [get_cells -hier -filter "full_name=~next/uplink/*"]
-
 ## BP Tile bounds
 current_design bp_tile_node
 
@@ -92,7 +80,7 @@ remove_edit_groups -all
 ### I CACHE DATA
 ###
 
-set icache_data_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/icache/data_mems_*"]
+set icache_data_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/icache/data_mems_*"]
 set icache_data_ma [create_macro_array \
   -num_rows 2 \
   -num_cols 4 \
@@ -116,7 +104,7 @@ set_macro_relative_location \
 ### I CACHE TAG
 ###
 
-set icache_tag_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/icache/tag_mem*"]
+set icache_tag_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/icache/tag_mem*"]
 set icache_tag_ma [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
@@ -141,7 +129,7 @@ set_macro_relative_location \
 ### I CACHE STAT
 ###
 
-#set icache_stat_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/icache/stat_mem/*"]
+#set icache_stat_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/icache/stat_mem/*"]
 #set icache_stat_margin 0
 #set_macro_relative_location \
 #  -target_object $icache_stat_mem \
@@ -157,7 +145,7 @@ set_macro_relative_location \
 ### D CACHE DATA
 ###
 
-set dcache_data_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/dcache/data_mem_*"]
+set dcache_data_mems [get_cells -hier -filter "ref_name=~free45_* && full_name=~*/dcache/data_mem_*"]
 set dcache_data_ma [create_macro_array \
   -num_rows 2 \
   -num_cols 4 \
@@ -180,7 +168,7 @@ set_macro_relative_location \
 ### D CACHE TAG
 ###
 
-set dcache_tag_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/dcache/tag_mem*"]
+set dcache_tag_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/dcache/tag_mem*"]
 set dcache_tag_ma [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
@@ -205,7 +193,7 @@ set_macro_relative_location \
 ### D CACHE STAT
 ###
 
-#set dcache_stat_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/dcache/stat_mem*"]
+#set dcache_stat_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/dcache/stat_mem*"]
 #set dcache_stat_margin 0
 #set_macro_relative_location \
 #  -target_object $dcache_stat_mem \
@@ -221,7 +209,7 @@ set_macro_relative_location \
 ### CCE Directory
 ###
 
-set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*bp_cce/directory/directory/*"]
+set directory_mems [get_cells -hier -filter "ref_name=~free45_* && full_name=~*cce/directory/directory/*"]
 set directory_mem_height [get_attribute -objects [index_collection $directory_mems 0] -name height]
 set directory_mem_width [get_attribute -objects [index_collection $directory_mems 0] -name width]
 set directory_ma [create_macro_array \
@@ -247,7 +235,7 @@ create_keepout_margin -type hard -outer $keepout_margins $directory_mems
 ### CCE Instance
 ###
 
-set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/bp_cce/*inst_ram*"]
+set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*cce/*inst_ram*"]
 set cce_instr_width [get_attribute -objects $cce_instr_ram -name width]
 set cce_instr_height [get_attribute -objects $cce_instr_ram -name height]
 set_macro_relative_location \
@@ -264,7 +252,7 @@ create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 ### BTB Memory
 ###
 
-#set btb_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/btb/*"]
+#set btb_mem [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/btb/*"]
 #set_macro_relative_location \
 #  -target_object $btb_mem \
 #  -target_corner br \
@@ -278,7 +266,7 @@ create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 ### INT RF
 ###
 
-set int_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/int_regfile/*"]
+set int_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~free45_* && full_name=~*/int_regfile/*"]
 set int_regfile_ma [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
@@ -298,4 +286,4 @@ set_macro_relative_location \
 
 create_keepout_margin -type hard -outer $keepout_margins $int_regfile_mems
 
-current_design bsg_chip
+current_design bp_processor

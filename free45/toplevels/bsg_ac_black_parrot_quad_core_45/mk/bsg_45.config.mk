@@ -14,8 +14,8 @@ export BSG_TOPLEVEL_DESIGN_TYPE :=block
 # block. If there is only a single block in your design's hier.mk, this
 # variable has no affect and is effectively  forced to flat.
 
-#export BSG_FLOW_STYLE :=hier
-export BSG_FLOW_STYLE :=flat
+export BSG_FLOW_STYLE :=hier
+#export BSG_FLOW_STYLE :=flat
 
 # Select the target package. Inside of bsg_packaging there multiple packages to
 # choose from that determine the intended package for the ASIC.
