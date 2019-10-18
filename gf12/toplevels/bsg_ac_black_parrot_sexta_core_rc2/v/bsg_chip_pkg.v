@@ -24,7 +24,7 @@ package bsg_chip_pkg;
   localparam bp_num_core_gp     = 16;
   localparam bp_num_mem_gp      = 6;
   localparam bp_num_router_gp   = bp_num_core_gp + bp_num_mem_gp;
-  localparam bp_cfg_e bp_cfg_gp = e_bp_sexta_core_cfg;
+  localparam bp_params_e bp_cfg_gp = e_bp_sexta_core_cfg;
 
   //////////////////////////////////////////////////
   //

@@ -38,10 +38,10 @@ set end_tile_right  [expr $end_tile_llx+$end_tile_width]
 set end_tile_bottom $end_tile_lly                        
 set end_tile_top    [expr $end_tile_lly+$end_tile_height]
 
-set mem_complex_llx [expr $tile_left + 50]
+set mem_complex_llx [expr $tile_left]
 set mem_complex_lly [expr $tile_top]
-set mem_complex_urx [expr $end_tile_llx + $tile_width - 50]
-set mem_complex_ury [round_up_to_nearest [expr $tile_top + 150] [unit_height]]
+set mem_complex_urx [expr $end_tile_llx + $tile_width]
+set mem_complex_ury [round_up_to_nearest [expr $tile_top + 200] [unit_height]]
 
 set mem_complex_bound [create_bound -name "mem_complex" -type soft -boundary [list [list $mem_complex_llx $mem_complex_lly] [list $mem_complex_urx $mem_complex_ury]]]
 add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*/mc/*"]
@@ -221,7 +221,7 @@ set_macro_relative_location \
 ### CCE Directory
 ###
 
-set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*bp_cce/directory/directory/*"]
+set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*cce/directory/directory/*"]
 set directory_mem_height [get_attribute -objects [index_collection $directory_mems 0] -name height]
 set directory_mem_width [get_attribute -objects [index_collection $directory_mems 0] -name width]
 set directory_ma [create_macro_array \
@@ -247,7 +247,7 @@ create_keepout_margin -type hard -outer $keepout_margins $directory_mems
 ### CCE Instance
 ###
 
-set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/bp_cce/*inst_ram*"]
+set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*cce/*inst_ram*"]
 set cce_instr_width [get_attribute -objects $cce_instr_ram -name width]
 set cce_instr_height [get_attribute -objects $cce_instr_ram -name height]
 set_macro_relative_location \
