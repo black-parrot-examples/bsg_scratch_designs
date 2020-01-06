@@ -335,12 +335,12 @@ import bsg_wormhole_router_pkg::*;
 
       for (i = 0; i < num_in_p; i++)
         begin: ct
-          bsg_wormhole_router_generalized #(.flit_width_p      ( ct_width_p )
-                                           ,.dims_p            ( 1 )
-                                           ,.cord_markers_pos_p( wh_cord_markers_pos_p )
-                                           ,.routing_matrix_p  ( StrictX )
-                                           ,.len_width_p       ( wh_len_width_p )
-                                           )   
+          bsg_wormhole_router #(.flit_width_p      ( ct_width_p )
+                               ,.dims_p            ( 1 )
+                               ,.cord_markers_pos_p( wh_cord_markers_pos_p )
+                               ,.routing_matrix_p  ( StrictX )
+                               ,.len_width_p       ( wh_len_width_p )
+                               )   
             rtr
               (.clk_i    ( core_clk_i )
               ,.reset_i  ( rtr_core_tag_data_lo[j].reset )

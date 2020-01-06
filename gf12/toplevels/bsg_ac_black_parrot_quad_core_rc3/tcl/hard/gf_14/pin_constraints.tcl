@@ -33,8 +33,8 @@ set tile_mem_resp_pins_i  [get_pins -hier $master_tile/* -filter "name=~mem_resp
 set tile_req_pin_len       [expr [sizeof_collection $tile_req_pins_o] / 4]
 set tile_cmd_pin_len       [expr [sizeof_collection $tile_cmd_pins_o] / 4]
 set tile_resp_pin_len      [expr [sizeof_collection $tile_resp_pins_o] / 4]
-set tile_mem_cmd_pin_len   [expr [sizeof_collection $tile_mem_cmd_pins_o] / 4]
-set tile_mem_resp_pin_len  [expr [sizeof_collection $tile_mem_resp_pins_o] / 4]
+set tile_mem_cmd_pin_len   [expr [sizeof_collection $tile_mem_cmd_pins_o] / 2]
+set tile_mem_resp_pin_len  [expr [sizeof_collection $tile_mem_resp_pins_o] / 2]
 
 # TODO: Refactor make list indexed by NSEW
 set tile_req_pins_o_S      [index_collection $tile_req_pins_o       [expr 0*$tile_req_pin_len]        [expr 1*$tile_req_pin_len-1]]
@@ -65,10 +65,6 @@ set tile_cmd_pins_o_E      [index_collection $tile_cmd_pins_o       [expr 2*$til
 set tile_cmd_pins_i_E      [index_collection $tile_cmd_pins_i       [expr 2*$tile_cmd_pin_len]        [expr 3*$tile_cmd_pin_len-1]]
 set tile_resp_pins_o_E     [index_collection $tile_resp_pins_o      [expr 2*$tile_resp_pin_len]       [expr 3*$tile_resp_pin_len-1]]
 set tile_resp_pins_i_E     [index_collection $tile_resp_pins_i      [expr 2*$tile_resp_pin_len]       [expr 3*$tile_resp_pin_len-1]]
-set tile_mem_cmd_pins_o_E  [index_collection $tile_mem_cmd_pins_o   [expr 2*$tile_mem_cmd_pin_len]    [expr 3*$tile_mem_cmd_pin_len-1]]
-set tile_mem_cmd_pins_i_E  [index_collection $tile_mem_cmd_pins_i   [expr 2*$tile_mem_cmd_pin_len]    [expr 3*$tile_mem_cmd_pin_len-1]]
-set tile_mem_resp_pins_o_E [index_collection $tile_mem_resp_pins_o  [expr 2*$tile_mem_resp_pin_len]   [expr 3*$tile_mem_resp_pin_len-1]]
-set tile_mem_resp_pins_i_E [index_collection $tile_mem_resp_pins_i  [expr 2*$tile_mem_resp_pin_len]   [expr 3*$tile_mem_resp_pin_len-1]]
 
 set tile_req_pins_o_W      [index_collection $tile_req_pins_o       [expr 3*$tile_req_pin_len]        [expr 4*$tile_req_pin_len-1]]
 set tile_req_pins_i_W      [index_collection $tile_req_pins_i       [expr 3*$tile_req_pin_len]        [expr 4*$tile_req_pin_len-1]]
@@ -76,16 +72,11 @@ set tile_cmd_pins_o_W      [index_collection $tile_cmd_pins_o       [expr 3*$til
 set tile_cmd_pins_i_W      [index_collection $tile_cmd_pins_i       [expr 3*$tile_cmd_pin_len]        [expr 4*$tile_cmd_pin_len-1]]
 set tile_resp_pins_o_W     [index_collection $tile_resp_pins_o      [expr 3*$tile_resp_pin_len]       [expr 4*$tile_resp_pin_len-1]]
 set tile_resp_pins_i_W     [index_collection $tile_resp_pins_i      [expr 3*$tile_resp_pin_len]       [expr 4*$tile_resp_pin_len-1]]
-set tile_mem_cmd_pins_o_W  [index_collection $tile_mem_cmd_pins_o   [expr 3*$tile_mem_cmd_pin_len]    [expr 4*$tile_mem_cmd_pin_len-1]]
-set tile_mem_cmd_pins_i_W  [index_collection $tile_mem_cmd_pins_i   [expr 3*$tile_mem_cmd_pin_len]    [expr 4*$tile_mem_cmd_pin_len-1]]
-set tile_mem_resp_pins_o_W [index_collection $tile_mem_resp_pins_o  [expr 3*$tile_mem_resp_pin_len]   [expr 4*$tile_mem_resp_pin_len-1]]
-set tile_mem_resp_pins_i_W [index_collection $tile_mem_resp_pins_i  [expr 3*$tile_mem_resp_pin_len]   [expr 4*$tile_mem_resp_pin_len-1]]
-
 
 # 0.04 = tile_height to track spacing
 # 0.08*N = N tracks of space
 # East/West pins - C4, K1
-set start_y [expr 0.04 + 0.8*40]
+set start_y [expr 0.04 + 0.8*300]
 set last_loc [bsg_pins_line_constraint $tile_req_pins_i_E      "C4" right $start_y               $master_tile $tile_req_pins_o_W      1 0]
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_E     "C4" right [expr $last_loc+0.160] $master_tile $tile_resp_pins_o_W     1 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_E      "C4" right [expr $last_loc+0.160] $master_tile $tile_cmd_pins_o_W      1 0]
@@ -94,15 +85,8 @@ set last_loc [bsg_pins_line_constraint $tile_req_pins_o_E      "C4" right [expr 
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_E     "C4" right [expr $last_loc+0.160] $master_tile $tile_resp_pins_i_W     1 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_E      "C4" right [expr $last_loc+0.160] $master_tile $tile_cmd_pins_i_W      1 0]
 
-set start_y [expr 0.104 + 0.128*40]
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_E  "K1" right $start_y               $master_tile $tile_mem_cmd_pins_o_W  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_E "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_o_W 1 0]
-
-set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o_E  "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_cmd_pins_i_W  1 0]
-set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_E "K1" right [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_i_W 1 0]
-
 # North/South pins - C5, K2
-set start_x  [expr 0.04 + 0.8*40]
+set start_x  [expr 0.04 + 0.8*600]
 set last_loc [bsg_pins_line_constraint $tile_req_pins_i_N      "C5" top   $start_y               $master_tile $tile_req_pins_o_S      1 0]
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_N     "C5" top   [expr $last_loc+0.160] $master_tile $tile_resp_pins_o_S     1 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_N      "C5" top   [expr $last_loc+0.160] $master_tile $tile_cmd_pins_o_S      1 0]
@@ -111,7 +95,7 @@ set last_loc [bsg_pins_line_constraint $tile_req_pins_o_N      "C5" top   [expr 
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_N     "C5" top   [expr $last_loc+0.160] $master_tile $tile_resp_pins_i_S     1 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_N      "C5" top   [expr $last_loc+0.160] $master_tile $tile_cmd_pins_i_S      1 0]
 
-set start_x [expr 0.104 + 0.128*40]
+set start_x [expr 0.104 + 0.128*600]
 set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_i_N  "K2" top   $start_y               $master_tile $tile_mem_cmd_pins_o_S  1 0]
 set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_i_N "K2" top   [expr $last_loc+0.256] $master_tile $tile_mem_resp_pins_o_S 1 0]
 
@@ -125,12 +109,8 @@ set last_loc [bsg_pins_line_constraint $tile_mem_resp_pins_o_N "K2" top   [expr 
 
 set                  misc_pins [get_pins -hier $master_tile/* -filter "name=~*clk_i"]
 append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*reset_i"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~proc_cfg_i*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~cfg*"]
 append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~my*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*cord*"]
-append_to_collection misc_pins [get_pins -hier $master_tile/* -filter "name=~*int_i*"]
 
-set start_x [expr 0.128 * 1800]
+set start_x [expr 0.128 * 2000]
 set last_loc [bsg_pins_line_constraint $misc_pins "K4" top $start_x $master_tile {} 2 0]
 

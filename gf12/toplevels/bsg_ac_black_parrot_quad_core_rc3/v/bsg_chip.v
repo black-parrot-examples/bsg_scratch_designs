@@ -20,7 +20,8 @@ module bsg_chip
 `include "bsg_pinout.v"
 `include "bsg_iopads.v"
 
-  `declare_bsg_ready_and_link_sif_s(ct_width_gp, bsg_ready_and_link_sif_s);
+  `declare_bsg_ready_and_link_sif_s(ct_width_gp, ct_link_sif_s);
+  `declare_bsg_ready_and_link_sif_s(link_width_gp, bp_link_sif_s);
 
   //////////////////////////////////////////////////
   //
@@ -235,8 +236,8 @@ module bsg_chip
   // BSG Chip IO Complex
   //
 
-  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        prev_router_links_li, prev_router_links_lo;
-  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        next_router_links_li, next_router_links_lo;
+  ct_link_sif_s [ct_num_in_gp-1:0]        prev_router_links_li, prev_router_links_lo;
+  ct_link_sif_s [ct_num_in_gp-1:0]        next_router_links_li, next_router_links_lo;
 
   bsg_chip_io_complex_links_ct_fifo #(.link_width_p                        ( link_width_gp         )
                                      ,.link_channel_width_p                ( link_channel_width_gp )
@@ -311,11 +312,11 @@ module bsg_chip
   // BSG Chip BlackParrot
   //
 
-  bsg_ready_and_link_sif_s bp_prev_cmd_link_li, bp_prev_cmd_link_lo;
-  bsg_ready_and_link_sif_s bp_prev_resp_link_li, bp_prev_resp_link_lo;
+  bp_link_sif_s bp_prev_cmd_link_li, bp_prev_cmd_link_lo;
+  bp_link_sif_s bp_prev_resp_link_li, bp_prev_resp_link_lo;
 
-  bsg_ready_and_link_sif_s bp_next_cmd_link_li, bp_next_cmd_link_lo;
-  bsg_ready_and_link_sif_s bp_next_resp_link_li, bp_next_resp_link_lo;
+  bp_link_sif_s bp_next_cmd_link_li, bp_next_cmd_link_lo;
+  bp_link_sif_s bp_next_resp_link_li, bp_next_resp_link_lo;
   bp_processor #(.bp_params_p(bp_cfg_gp))
     bp_processor
       (.core_clk_i  ( bp_clk_lo )
