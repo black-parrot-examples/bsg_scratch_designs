@@ -22,11 +22,9 @@ package bsg_chip_pkg;
   //
   
   localparam bp_num_core_gp     = 4;
-  localparam bp_num_mem_gp      = 4;
-  localparam bp_num_router_gp   = bp_num_core_gp + bp_num_mem_gp;
   localparam bp_params_e bp_cfg_gp = e_bp_quad_core_cfg;
 
-  localparam wh_did_width_gp = 3;
+  localparam wh_did_width_gp = 8;
 
   //////////////////////////////////////////////////
   //
@@ -48,11 +46,6 @@ package bsg_chip_pkg;
   localparam ct_lg_credit_decimation_gp = `BSG_SAFE_CLOG2(ct_credit_decimation_gp/2+1);
   localparam ct_use_pseudo_large_fifo_gp = 1;
 
-  localparam wh_len_width_gp = 5;
-  localparam wh_cord_markers_pos_a_gp = 0;
-  localparam wh_cord_markers_pos_b_gp = 8;
-  localparam wh_cord_width_gp = wh_cord_markers_pos_b_gp - wh_cord_markers_pos_a_gp;
-
   //////////////////////////////////////////////////
   //
   // BSG CHIP TAG PARAMETERS AND STRUCTS
@@ -61,14 +54,12 @@ package bsg_chip_pkg;
   // Total number of clients the master will be driving.
   localparam tag_num_clients_gp = 38;
 
-  localparam tag_max_payload_width_in_io_complex_gp = (wh_cord_width_gp + 1);
-  localparam tag_max_payload_width_in_bp_complex_gp = (wh_cord_width_gp + 1);
+  localparam tag_max_payload_width_in_bp_complex_gp = (wh_did_width_gp + 1);
   localparam tag_max_payload_width_in_clk_gen_pd_gp = `BSG_MAX(clk_gen_ds_width_gp+1, clk_gen_num_adgs_gp+4);
 
-  localparam tag_max_payload_width_gp = `BSG_MAX(tag_max_payload_width_in_io_complex_gp
-                                        , `BSG_MAX(tag_max_payload_width_in_bp_complex_gp
+  localparam tag_max_payload_width_gp = `BSG_MAX(tag_max_payload_width_in_bp_complex_gp
                                         , `BSG_MAX(tag_max_payload_width_in_clk_gen_pd_gp
-                                        , 0)));
+                                        , 0));
 
   // The number of bits required to represent the max payload width
   localparam tag_lg_max_payload_width_gp = `BSG_SAFE_CLOG2(tag_max_payload_width_gp + 1);

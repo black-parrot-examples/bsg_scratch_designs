@@ -40,8 +40,6 @@ module bsg_chip
   bsg_tag_s [2:0] ds_tag_lines_lo;
   bsg_tag_s [2:0] sel_tag_lines_lo;
 
-  bsg_tag_s router_core_tag_lines_lo;
-
   assign async_reset_tag_lines_lo = tag_lines_lo[0];
   assign osc_tag_lines_lo         = tag_lines_lo[3:1];
   assign osc_trigger_tag_lines_lo = tag_lines_lo[6:4];
@@ -152,7 +150,6 @@ module bsg_chip
       ,.recv_new_r_o  ( host_tag_new_data_lo )
       ,.recv_data_r_o ( host_tag_data_lo )
       );
-
   wire host_reset_lo = host_tag_data_lo.reset;
   wire [wh_did_width_gp-1:0] host_did_lo = host_tag_data_lo.did;
 
@@ -167,8 +164,8 @@ module bsg_chip
       ,.recv_new_r_o  ( router_tag_new_data_lo )
       ,.recv_data_r_o ( router_tag_data_lo )
       );
-
   wire router_reset_lo = router_tag_data_lo.reset;
+  wire [wh_did_width_gp-1:0] router_did_lo = router_tag_data_lo.did;
 
   //////////////////////////////////////////////////
   //
@@ -344,8 +341,8 @@ module bsg_chip
       ,.mem_clk_i   ( router_clk_lo )
       ,.mem_reset_i ( router_reset_lo )
 
-      ,.my_did_i   ( core_did_lo )
-      ,.host_did_i ( host_did_lo )
+      ,.my_did_i   ( core_did_lo[0+:io_noc_did_width_p] )
+      ,.host_did_i ( host_did_lo[0+:io_noc_did_width_p] )
 
       ,.io_cmd_link_i({bp_next_cmd_link_li, bp_prev_cmd_link_li})
       ,.io_cmd_link_o({bp_next_cmd_link_lo, bp_prev_cmd_link_lo})
@@ -369,7 +366,7 @@ module bsg_chip
     (.clk_i(router_clk_lo)
     ,.reset_i(router_reset_lo)
 
-    ,.my_cord_i(core_did_lo)
+    ,.my_cord_i(router_did_lo[0+:io_noc_did_width_p])
 
     ,.link_i({bypass_link_li, dram_cmd_link_lo})
     ,.link_o({bypass_link_lo, dram_resp_link_li})

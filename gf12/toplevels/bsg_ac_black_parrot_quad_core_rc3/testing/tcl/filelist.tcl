@@ -43,6 +43,8 @@ set TESTING_SOURCE_FILES [join "
   $bp_me_dir/test/common/bp_mem_storage_sync.v
   $bp_me_dir/test/common/bp_mem_utils.cpp
   $bp_me_dir/test/common/bp_cce_mmio_cfg_loader.v
+  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_io_cmd.v
+  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_io_resp.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_cmd.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_resp.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_io_link_bidir.v
@@ -51,6 +53,7 @@ set TESTING_SOURCE_FILES [join "
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_master.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_client.v
   $bp_top_dir/test/common/bp_nonsynth_host.v
+  $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v
   $basejump_stl_dir/bsg_async/bsg_async_credit_counter.v
   $basejump_stl_dir/bsg_async/bsg_async_fifo.v
   $basejump_stl_dir/bsg_async/bsg_async_ptr_gray.v
@@ -62,9 +65,11 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_dataflow/bsg_channel_tunnel_out.v
   $basejump_stl_dir/bsg_dataflow/bsg_channel_tunnel.v
   $basejump_stl_dir/bsg_dataflow/bsg_channel_tunnel_wormhole.v
+  $basejump_stl_dir/bsg_dataflow/bsg_flow_counter.v
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_large.v
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_pseudo_large.v
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_small.v
+  $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_small_unhardened.v
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_1rw_large.v
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_tracker.v
   $basejump_stl_dir/bsg_dataflow/bsg_one_fifo.v

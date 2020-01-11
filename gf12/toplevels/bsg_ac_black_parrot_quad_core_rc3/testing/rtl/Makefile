@@ -44,7 +44,7 @@ export BLACKPARROT_ME_DIR     ?= $(BLACKPARROT_DIR)/bp_me
 # Common VCS Options (will be used most of the time by all corners)
 VCS_OPTIONS := -full64
 VCS_OPTIONS += -notice
-VCS_OPTIONS += -debug_pp
+VCS_OPTIONS += -debug_all
 VCS_OPTIONS += -V
 VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext
@@ -115,6 +115,9 @@ PROG     :=hello_world
 DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
 DRAM_SYS :=system.ini
 
+prog.nbf:
+	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).nbf $(BSG_OUT_DIR)/$@
+
 prog.mem:
 	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
 
@@ -147,11 +150,12 @@ view:
 	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
+$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
 
 $(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
 	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
+	ln -nsf $(BSG_DESIGNS_DIR)/modules $@/modules
 
 $(BSG_OUT_DIR):
 	mkdir -p $@
