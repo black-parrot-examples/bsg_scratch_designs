@@ -23,10 +23,9 @@ import bsg_chip_pkg::*;
 
 import bp_common_pkg::*;
 import bp_common_aviary_pkg::*;
+import bp_common_rv64_pkg::*;
 import bp_be_pkg::*;
-import bp_be_rv64_pkg::*;
 import bp_cce_pkg::*;
-import bp_cfg_link_pkg::*;
 
 `include "bsg_pinout_inverted.v"
 
@@ -361,6 +360,7 @@ import bp_cfg_link_pkg::*;
       ,.links_o  ( next_router_links_lo )
       );
 
+/*
   //////////////////////////////////////////////////
   //
   // BP Config Loader
@@ -390,9 +390,9 @@ import bp_cfg_link_pkg::*;
 
   localparam bp_proc_param_s proc_param_lp = all_cfgs_gp[bp_cfg_gp];
   `declare_bp_me_if(proc_param_lp.paddr_width, proc_param_lp.cce_block_width, proc_param_lp.num_lce, proc_param_lp.lce_assoc);
-  bp_cce_mem_cmd_s      cfg_cmd_lo;
+  bp_cce_mem_msg_s      cfg_cmd_lo;
   logic                 cfg_cmd_v_lo, cfg_cmd_ready_li;
-  bp_mem_cce_resp_s     cfg_resp_li;
+  bp_cce_mem_msg_s      cfg_resp_li;
   logic                 cfg_resp_v_li, cfg_resp_ready_lo;
   bp_cce_mmio_cfg_loader
    #(.cfg_p(bp_cfg_gp)
@@ -442,9 +442,9 @@ import bp_cfg_link_pkg::*;
      ,.resp_link_o(cfg_resp_link_lo)
      );
 
-  bp_cce_mem_cmd_s           host_cmd_li;
+  bp_cce_mem_msg_s           host_cmd_li;
   logic                      host_cmd_v_li, host_cmd_yumi_lo;
-  bp_mem_cce_resp_s          host_resp_lo;
+  bp_cce_mem_msg_s           host_resp_lo;
   logic                      host_resp_v_lo, host_resp_ready_li;
   logic [bp_num_core_gp-1:0] program_finish_lo;
   bp_nonsynth_host
@@ -464,9 +464,9 @@ import bp_cfg_link_pkg::*;
      ,.program_finish_o(program_finish_lo)
      );
 
-  bp_cce_mem_cmd_s       dram_cmd_li;
+  bp_cce_mem_msg_s       dram_cmd_li;
   logic                  dram_cmd_v_li, dram_cmd_yumi_lo;
-  bp_mem_cce_resp_s      dram_resp_lo;
+  bp_cce_mem_msg_s       dram_resp_lo;
   logic                  dram_resp_v_lo, dram_resp_ready_li;
   bp_mem
    #(.cfg_p(bp_cfg_gp)
@@ -492,9 +492,9 @@ import bp_cfg_link_pkg::*;
      ,.mem_resp_ready_i(dram_resp_ready_li)
      );
 
-  bp_cce_mem_cmd_s       mem_cmd_lo;
+  bp_cce_mem_msg_s       mem_cmd_lo;
   logic                  mem_cmd_v_lo, mem_cmd_yumi_li;
-  bp_mem_cce_resp_s      mem_resp_li;
+  bp_cce_mem_msg_s       mem_resp_li;
   logic                  mem_resp_v_li, mem_resp_ready_lo;
   bp_me_cce_to_wormhole_link_client
    #(.cfg_p(bp_cfg_gp))
@@ -555,6 +555,6 @@ import bp_cfg_link_pkg::*;
 
   assign gw_cmd_link_li  = next_router_links_lo[0];
   assign gw_resp_link_li = next_router_links_lo[1];
- 
+ */
 endmodule
 

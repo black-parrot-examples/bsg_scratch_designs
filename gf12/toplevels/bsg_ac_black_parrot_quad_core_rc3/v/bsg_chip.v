@@ -14,6 +14,8 @@
 module bsg_chip
  import bp_common_pkg::*;
  import bp_common_aviary_pkg::*;
+ import bsg_noc_pkg::*;
+ import bsg_wormhole_router_pkg::*;
  import bsg_tag_pkg::*;
  import bsg_chip_pkg::*;
  #(localparam bp_params_e bp_params_p = e_bp_quad_core_cfg `declare_bp_proc_params(bp_params_p))
@@ -38,7 +40,7 @@ module bsg_chip
   bsg_tag_s [2:0] ds_tag_lines_lo;
   bsg_tag_s [2:0] sel_tag_lines_lo;
 
-  bsg_tag_s [bp_num_router_gp-1:0] router_core_tag_lines_lo;
+  bsg_tag_s router_core_tag_lines_lo;
 
   assign async_reset_tag_lines_lo = tag_lines_lo[0];
   assign osc_tag_lines_lo         = tag_lines_lo[3:1];
@@ -53,9 +55,9 @@ module bsg_chip
   wire bsg_tag_s next_link_io_tag_lines_lo   = tag_lines_lo[16];
   wire bsg_tag_s next_link_core_tag_lines_lo = tag_lines_lo[17];
   wire bsg_tag_s next_ct_core_tag_lines_lo   = tag_lines_lo[18];
-  assign router_core_tag_lines_lo            = tag_lines_lo[19+:bp_num_router_gp];
-  //wire bsg_tag_s cfg_tag_line_lo             = tag_lines_lo[tag_num_clients_gp-2];
-  wire bsg_tag_s bp_core_tag_line_lo         = tag_lines_lo[tag_num_clients_gp-1];
+  wire bsg_tag_s bp_core_tag_lines_lo        = tag_lines_lo[19];
+  wire bsg_tag_s host_core_tag_lines_lo      = tag_lines_lo[20];
+  wire bsg_tag_s router_tag_lines_lo         = tag_lines_lo[21];
 
   // BSG tag master instance
   bsg_tag_master #(.els_p( tag_num_clients_gp )
@@ -120,46 +122,53 @@ module bsg_chip
   // Tag payload for bp control signals
   typedef struct packed { 
       logic reset;
-      logic [wh_cord_width_gp-1:0] cord;
+      logic [wh_did_width_gp-1:0] did;
   } bp_tag_payload_s;
 
   // Tag payload for bp control signals
-  bp_tag_payload_s bp_tag_data_lo;
-  logic            bp_tag_new_data_lo;
+  bp_tag_payload_s core_tag_data_lo;
+  logic            core_tag_new_data_lo;
 
   bsg_tag_client #(.width_p( $bits(bp_tag_payload_s) ), .default_p( 0 ))
     btc_bp
-      (.bsg_tag_i     ( bp_core_tag_line_lo )
+      (.bsg_tag_i     ( bp_core_tag_lines_lo )
       ,.recv_clk_i    ( bp_clk_lo )
       ,.recv_reset_i  ( 1'b0 )
-      ,.recv_new_r_o  ( bp_tag_new_data_lo )
-      ,.recv_data_r_o ( bp_tag_data_lo )
+      ,.recv_new_r_o  ( core_tag_new_data_lo )
+      ,.recv_data_r_o ( core_tag_data_lo )
+      );
+  wire core_reset_lo = core_tag_data_lo.reset;
+  wire [wh_did_width_gp-1:0] core_did_lo = core_tag_data_lo.did;
+
+  // Tag payload for bp control signals
+  bp_tag_payload_s host_tag_data_lo;
+  logic            host_tag_new_data_lo;
+
+  bsg_tag_client #(.width_p( $bits(bp_tag_payload_s) ), .default_p( 0 ))
+    btc_host
+      (.bsg_tag_i     ( host_core_tag_lines_lo )
+      ,.recv_clk_i    ( bp_clk_lo )
+      ,.recv_reset_i  ( 1'b0 )
+      ,.recv_new_r_o  ( host_tag_new_data_lo )
+      ,.recv_data_r_o ( host_tag_data_lo )
       );
 
-  // Join the resets and cords
-  logic [bp_num_router_gp-1:0]                       router_tag_reset_lo;
-  logic [bp_num_router_gp-1:0][wh_cord_width_gp-1:0] router_tag_cord_lo;
-  for (i = 0; i < bp_num_router_gp; i++)
-    begin : router_tag_clients
-      bp_tag_payload_s router_tag_data_lo;
-      logic            router_tag_new_data_lo;
-      bsg_tag_client #(.width_p( $bits(bp_tag_payload_s) ), .default_p( 0 ))
-       btc_rtr
-        (.bsg_tag_i      ( router_core_tag_lines_lo[i] )
-         ,.recv_clk_i    ( router_clk_lo )
-         ,.recv_reset_i  ( 1'b0 )
-         ,.recv_new_r_o  ( router_tag_new_data_lo )
-         ,.recv_data_r_o ( router_tag_data_lo )
-         );
-      assign router_tag_reset_lo[i] = router_tag_data_lo.reset;
-      assign router_tag_cord_lo[i]  = router_tag_data_lo.cord;
-    end
-  wire router_reset_lo = |router_tag_reset_lo;
-  wire [bp_num_mem_gp-1:0][wh_cord_width_gp-1:0]  mem_router_cord_lo  = router_tag_cord_lo[0+:bp_num_mem_gp];
-  wire [bp_num_core_gp-1:0][wh_cord_width_gp-1:0] tile_router_cord_lo = router_tag_cord_lo[bp_num_mem_gp+:bp_num_core_gp];
+  wire host_reset_lo = host_tag_data_lo.reset;
+  wire [wh_did_width_gp-1:0] host_did_lo = host_tag_data_lo.did;
 
-  // TODO: connect properly
-  wire [wh_did_width_gp-1:0] did_router_cord_lo = router_tag_cord_lo[bp_num_mem_gp][0+:io_noc_did_width_p];
+  bp_tag_payload_s router_tag_data_lo;
+  logic            router_tag_new_data_lo;
+
+  bsg_tag_client #(.width_p( $bits(bp_tag_payload_s) ), .default_p( 0 ))
+    btc_router
+      (.bsg_tag_i     ( router_tag_lines_lo )
+      ,.recv_clk_i    ( router_clk_lo )
+      ,.recv_reset_i  ( 1'b0 )
+      ,.recv_new_r_o  ( router_tag_new_data_lo )
+      ,.recv_data_r_o ( router_tag_data_lo )
+      );
+
+  wire router_reset_lo = router_tag_data_lo.reset;
 
   //////////////////////////////////////////////////
   //
@@ -317,14 +326,16 @@ module bsg_chip
 
   bp_link_sif_s bp_next_cmd_link_li, bp_next_cmd_link_lo;
   bp_link_sif_s bp_next_resp_link_li, bp_next_resp_link_lo;
+
+  bp_link_sif_s dram_cmd_link_lo, dram_resp_link_li;
   bp_processor #(.bp_params_p(bp_cfg_gp))
     bp_processor
       (.core_clk_i  ( bp_clk_lo )
-      ,.core_reset_i( bp_tag_data_lo.reset )
+      ,.core_reset_i( core_reset_lo )
 
       // Currently synced to core clock
       ,.coh_clk_i  ( bp_clk_lo )
-      ,.coh_reset_i( bp_tag_data_lo.reset )
+      ,.coh_reset_i( core_reset_lo )
 
       // Currently synced to mem clock
       ,.io_clk_i    ( router_clk_lo)
@@ -333,26 +344,52 @@ module bsg_chip
       ,.mem_clk_i   ( router_clk_lo )
       ,.mem_reset_i ( router_reset_lo )
 
-      ,.my_did_i ( did_router_cord_lo )
+      ,.my_did_i   ( core_did_lo )
+      ,.host_did_i ( host_did_lo )
 
       ,.io_cmd_link_i({bp_next_cmd_link_li, bp_prev_cmd_link_li})
       ,.io_cmd_link_o({bp_next_cmd_link_lo, bp_prev_cmd_link_lo})
 
       ,.io_resp_link_i({bp_next_resp_link_li, bp_prev_resp_link_li})
       ,.io_resp_link_o({bp_next_resp_link_lo, bp_prev_resp_link_lo})
+
+      ,.dram_cmd_link_o(dram_cmd_link_lo)
+      ,.dram_resp_link_i(dram_resp_link_li)
       );
+
+  bp_link_sif_s [E:W] bypass_link_li, bypass_link_lo;
+  bsg_wormhole_router #(.flit_width_p(mem_noc_flit_width_p)
+                        ,.dims_p(mem_noc_dims_p)
+                        ,.cord_dims_p(mem_noc_cord_dims_p)
+                        ,.cord_markers_pos_p(mem_noc_cord_markers_pos_p)
+                        ,.len_width_p(mem_noc_len_width_p)
+                        ,.reverse_order_p(1)
+                        ,.routing_matrix_p(StrictX)
+                        ) bypass_router
+    (.clk_i(router_clk_lo)
+    ,.reset_i(router_reset_lo)
+
+    ,.my_cord_i(core_did_lo)
+
+    ,.link_i({bypass_link_li, dram_cmd_link_lo})
+    ,.link_o({bypass_link_lo, dram_resp_link_li})
+    );
 
   assign prev_router_links_li[0] = bp_prev_cmd_link_lo;
   assign prev_router_links_li[1] = bp_prev_resp_link_lo;
+  assign prev_router_links_li[2] = bypass_link_lo[W];
 
   assign bp_prev_cmd_link_li  = prev_router_links_lo[0];
   assign bp_prev_resp_link_li = prev_router_links_lo[1];
+  assign bypass_link_li[W]    = prev_router_links_lo[2];
 
   assign next_router_links_li[0] = bp_next_cmd_link_lo;
   assign next_router_links_li[1] = bp_next_resp_link_lo;
+  assign next_router_links_li[2] = bypass_link_lo[E];
 
   assign bp_next_cmd_link_li  = next_router_links_lo[0];
   assign bp_next_resp_link_li = next_router_links_lo[1];
+  assign bypass_link_li[E]    = next_router_links_lo[2];
 
 endmodule
 

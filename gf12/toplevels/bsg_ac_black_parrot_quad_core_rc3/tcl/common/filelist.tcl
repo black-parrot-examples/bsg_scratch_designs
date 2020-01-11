@@ -56,7 +56,6 @@ set SVERILOG_PACKAGE_FILES [join "
   $bp_be_dir/src/include/bp_be_dcache/bp_be_dcache_pkg.vh
   $bp_me_dir/src/include/v/bp_cce_pkg.v
   $bp_me_dir/src/include/v/bp_me_pkg.vh
-  $bsg_designs_target_dir/v/bsg_chip_pkg.v
 "]
 
 # Best Practice: Keep bsg_defines first, then all pacakges (denoted by ending

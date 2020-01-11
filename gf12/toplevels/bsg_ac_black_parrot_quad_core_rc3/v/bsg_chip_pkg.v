@@ -39,7 +39,7 @@ package bsg_chip_pkg;
   localparam link_lg_fifo_depth_gp = 6;
   localparam link_lg_credit_to_token_decimation_gp = 3;
 
-  localparam ct_num_in_gp = 2;
+  localparam ct_num_in_gp = 3;
   localparam ct_tag_width_gp = `BSG_SAFE_CLOG2(ct_num_in_gp + 1);
   localparam ct_width_gp = link_width_gp - ct_tag_width_gp;
 
