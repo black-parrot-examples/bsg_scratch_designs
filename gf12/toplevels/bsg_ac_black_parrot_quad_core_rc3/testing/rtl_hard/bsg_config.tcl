@@ -64,11 +64,11 @@ proc bsg_create_library {library_name library_file source_files {include_paths "
 # scripts for creating filelist and library
 #source $::env(BSG_TESTING_COMMON_DIR)/bsg_vcs_create_filelist_library.tcl
 
-source $::env(BSG_CHIP_DIR)/cad/pdk_setup/pdk_setup.tcl
+source $::env(BSG_CHIP_DIR)/cad/setup/common_setup.tcl
 
 # chip source (rtl) files and include paths list
-source $::env(BSG_CHIP_DIR)/scripts/dc/bsg_target_design.filelist.tcl
-source $::env(BSG_CHIP_DIR)/scripts/dc/bsg_target_design.include.tcl
+source $::env(BSG_CHIP_DIR)/cad/flow/dc/bsg_dc_scripts/target_design.filelist.tcl
+source $::env(BSG_CHIP_DIR)/cad/flow/dc/bsg_dc_scripts/target_design.include.tcl
 
 foreach lib [array name VERILOG_FILES] {
   if { $VERILOG_FILES($lib) != "" } {

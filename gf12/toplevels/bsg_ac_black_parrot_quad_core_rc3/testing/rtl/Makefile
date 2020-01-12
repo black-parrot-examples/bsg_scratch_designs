@@ -44,7 +44,7 @@ export BLACKPARROT_ME_DIR     ?= $(BLACKPARROT_DIR)/bp_me
 # Common VCS Options (will be used most of the time by all corners)
 VCS_OPTIONS := -full64
 VCS_OPTIONS += -notice
-VCS_OPTIONS += -debug_all
+VCS_OPTIONS += -debug_pp
 VCS_OPTIONS += -V
 VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext

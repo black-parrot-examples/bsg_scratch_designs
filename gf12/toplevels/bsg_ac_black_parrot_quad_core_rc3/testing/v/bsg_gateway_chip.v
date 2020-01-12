@@ -33,8 +33,7 @@ import bsg_wormhole_router_pkg::*;
 #(localparam bp_params_e bp_params_p = e_bp_quad_core_cfg `declare_bp_proc_params(bp_params_p))
 `include "bsg_pinout_inverted.v"
 
-  `declare_bsg_ready_and_link_sif_s(ct_width_gp, ct_link_sif_s);
-  `declare_bsg_ready_and_link_sif_s(link_width_gp, bp_link_sif_s);
+  `declare_bsg_ready_and_link_sif_s(ct_width_gp, bsg_ready_and_link_sif_s);
 
   // Control clock generator output signal
   assign p_sel_0_o = 1'b0;
@@ -309,8 +308,8 @@ import bsg_wormhole_router_pkg::*;
   // BSG Chip IO Complex
   //
 
-  ct_link_sif_s [ct_num_in_gp-1:0] prev_router_links_li, prev_router_links_lo;
-  ct_link_sif_s [ct_num_in_gp-1:0] next_router_links_li, next_router_links_lo;
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0] prev_router_links_li, prev_router_links_lo;
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0] next_router_links_li, next_router_links_lo;
 
   bsg_chip_io_complex_links_ct_fifo #(.link_width_p                        ( link_width_gp         )
                                      ,.link_channel_width_p                ( link_channel_width_gp )
@@ -387,9 +386,9 @@ import bsg_wormhole_router_pkg::*;
   //
   `declare_bp_me_if(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p)
   `declare_bp_io_if(paddr_width_p, dword_width_p, lce_id_width_p)
-  bp_link_sif_s gw_cmd_link_li, gw_cmd_link_lo;
-  bp_link_sif_s gw_resp_link_li, gw_resp_link_lo;
-  bp_link_sif_s [E:W] gw_dram_link_li, gw_dram_link_lo;
+  bsg_ready_and_link_sif_s gw_cmd_link_li, gw_cmd_link_lo;
+  bsg_ready_and_link_sif_s gw_resp_link_li, gw_resp_link_lo;
+  bsg_ready_and_link_sif_s [E:W] gw_dram_link_li, gw_dram_link_lo;
 
   bp_cce_io_msg_s       cfg_cmd_lo;
   logic                 cfg_cmd_v_lo, cfg_cmd_ready_li;
@@ -412,7 +411,7 @@ import bsg_wormhole_router_pkg::*;
   logic                 load_resp_v_li, load_resp_ready_lo;
   
   bp_cce_mem_msg_s      dram_cmd_lo;
-  logic                 dram_cmd_v_lo, dram_cmd_yumi_li;
+  logic                 dram_cmd_v_lo, dram_cmd_ready_li;
   bp_cce_mem_msg_s      dram_resp_li;
   logic                 dram_resp_v_li, dram_resp_ready_lo;
 
@@ -448,7 +447,7 @@ import bsg_wormhole_router_pkg::*;
      ,.resp_link_o(gw_resp_link_lo)
      );
 
-  bp_link_sif_s dram_link_li, dram_link_lo;
+  bsg_ready_and_link_sif_s dram_link_li, dram_link_lo;
   bsg_wormhole_router #(.flit_width_p(mem_noc_flit_width_p)
                         ,.dims_p(mem_noc_dims_p)
                         ,.cord_dims_p(mem_noc_cord_dims_p)
@@ -474,7 +473,7 @@ import bsg_wormhole_router_pkg::*;
 
      ,.mem_cmd_o(dram_cmd_lo)
      ,.mem_cmd_v_o(dram_cmd_v_lo)
-     ,.mem_cmd_yumi_i(dram_cmd_yumi_li)
+     ,.mem_cmd_yumi_i(dram_cmd_ready_li & dram_cmd_v_lo)
 
      ,.mem_resp_i(dram_resp_li)
      ,.mem_resp_v_i(dram_resp_v_li)
@@ -500,29 +499,11 @@ import bsg_wormhole_router_pkg::*;
 
      ,.mem_cmd_i(dram_cmd_lo)
      ,.mem_cmd_v_i(dram_cmd_v_lo)
-     ,.mem_cmd_yumi_o(dram_cmd_yumi_li)
+     ,.mem_cmd_ready_o(dram_cmd_ready_li)
 
      ,.mem_resp_o(dram_resp_li)
      ,.mem_resp_v_o(dram_resp_v_li)
-     ,.mem_resp_ready_i(dram_resp_ready_lo)
-     );
-
-  logic nbf_done_lo;
-  bp_nonsynth_nbf_loader
-   #(.bp_params_p(bp_params_p))
-   nbf_loader
-    (.clk_i(blackparrot_clk)
-     ,.reset_i(core_reset_lo | ~tag_trace_done_lo)
-
-     ,.io_cmd_o(nbf_cmd_lo)
-     ,.io_cmd_v_o(nbf_cmd_v_lo)
-     ,.io_cmd_yumi_i(nbf_cmd_ready_li & nbf_cmd_v_lo)
-
-     ,.io_resp_i(nbf_resp_li)
-     ,.io_resp_v_i(nbf_resp_v_li)
-     ,.io_resp_ready_o(nbf_resp_ready_lo)
-
-     ,.done_o(nbf_done_lo)
+     ,.mem_resp_yumi_i(dram_resp_ready_lo & dram_resp_v_li)
      );
 
   localparam cce_instr_ram_addr_width_lp = `BSG_SAFE_CLOG2(num_cce_instr_ram_els_p);
@@ -535,7 +516,7 @@ import bsg_wormhole_router_pkg::*;
       )
     cfg_loader
     (.clk_i(blackparrot_clk)
-     ,.reset_i(core_reset_lo | ~nbf_done_lo | ~tag_trace_done_lo)
+     ,.reset_i(core_reset_lo | ~tag_trace_done_lo)
   
      ,.io_cmd_o(cfg_cmd_lo)
      ,.io_cmd_v_o(cfg_cmd_v_lo)
@@ -565,38 +546,21 @@ import bsg_wormhole_router_pkg::*;
      );
 
   always_comb
-    if (nbf_done_lo)
-      begin
-        load_cmd_lo = cfg_cmd_lo;
-        load_cmd_v_lo = load_cmd_ready_li & cfg_cmd_v_lo;
+    begin
+      load_cmd_lo = cfg_cmd_lo;
+      load_cmd_v_lo = load_cmd_ready_li & cfg_cmd_v_lo;
   
-        nbf_cmd_ready_li = 1'b0;
-        cfg_cmd_ready_li = load_cmd_ready_li;
+      nbf_cmd_ready_li = 1'b0;
+      cfg_cmd_ready_li = load_cmd_ready_li;
   
-        nbf_resp_li = '0;
-        nbf_resp_v_li = 1'b0;
+      nbf_resp_li = '0;
+      nbf_resp_v_li = 1'b0;
   
-        cfg_resp_li = load_resp_li;
-        cfg_resp_v_li = load_resp_v_li & load_resp_ready_lo & cfg_resp_ready_lo;
+      cfg_resp_li = load_resp_li;
+      cfg_resp_v_li = load_resp_v_li & load_resp_ready_lo & cfg_resp_ready_lo;
   
-        load_resp_ready_lo = cfg_resp_ready_lo;
-      end
-    else
-      begin
-        load_cmd_lo = nbf_cmd_lo;
-        load_cmd_v_lo = load_cmd_ready_li & nbf_cmd_v_lo;
-  
-        nbf_cmd_ready_li = load_cmd_ready_li;
-        cfg_cmd_ready_li = 1'b0;
-  
-        nbf_resp_li = load_resp_li;
-        nbf_resp_v_li = load_resp_v_li;
-  
-        cfg_resp_li = '0;
-        cfg_resp_v_li = 1'b0;
-  
-        load_resp_ready_lo = nbf_resp_ready_lo;
-      end
+      load_resp_ready_lo = cfg_resp_ready_lo;
+    end
 
   assign prev_router_links_li[0] = '0;
   assign prev_router_links_li[1] = '0;

@@ -14,6 +14,8 @@
 module bsg_chip
  import bp_common_pkg::*;
  import bp_common_aviary_pkg::*;
+ import bp_me_pkg::*;
+ import bp_cce_pkg::*;
  import bsg_noc_pkg::*;
  import bsg_wormhole_router_pkg::*;
  import bsg_tag_pkg::*;
@@ -22,8 +24,7 @@ module bsg_chip
 `include "bsg_pinout.v"
 `include "bsg_iopads.v"
 
-  `declare_bsg_ready_and_link_sif_s(ct_width_gp, ct_link_sif_s);
-  `declare_bsg_ready_and_link_sif_s(link_width_gp, bp_link_sif_s);
+  `declare_bsg_ready_and_link_sif_s(ct_width_gp, bsg_ready_and_link_sif_s);
 
   //////////////////////////////////////////////////
   //
@@ -242,8 +243,8 @@ module bsg_chip
   // BSG Chip IO Complex
   //
 
-  ct_link_sif_s [ct_num_in_gp-1:0]        prev_router_links_li, prev_router_links_lo;
-  ct_link_sif_s [ct_num_in_gp-1:0]        next_router_links_li, next_router_links_lo;
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        prev_router_links_li, prev_router_links_lo;
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        next_router_links_li, next_router_links_lo;
 
   bsg_chip_io_complex_links_ct_fifo #(.link_width_p                        ( link_width_gp         )
                                      ,.link_channel_width_p                ( link_channel_width_gp )
@@ -318,13 +319,13 @@ module bsg_chip
   // BSG Chip BlackParrot
   //
 
-  bp_link_sif_s bp_prev_cmd_link_li, bp_prev_cmd_link_lo;
-  bp_link_sif_s bp_prev_resp_link_li, bp_prev_resp_link_lo;
+  bsg_ready_and_link_sif_s bp_prev_cmd_link_li, bp_prev_cmd_link_lo;
+  bsg_ready_and_link_sif_s bp_prev_resp_link_li, bp_prev_resp_link_lo;
 
-  bp_link_sif_s bp_next_cmd_link_li, bp_next_cmd_link_lo;
-  bp_link_sif_s bp_next_resp_link_li, bp_next_resp_link_lo;
+  bsg_ready_and_link_sif_s bp_next_cmd_link_li, bp_next_cmd_link_lo;
+  bsg_ready_and_link_sif_s bp_next_resp_link_li, bp_next_resp_link_lo;
 
-  bp_link_sif_s dram_cmd_link_lo, dram_resp_link_li;
+  bsg_ready_and_link_sif_s dram_cmd_link_lo, dram_resp_link_li;
   bp_processor #(.bp_params_p(bp_cfg_gp))
     bp_processor
       (.core_clk_i  ( bp_clk_lo )
@@ -354,7 +355,53 @@ module bsg_chip
       ,.dram_resp_link_i(dram_resp_link_li)
       );
 
-  bp_link_sif_s [E:W] bypass_link_li, bypass_link_lo;
+  `declare_bp_me_if(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p)
+  bp_cce_mem_msg_s dram_cmd_li;
+  logic            dram_cmd_v_li, dram_cmd_ready_lo;
+  bp_cce_mem_msg_s dram_resp_lo;
+  logic            dram_resp_v_lo, dram_resp_ready_li;
+  bp_me_cce_to_mem_link_client
+   #(.bp_params_p(bp_params_p))
+   dram_link
+    (.clk_i(router_clk_lo)
+     ,.reset_i(router_reset_lo)
+  
+     ,.mem_cmd_o(dram_cmd_li)
+     ,.mem_cmd_v_o(dram_cmd_v_li)
+     ,.mem_cmd_yumi_i(dram_cmd_ready_lo & dram_cmd_v_li)
+  
+     ,.mem_resp_i(dram_resp_lo)
+     ,.mem_resp_v_i(dram_resp_v_lo)
+     ,.mem_resp_ready_o(dram_resp_ready_li)
+  
+     ,.cmd_link_i(dram_cmd_link_lo)
+     ,.resp_link_o(dram_resp_link_li)
+     );
+
+  bsg_ready_and_link_sif_s [E:P] bypass_link_li, bypass_link_lo;
+  bp_me_cce_to_mem_link_master
+   #(.bp_params_p(bp_params_p))
+   bypass_link
+    (.clk_i(router_clk_lo)
+     ,.reset_i(router_reset_lo)
+
+     ,.mem_cmd_i(dram_cmd_li)
+     ,.mem_cmd_v_i(dram_cmd_v_li)
+     ,.mem_cmd_ready_o(dram_cmd_ready_lo)
+
+     ,.mem_resp_o(dram_resp_lo)
+     ,.mem_resp_v_o(dram_resp_v_lo)
+     ,.mem_resp_yumi_i(dram_resp_ready_li & dram_resp_v_lo)
+
+     ,.my_cord_i(core_did_lo[0+:io_noc_did_width_p])
+     ,.my_cid_i('0)
+     ,.dst_cord_i(host_did_lo[0+:io_noc_did_width_p])
+     ,.dst_cid_i('0)
+
+     ,.cmd_link_o(bypass_link_li[P])
+     ,.resp_link_i(bypass_link_lo[P])
+     );
+
   bsg_wormhole_router #(.flit_width_p(mem_noc_flit_width_p)
                         ,.dims_p(mem_noc_dims_p)
                         ,.cord_dims_p(mem_noc_cord_dims_p)
@@ -368,9 +415,11 @@ module bsg_chip
 
     ,.my_cord_i(router_did_lo[0+:io_noc_did_width_p])
 
-    ,.link_i({bypass_link_li, dram_cmd_link_lo})
-    ,.link_o({bypass_link_lo, dram_resp_link_li})
+    ,.link_i(bypass_link_li)
+    ,.link_o(bypass_link_lo)
     );
+
+  
 
   assign prev_router_links_li[0] = bp_prev_cmd_link_lo;
   assign prev_router_links_li[1] = bp_prev_resp_link_lo;
