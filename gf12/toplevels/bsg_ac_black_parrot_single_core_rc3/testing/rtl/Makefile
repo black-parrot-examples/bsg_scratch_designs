@@ -112,7 +112,7 @@ VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
 ########################################
 
 #PROG     :=hello_world
-PROG     :=rsort
+PROG     :=hello_world
 DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
 DRAM_SYS :=system.ini
 

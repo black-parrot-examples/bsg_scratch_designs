@@ -22,7 +22,7 @@ set tile_lly [lindex [get_attribute [get_cell -hier $master_tile] boundary_bbox]
 set tile_width [get_attribute [get_cell -hier $master_tile] width]
 set tile_height [get_attribute [get_cell -hier $master_tile] height]
 
-set end_tile "y_0__x_1__tile_node"
+set end_tile "y_0__x_0__tile_node"
 set end_tile_llx [lindex [get_attribute [get_cell -hier $end_tile] boundary_bbox] 0 0]
 set end_tile_lly [lindex [get_attribute [get_cell -hier $end_tile] boundary_bbox] 0 1]
 set end_tile_width [get_attribute [get_cell -hier $end_tile] width]
@@ -47,9 +47,9 @@ set io_complex_bound [create_bound -name "io_complex" -type soft -boundary [list
 add_to_bound $io_complex_bound [get_cells -hier -filter "full_name=~*/ic/*"]
 
 set mem_complex_llx [expr $tile_left]
-set mem_complex_lly [expr $tile_bottom - $tile_height - 30]
+set mem_complex_lly [expr $tile_bottom]
 set mem_complex_urx [expr $end_tile_llx + $tile_width]
-set mem_complex_ury [round_up_to_nearest [expr $tile_bottom - $tile_height - 220] [unit_height]]
+set mem_complex_ury [round_up_to_nearest [expr $tile_bottom - 220] [unit_height]]
 
 set mem_complex_bound [create_bound -name "mem_complex" -type soft -boundary [list [list $mem_complex_llx $mem_complex_lly] [list $mem_complex_urx $mem_complex_ury]]]
 add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*/mc/*"]

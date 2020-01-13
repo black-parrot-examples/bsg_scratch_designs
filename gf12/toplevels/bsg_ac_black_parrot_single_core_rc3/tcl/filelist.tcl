@@ -252,6 +252,5 @@ set SVERILOG_SOURCE_FILES [join "
   $bsg_designs_target_dir/v/bsg_clk_gen_osc.v
 
   $bsg_packaging_dir/$bsg_package/pinouts/$bsg_pinout/common/verilog/bsg_chip_swizzle_adapter.v
-  $bp_top_dir/test/common/bp_nonsynth_commit_tracer.v
 "]
 

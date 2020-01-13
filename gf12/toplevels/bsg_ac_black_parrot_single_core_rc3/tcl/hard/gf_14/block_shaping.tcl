@@ -2,9 +2,9 @@ set core_width 2500
 set core_height 2500
 
 # Number of blackparrot tiles
-set num_bp_tiles 4
-set tile_rows 2
-set tile_cols 2
+set num_bp_tiles 1
+set tile_rows 1
+set tile_cols 1
 
 set channel_width 20
 set channel_height 20
