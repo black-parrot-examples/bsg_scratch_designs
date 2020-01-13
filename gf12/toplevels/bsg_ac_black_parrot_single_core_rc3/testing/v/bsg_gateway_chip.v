@@ -30,7 +30,7 @@ import bp_me_pkg::*;
 import bsg_noc_pkg::*;
 import bsg_wormhole_router_pkg::*;
 
-#(localparam bp_params_e bp_params_p = e_bp_quad_core_cfg `declare_bp_proc_params(bp_params_p))
+#(localparam bp_params_e bp_params_p = e_bp_single_core_cfg `declare_bp_proc_params(bp_params_p))
 `include "bsg_pinout_inverted.v"
 
   `declare_bsg_ready_and_link_sif_s(ct_width_gp, bsg_ready_and_link_sif_s);
@@ -46,9 +46,9 @@ import bsg_wormhole_router_pkg::*;
 
   initial
     begin
-      //$vcdpluson;
-      //$vcdplusmemon;
-      //$vcdplusautoflushon;
+      $vcdpluson;
+      $vcdplusmemon;
+      $vcdplusautoflushon;
     end
 
   //////////////////////////////////////////////////
@@ -485,7 +485,7 @@ import bsg_wormhole_router_pkg::*;
 
   bp_mem
    #(.bp_params_p(bp_params_p)
-     ,.mem_cap_in_bytes_p(32'h100000)
+     ,.mem_cap_in_bytes_p(32'h10000)
      ,.mem_load_p(1)
      ,.mem_file_p("prog.mem")
      ,.mem_offset_p(32'h80000000)
@@ -544,6 +544,29 @@ import bsg_wormhole_router_pkg::*;
   
      ,.program_finish_o(program_finish)
      );
+
+  //synopsys translate_off
+if (0) begin
+  bind bp_be_top
+    bp_nonsynth_commit_tracer
+     #(.bp_params_p(bp_params_p))
+     commit_tracer
+      (.clk_i(clk_i)
+       ,.reset_i(reset_i)
+       ,.freeze_i(be_checker.scheduler.int_regfile.cfg_bus.freeze)
+
+       ,.mhartid_i(be_checker.scheduler.int_regfile.cfg_bus.core_id)
+
+       ,.commit_v_i(be_calculator.commit_pkt.instret)
+       ,.commit_pc_i(be_calculator.commit_pkt.pc)
+       ,.commit_instr_i(be_calculator.commit_pkt.instr)
+
+       ,.rd_w_v_i(be_calculator.wb_pkt.rd_w_v)
+       ,.rd_addr_i(be_calculator.wb_pkt.rd_addr)
+       ,.rd_data_i(be_calculator.wb_pkt.rd_data)
+       );
+end
+  //synopsys translate_on
 
   always_comb
     begin
