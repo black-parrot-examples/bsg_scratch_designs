@@ -19,9 +19,23 @@
 #    19  | Core Control           | 4-bits
 #    20  | Host Control           | 4-bits
 #    21  | Router Control         | 4-bits
+#    22  | DMC Control            | 2-bits
+#    23  | DMC trefi 0            | 8-bits
+#    24  | DMC trefi 1            | 8-bits
+#    25  | DMC tmrd trfc          | 8-bits
+#    26  | DMC trc trp            | 8-bits
+#    27  | DMC tras trrd          | 8-bits
+#    28  | DMC trcd twr           | 8-bits
+#    29  | DMC twtr trtp          | 8-bits
+#    30  | DMC tcas               | 4-bits
+#    31  | DMC col \ row width    | 8-bits
+#    32  | DMC bank width         |
+#        |     dqs_sel_cal        | 8-bits
+#        |     init_cmd_cnt       |
+#
 #
 # Number of masters = 2
-# Number of clients = 22
+# Number of clients = 32
 # Max data width = 9
 #
 # Packet lengths
