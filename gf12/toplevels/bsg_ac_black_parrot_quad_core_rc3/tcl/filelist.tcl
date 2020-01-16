@@ -243,7 +243,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_tag/bsg_tag_master.v
   $basejump_stl_dir/bsg_tag/bsg_tag_client.v
   $basejump_stl_dir/bsg_tag/bsg_tag_client_unsync.v
-  
+
   $bsg_designs_dir/modules/bsg_chip_io_complex/bsg_chip_io_complex.v
 
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
