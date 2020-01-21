@@ -67,8 +67,10 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit_banked.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_banked.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync.v

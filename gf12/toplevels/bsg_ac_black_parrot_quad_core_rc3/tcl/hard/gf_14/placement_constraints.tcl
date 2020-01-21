@@ -229,9 +229,8 @@ set_macro_relative_location \
 ### L2S DATA
 ###
 
-set l2s_data_mems_c0 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*crack_0*"]
-set l2s_data_mems_c1 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*crack_1*"]
-set l2s_data_mems_west [concat $l2s_data_mems_c0 $l2s_data_mems_c1]
+set l2s_data_mems_c0 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*db_0*"]
+set l2s_data_mems_west [concat $l2s_data_mems_c0]
 set l2s_data_ma_west [create_macro_array \
   -num_rows 2 \
   -num_cols 4 \
@@ -250,9 +249,8 @@ set_macro_relative_location \
   -anchor_corner tl \
   -offset [list 0 0]
 
-set l2s_data_mems_c2 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*crack_2*"]
-set l2s_data_mems_c3 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*crack_3*"]
-set l2s_data_mems_east [concat $l2s_data_mems_c2 $l2s_data_mems_c3]
+set l2s_data_mems_c1 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*data_mem*db_1*"]
+set l2s_data_mems_east [concat $l2s_data_mems_c1]
 set l2s_data_ma_east [create_macro_array \
   -num_rows 2 \
   -num_cols 4 \
@@ -275,8 +273,8 @@ set_macro_relative_location \
 ### L2S TAG
 ###
 
-set l2s_tag_mems_c0 [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*tag_mem*crack_0*"]
-set l2s_tag_mems_west [concat $l2s_tag_mems_c0]
+set l2s_tag_mems_b0 [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*tag_mem*wb_0*"]
+set l2s_tag_mems_west [concat $l2s_tag_mems_b0]
 set l2s_tag_ma_west [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
@@ -297,8 +295,8 @@ set_macro_relative_location \
   -anchor_corner tr \
   -offset [list -$l2s_tag_margin 0]
 
-set l2s_tag_mems_c1 [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*tag_mem*crack_1*"]
-set l2s_tag_mems_east [concat $l2s_tag_mems_c1]
+set l2s_tag_mems_b1 [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/l2s*tag_mem*wb_1*"]
+set l2s_tag_mems_east [concat $l2s_tag_mems_b1]
 set l2s_tag_ma_east [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
@@ -359,7 +357,7 @@ set_macro_relative_location \
   -target_orientation R0 \
   -anchor_object $directory_ma \
   -anchor_corner bl \
-  -offset [list -$keepout_margin_x -$keepout_margin_y]
+  -offset [list -$keepout_margin_x 0]
 
 create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 
