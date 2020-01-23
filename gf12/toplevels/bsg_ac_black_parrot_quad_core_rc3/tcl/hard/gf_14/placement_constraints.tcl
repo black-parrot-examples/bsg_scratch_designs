@@ -66,6 +66,29 @@ add_to_bound ${next_downlink_bound} [get_cells -hier -filter "full_name=~next/do
 set next_uplink_bound [create_bound -name "next_uplink" -type soft -boundary {{1959.9420 2697.3600} {2692.8420 2763.1200}}]
 add_to_bound ${next_uplink_bound} [get_cells -hier -filter "full_name=~next/uplink/*"]
 
+set tile0 [get_attribute [get_cell -hier "y_0__x_0__tile_node"] boundary_bbox]
+set tile1 [get_attribute [get_cell -hier "y_0__x_1__tile_node"] boundary_bbox]
+set tile2 [get_attribute [get_cell -hier "y_1__x_0__tile_node"] boundary_bbox]
+set tile3 [get_attribute [get_cell -hier "y_1__x_1__tile_node"] boundary_bbox]
+
+set top_box [list [list [expr [lindex $tile0 0 0]] [expr [lindex $tile0 1 1] + 10]] [list [expr [lindex $tile1 1 0]] [expr [lindex $tile1 1 1] + 50]]]
+set bot_box [list [list [expr [lindex $tile2 0 0] - 100] [expr [lindex $tile2 0 0] - 100]] [list [expr [lindex $tile3 1 0] + 100] [expr [lindex $tile3 0 1] - 10]]]
+set left_box [list [list [expr [lindex $tile0 0 0] - 100] [expr [lindex $tile2 0 1]]] [list [expr [lindex $tile0 0 0] - 10] [expr [lindex $tile0 1 1] + 100]]]
+set right_box [list [list [expr [lindex $tile1 1 0] + 10] [expr [lindex $tile3 0 1]]] [list [expr [lindex $tile1 1 0] + 100] [expr [lindex $tile1 1 1] + 100]]]
+
+set bypass_bound [create_bound -name "bypass_bound" -type soft -boundary [list $bot_box $left_box $right_box]]
+
+add_to_bound ${bypass_bound} [get_cells *bypass_link*]
+add_to_bound ${bypass_bound} [get_cells *bypass_router*]
+add_to_bound ${bypass_bound} [get_cells *prev_bypass_repeater*]
+add_to_bound ${bypass_bound} [get_cells *next_bypass_repeater*]
+add_to_bound ${bypass_bound} [get_cells -hier -filter "full_name=~prev/*"]
+add_to_bound ${bypass_bound} [get_cells -hier -filter "full_name=~next/*"]
+
+set bt_bound [create_bound -name "bt_bound" -type soft -boundary $top_box]
+add_to_bound ${bt_bound} [get_cells *btm*]
+add_to_bound ${bt_bound} [get_cells *btc*]
+
 ## BP Tile bounds
 current_design bp_tile_node
 
@@ -349,15 +372,22 @@ create_keepout_margin -type hard -outer $keepout_margins $directory_mems
 ###
 
 set cce_instr_ram [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*cce/*inst_ram*"]
-set cce_instr_width [get_attribute -objects $cce_instr_ram -name width]
-set cce_instr_height [get_attribute -objects $cce_instr_ram -name height]
+set cce_instr_ma [create_macro_array \
+  -num_rows 1 \
+  -num_cols 1 \
+  -align bottom \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
+  -orientation N \
+  $cce_instr_ram]
+
 set_macro_relative_location \
-  -target_object $cce_instr_ram \
+  -target_object $cce_instr_ma \
   -target_corner br \
   -target_orientation R0 \
   -anchor_object $directory_ma \
   -anchor_corner bl \
-  -offset [list -$keepout_margin_x 0]
+  -offset [list 0 0]
 
 create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 

@@ -46,9 +46,9 @@ import bsg_wormhole_router_pkg::*;
 
   initial
     begin
-      //$vcdpluson;
-      //$vcdplusmemon;
-      //$vcdplusautoflushon;
+      $vcdpluson;
+      $vcdplusmemon;
+      $vcdplusautoflushon;
     end
 
   //////////////////////////////////////////////////

@@ -246,6 +246,9 @@ module bsg_chip
   bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        prev_router_links_li, prev_router_links_lo;
   bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        next_router_links_li, next_router_links_lo;
 
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        repeated_prev_router_links_li, repeated_prev_router_links_lo;
+  bsg_ready_and_link_sif_s [ct_num_in_gp-1:0]        repeated_next_router_links_li, repeated_next_router_links_lo;
+
   bsg_chip_io_complex_links_ct_fifo #(.link_width_p                        ( link_width_gp         )
                                      ,.link_channel_width_p                ( link_channel_width_gp )
                                      ,.link_num_channels_p                 ( link_num_channels_gp  )
@@ -276,8 +279,8 @@ module bsg_chip
       ,.co_data_o( co2_data_lo[link_channel_width_gp-1:0] )
       ,.co_tkn_i ( co2_tkn_li )
 
-      ,.links_i  ( prev_router_links_li ) 
-      ,.links_o  ( prev_router_links_lo )
+      ,.links_i  ( repeated_prev_router_links_li ) 
+      ,.links_o  ( repeated_prev_router_links_lo )
       );
 
   bsg_chip_io_complex_links_ct_fifo #(.link_width_p                        ( link_width_gp         )
@@ -310,8 +313,8 @@ module bsg_chip
       ,.co_data_o( co_data_lo[link_channel_width_gp-1:0] )
       ,.co_tkn_i ( co_tkn_li )
 
-      ,.links_i  ( next_router_links_li )
-      ,.links_o  ( next_router_links_lo )
+      ,.links_i  ( repeated_next_router_links_li )
+      ,.links_o  ( repeated_next_router_links_lo )
       );
 
   //////////////////////////////////////////////////
@@ -419,7 +422,34 @@ module bsg_chip
     ,.link_o(bypass_link_lo)
     );
 
-  
+  for (i = 0; i < 3; i++)
+    begin : repeater
+      bsg_noc_repeater_node
+       #(.width_p(ct_width_gp))
+       prev_bypass_repeater
+        (.clk_i(router_clk_lo)
+         ,.reset_i(router_reset_lo)
+
+         ,.side_A_links_i(prev_router_links_li[i])
+         ,.side_A_links_o(prev_router_links_lo[i])
+
+         ,.side_B_links_i(repeated_prev_router_links_lo[i])
+         ,.side_B_links_o(repeated_prev_router_links_li[i])
+         );
+
+      bsg_noc_repeater_node
+       #(.width_p(ct_width_gp))
+       next_bypass_repeater
+        (.clk_i(router_clk_lo)
+         ,.reset_i(router_reset_lo)
+
+         ,.side_A_links_i(next_router_links_li[i])
+         ,.side_A_links_o(next_router_links_lo[i])
+
+         ,.side_B_links_i(repeated_next_router_links_lo[i])
+         ,.side_B_links_o(repeated_next_router_links_li[i])
+         );
+    end
 
   assign prev_router_links_li[0] = bp_prev_cmd_link_lo;
   assign prev_router_links_li[1] = bp_prev_resp_link_lo;

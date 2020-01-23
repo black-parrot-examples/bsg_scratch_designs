@@ -185,6 +185,7 @@ $(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_F
 
 $(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
 	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
+	ln -nsf $(BSG_DESIGNS_DIR)/modules $@/modules
 
 $(BSG_OUT_DIR):
 	mkdir -p $@
