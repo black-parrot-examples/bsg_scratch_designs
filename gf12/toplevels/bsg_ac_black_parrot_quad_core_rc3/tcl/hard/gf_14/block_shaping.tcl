@@ -6,8 +6,8 @@ set num_bp_tiles 4
 set tile_rows 2
 set tile_cols 2
 
-set channel_width 20
-set channel_height 20
+set channel_width 10
+set channel_height 10
 
 set dcache_data_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/dcache/data_mem_*"]
 set dcache_tag_mems  [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/dcache/tag_mem*" ]
@@ -24,7 +24,7 @@ set directory_mem_height   [lindex [get_attribute [get_cell -hier $directory_mem
 #set tile_height $tile_width
 #set tile_width [expr 8*$data_mem_width + 4*$directory_mem_width]
 set tile_width  [round_up_to_nearest 580.000 [unit_width ]]
-set tile_height [round_up_to_nearest 580.000 [unit_height]]
+set tile_height [round_up_to_nearest 581.080 [unit_height]]
 
 foreach {y} {1 0} {
   foreach {x} {0 1} {
@@ -39,8 +39,8 @@ set core_height 2500
 bsg_create_block_array_grid $bp_tile_cells \
   -grid mib_placement_grid \
   -relative_to core \
-  -x [expr $core_width/2 - $tile_width*$tile_cols/2 ] \
-  -y [expr $core_height - $tile_height*$tile_rows - 20*$channel_height] \
+  -x [expr $core_width/2 - $tile_width*$tile_cols/2 - $channel_width] \
+  -y [expr $core_height - $tile_height*$tile_rows - 40*$channel_height] \
   -rows $tile_rows \
   -cols [expr $tile_cols] \
   -min_channel [list $channel_width $channel_height] \

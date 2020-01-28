@@ -8,6 +8,8 @@ current_design ${DESIGN_NAME}
 set_locked_objects -unlock [get_cells -hier]
 remove_bounds -all
 remove_edit_groups -all
+remove_routing_corridors -all
+remove_placement_blockages -all
 
 #set core_height 2500
 #set core_width 2500
@@ -39,7 +41,7 @@ set end_tile_bottom $end_tile_lly
 set end_tile_top    [expr $end_tile_lly+$end_tile_height]
 
 set io_complex_llx [expr $tile_left]
-set io_complex_lly [expr $tile_top]
+set io_complex_lly [expr $tile_top + 10]
 set io_complex_urx [expr $end_tile_llx + $tile_width]
 set io_complex_ury [round_up_to_nearest [expr $tile_top + 200] [unit_height]]
 
@@ -47,47 +49,56 @@ set io_complex_bound [create_bound -name "io_complex" -type soft -boundary [list
 add_to_bound $io_complex_bound [get_cells -hier -filter "full_name=~*/ic/*"]
 
 set mem_complex_llx [expr $tile_left]
-set mem_complex_lly [expr $tile_bottom - $tile_height - 30]
+set mem_complex_lly [expr $tile_bottom - $tile_height - 20 - 10]
 set mem_complex_urx [expr $end_tile_llx + $tile_width]
-set mem_complex_ury [round_up_to_nearest [expr $tile_bottom - $tile_height - 220] [unit_height]]
+set mem_complex_ury [round_up_to_nearest [expr $tile_bottom - $tile_height - 20 - 200] [unit_height]]
 
 set mem_complex_bound [create_bound -name "mem_complex" -type soft -boundary [list [list $mem_complex_llx $mem_complex_lly] [list $mem_complex_urx $mem_complex_ury]]]
 add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*/mc/*"]
-
-set prev_uplink_bound [create_bound -name "prev_uplink" -type soft -boundary {{237.0180 2014.3200} {307.1580 2763.1200}}]
-add_to_bound ${prev_uplink_bound} [get_cells -hier -filter "full_name=~prev/uplink/*"]
-
-set prev_downlink_bound [create_bound -name "prev_downlink" -type soft -boundary {{307.1580 2697.3600} {1040.0580 2763.1200}}]
-add_to_bound ${prev_downlink_bound} [get_cells -hier -filter "full_name=~prev/downlink/*"]
-
-set next_downlink_bound [create_bound -name "next_downlink" -type soft -boundary {{2692.8420 2014.3200} {2762.9820 2763.1200}}]
-add_to_bound ${next_downlink_bound} [get_cells -hier -filter "full_name=~next/downlink/*"]
-
-set next_uplink_bound [create_bound -name "next_uplink" -type soft -boundary {{1959.9420 2697.3600} {2692.8420 2763.1200}}]
-add_to_bound ${next_uplink_bound} [get_cells -hier -filter "full_name=~next/uplink/*"]
+add_to_bound $mem_complex_bound [get_cells -hier -filter "full_name=~*dram*"]
 
 set tile0 [get_attribute [get_cell -hier "y_0__x_0__tile_node"] boundary_bbox]
 set tile1 [get_attribute [get_cell -hier "y_0__x_1__tile_node"] boundary_bbox]
 set tile2 [get_attribute [get_cell -hier "y_1__x_0__tile_node"] boundary_bbox]
 set tile3 [get_attribute [get_cell -hier "y_1__x_1__tile_node"] boundary_bbox]
 
-set top_box [list [list [expr [lindex $tile0 0 0]] [expr [lindex $tile0 1 1] + 10]] [list [expr [lindex $tile1 1 0]] [expr [lindex $tile1 1 1] + 50]]]
-set bot_box [list [list [expr [lindex $tile2 0 0] - 100] [expr [lindex $tile2 0 0] - 100]] [list [expr [lindex $tile3 1 0] + 100] [expr [lindex $tile3 0 1] - 10]]]
-set left_box [list [list [expr [lindex $tile0 0 0] - 100] [expr [lindex $tile2 0 1]]] [list [expr [lindex $tile0 0 0] - 10] [expr [lindex $tile0 1 1] + 100]]]
-set right_box [list [list [expr [lindex $tile1 1 0] + 10] [expr [lindex $tile3 0 1]]] [list [expr [lindex $tile1 1 0] + 100] [expr [lindex $tile1 1 1] + 100]]]
+set top_box [list [list [expr [lindex $tile0 0 0] - 200] [expr [lindex $tile0 1 1] + 10]] [list [expr [lindex $tile1 1 0] + 200] [expr [lindex $tile1 1 1] + 200]]]
+set bot_box [list [list [expr [lindex $tile2 0 0] - 200] [expr [lindex $tile2 0 0] - 200]] [list [expr [lindex $tile3 1 0] + 200] [expr [lindex $tile3 0 1] - 10]]]
 
-set bypass_bound [create_bound -name "bypass_bound" -type soft -boundary [list $bot_box $left_box $right_box]]
+set left_box [list [list [expr [lindex $tile0 0 0] - 200] [expr [lindex $tile2 0 1] - 200]] [list [expr [lindex $tile0 0 0] - 10] [expr [lindex $tile0 1 1] + 200]]]
+set right_box [list [list [expr [lindex $tile1 1 0] + 10] [expr [lindex $tile3 0 1] - 200]] [list [expr [lindex $tile1 1 0] + 200] [expr [lindex $tile1 1 1] + 200]]]
 
-add_to_bound ${bypass_bound} [get_cells *bypass_link*]
-add_to_bound ${bypass_bound} [get_cells *bypass_router*]
-add_to_bound ${bypass_bound} [get_cells *prev_bypass_repeater*]
-add_to_bound ${bypass_bound} [get_cells *next_bypass_repeater*]
-add_to_bound ${bypass_bound} [get_cells -hier -filter "full_name=~prev/*"]
-add_to_bound ${bypass_bound} [get_cells -hier -filter "full_name=~next/*"]
+create_bound -name bypass_link_bound -type soft -boundary $bot_box [get_cells *bypass_link*]
+create_bound -name bypass_router_bound -type soft -boundary $bot_box [get_cells *bypass_router*]
+
+create_bound -name prev_bypass_bound -type soft -boundary $left_box [get_cells *prev_bypass_repeater]
+create_bound -name next_bypass_bound -type soft -boundary $right_box [get_cells *next_bypass_repeater]
+
+set prev_uplink_bound [create_bound -name "prev_uplink" -type soft -boundary {{237.0180 2014.3200} {307.1580 2763.1200}}]
+add_to_bound ${prev_uplink_bound} [get_cells -hier -filter "full_name=~prev/uplink/*"]
+
+set prev_downlink_bound [create_bound -name "prev_downlink" -type soft -boundary {{307.1580 2697.3600} {1040.0580 2763.1200}}]
+add_to_bound ${prev_downlink_bound} [get_cells -hier -filter "full_name=~prev/downlink/*"]
+add_to_bound ${prev_downlink_bound} [get_cells -hier -filter "full_name=~prev*"]
+
+set next_uplink_bound [create_bound -name "next_uplink" -type soft -boundary {{1959.9420 2697.3600} {2692.8420 2763.1200}}]
+add_to_bound ${next_uplink_bound} [get_cells -hier -filter "full_name=~next/uplink/*"]
+
+set next_downlink_bound [create_bound -name "next_downlink" -type soft -boundary {{2692.8420 2014.3200} {2762.9820 2763.1200}}]
+add_to_bound ${next_downlink_bound} [get_cells -hier -filter "full_name=~next/downlink/*"]
+add_to_bound ${next_downlink_bound} [get_cells -hier -filter "full_name=~next*"]
 
 set bt_bound [create_bound -name "bt_bound" -type soft -boundary $top_box]
 add_to_bound ${bt_bound} [get_cells *btm*]
 add_to_bound ${bt_bound} [get_cells *btc*]
+
+set tile_blockage_box [list [list [lindex $tile2 0 0] [lindex $tile2 0 1]] [list [lindex $tile1 1 0] [lindex $tile1 1 1]]]
+create_placement_blockage -type hard -boundary $tile_blockage_box
+#create_routing_blockage -layers [get_layers] -boundary $tile_blockage_box -zero_spacing
+
+create_routing_corridor -name bypass_link_corridor -boundary $bot_box -object [get_nets *bypass_link*]
+create_routing_corridor -name prev_bypass_corridor -boundary $left_box -object [get_nets *repeated_prev*]
+create_routing_corridor -name next_bypass_corridor -boundary $right_box -object [get_nets *repeated_next*]
 
 ## BP Tile bounds
 current_design bp_tile_node
