@@ -172,6 +172,9 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
     }
   }
 
+  set_optimize_registers false
+  #set_optimize_registers -minimum_period_only 
+  set_optimize_registers [get_designs *fpu*]
 
 
 ########################################

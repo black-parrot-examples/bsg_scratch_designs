@@ -422,8 +422,8 @@ create_keepout_margin -type hard -outer $keepout_margins $cce_instr_ram
 
 set int_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/int_regfile/*"]
 set int_regfile_ma [create_macro_array \
-  -num_rows 2 \
-  -num_cols 1 \
+  -num_rows 1 \
+  -num_cols 2 \
   -align left \
   -horizontal_channel_height [expr 2*$keepout_margin_y] \
   -vertical_channel_width [expr 2*$keepout_margin_x] \
@@ -439,6 +439,30 @@ set_macro_relative_location \
   -offset [list 0 0]
 
 create_keepout_margin -type hard -outer $keepout_margins $int_regfile_mems
+
+###################################
+#### FP RF
+####
+set fp_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/fp_regfile/*"]
+set fp_regfile_ma [create_macro_array \
+  -num_rows 3 \
+  -num_cols 1 \
+  -align left \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
+  -orientation FN \
+  $fp_regfile_mems]
+
+set_macro_relative_location \
+  -target_object $fp_regfile_ma \
+  -target_corner bl \
+  -target_orientation R0 \
+  -anchor_object $int_regfile_ma \
+  -anchor_corner tl \
+  -offset [list 0 0]
+
+create_keepout_margin -type hard -outer $keepout_margins $fp_regfile_mems
+
 
 
 current_design bsg_chip
