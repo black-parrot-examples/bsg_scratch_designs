@@ -39,7 +39,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_cache/bsg_cache.v
   $basejump_stl_dir/bsg_cache/bsg_cache_dma.v
   $basejump_stl_dir/bsg_cache/bsg_cache_miss.v
-  $basejump_stl_dir/bsg_cache/bsg_cache_pkt_decode.v
+  $basejump_stl_dir/bsg_cache/bsg_cache_decode.v
   $basejump_stl_dir/bsg_cache/bsg_cache_sbuf.v
   $basejump_stl_dir/bsg_cache/bsg_cache_sbuf_queue.v
   $basejump_stl_dir/bsg_dataflow/bsg_channel_tunnel.v
@@ -160,7 +160,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_be_dir/src/v/bp_be_calculator/bp_be_int_regfile.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_fp_regfile.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_hardfloat_fpu.v
-  $bp_be_dir/src/v/bp_be_calculator/bp_be_hardfloat_fpu_lite.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_checker_top.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_detector.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_director.v

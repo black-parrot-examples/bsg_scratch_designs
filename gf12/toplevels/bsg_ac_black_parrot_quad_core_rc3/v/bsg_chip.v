@@ -364,7 +364,13 @@ module bsg_chip
   bp_cce_mem_msg_s dram_resp_lo;
   logic            dram_resp_v_lo, dram_resp_ready_li;
   bp_me_cce_to_mem_link_client
-   #(.bp_params_p(bp_params_p))
+   #(.bp_params_p(bp_params_p)
+     ,.num_outstanding_req_p(mem_noc_max_credits_p)
+     ,.flit_width_p(mem_noc_flit_width_p)
+     ,.cord_width_p(mem_noc_cord_width_p)
+     ,.cid_width_p(mem_noc_cid_width_p)
+     ,.len_width_p(mem_noc_len_width_p)
+     )
    dram_link
     (.clk_i(router_clk_lo)
      ,.reset_i(router_reset_lo)
@@ -383,7 +389,12 @@ module bsg_chip
 
   bsg_ready_and_link_sif_s [E:P] bypass_link_li, bypass_link_lo;
   bp_me_cce_to_mem_link_master
-   #(.bp_params_p(bp_params_p))
+   #(.bp_params_p(bp_params_p)
+     ,.flit_width_p(mem_noc_flit_width_p)
+     ,.cord_width_p(mem_noc_cord_width_p)
+     ,.cid_width_p(mem_noc_cid_width_p)
+     ,.len_width_p(mem_noc_len_width_p)
+     )
    bypass_link
     (.clk_i(router_clk_lo)
      ,.reset_i(router_reset_lo)
