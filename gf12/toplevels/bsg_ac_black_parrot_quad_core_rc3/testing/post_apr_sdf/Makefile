@@ -152,7 +152,7 @@ sdf_corner = max
 #rc_corner = SigCmax
 
 ifndef corner
-  corner = tt0p80v25c
+  corner = tt_0p80v_25c
 endif
 
 ifndef rc_corner
@@ -162,7 +162,8 @@ endif
 VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
 VCS_OPTIONS += -negdelay
 #VCS_OPTIONS += +notimingcheck
-VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/results/$(corner)/$(rc_corner)/bsg_chip.sdf
+VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
+VCS_OPTIONS += -sdfretain
 
 ifdef CORNER_SS
   VCS_OPTIONS += +define+CORNER_SS=1

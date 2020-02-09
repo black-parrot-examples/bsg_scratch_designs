@@ -70,6 +70,14 @@ source $::env(BSG_CHIP_DIR)/cad/setup/common_setup.tcl
 #set all_final_source_files [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*_chip_finish.pt.v.gz]
 set all_final_source_files [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*_chip_finish.v.gz]
 
+set VERILOG_FILES(iv7p5_lvt_c14)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC14L.v
+set VERILOG_FILES(iv7p5_rvt_c14)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC14R.v
+set VERILOG_FILES(iv7p5_slvt_c14) /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC14SL.v
+set VERILOG_FILES(iv7p5_hvt_c16)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC16H.v
+set VERILOG_FILES(iv7p5_lvt_c16)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC16L.v
+set VERILOG_FILES(iv7p5_rvt_c16)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC16R.v
+set VERILOG_FILES(iv7p5_slvt_c16) /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC16SL.v
+
 foreach lib [array name VERILOG_FILES] {
   if { $VERILOG_FILES($lib) != "" } {
     set all_final_source_files [concat $all_final_source_files [join $VERILOG_FILES($lib)]]
