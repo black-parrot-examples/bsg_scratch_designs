@@ -174,6 +174,12 @@ BSG_CDC_PATH_FILE = $(BSG_OUT_DIR)/cdc_instance_list.v
 BSG_CHIP_NETLIST_V = $(BSG_OUT_DIR)/bsg_chip_chip_finish.v
 BSG_CHIP_INSTANCE_PATH = bsg_asic_cloud_pcb.IC0.ASIC
 BSG_CHIP_NETLIST_V_GZ = $(BSG_CHIP_DIR)/current_build/pnr/bsg_chip/results/bsg_chip_chip_finish.v.gz
+BP_TILE_NODE_NETLIST_V = $(BSG_OUT_DIR)/bp_tile_node.v
+BP_TILE_NODE_INSTANCE_PATH_0_0 = bsg_asic_cloud_pcb.IC0.ASIC.bp_processor.cc.y_0__x_0__tile_node
+BP_TILE_NODE_INSTANCE_PATH_0_1 = bsg_asic_cloud_pcb.IC0.ASIC.bp_processor.cc.y_0__x_1__tile_node
+BP_TILE_NODE_INSTANCE_PATH_1_0 = bsg_asic_cloud_pcb.IC0.ASIC.bp_processor.cc.y_1__x_0__tile_node
+BP_TILE_NODE_INSTANCE_PATH_1_1 = bsg_asic_cloud_pcb.IC0.ASIC.bp_processor.cc.y_1__x_1__tile_node
+BP_TILE_NODE_NETLIST_V_GZ = $(BSG_CHIP_DIR)/current_build/pnr/bp_tile_node/results/bp_tile_node_chip_finish.v.gz
 
 VCS_OPTIONS += +optconfigfile+$(BSG_CDC_PATH_FILE)
 
@@ -182,6 +188,12 @@ $(BSG_CDC_PATH_FILE): $(BSG_CHIP_NETLIST_V_GZ)
 	cp $(BSG_CHIP_NETLIST_V_GZ) $(BSG_CHIP_NETLIST_V).gz
 	gzip -d $(BSG_CHIP_NETLIST_V).gz
 	$(EXPAND_VERILOG) $(BSG_CHIP_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BSG_CHIP_INSTANCE_PATH)." $$$$2 " } { noTiming };" }' | sort > $@
+	cp $(BP_TILE_NODE_NETLIST_V_GZ) $(BP_TILE_NODE_NETLIST_V).gz
+	gzip -d $(BP_TILE_NODE_NETLIST_V).gz
+	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_0_0)." $$$$2 " } { noTiming };" }' | sort >> $@
+	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_0_1)." $$$$2 " } { noTiming };" }' | sort >> $@
+	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_1_0)." $$$$2 " } { noTiming };" }' | sort >> $@
+	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_1_1)." $$$$2 " } { noTiming };" }' | sort >> $@
 
 ########################################
 ## BlackParrot test junk

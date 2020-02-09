@@ -173,7 +173,6 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   }
 
   set_optimize_registers false
-  #set_optimize_registers -minimum_period_only 
   set_optimize_registers [get_designs *fpu*]
 
 
@@ -280,6 +279,10 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   set_ungroup [get_cells -hier mem_mesh]
   set_ungroup [get_cells -hier cmd_mesh]
   set_ungroup [get_cells -hier resp_mesh]
+
+  # Ungroup FPU for QoR
+  set_ungroup [get_cells -hier *fpu*]
+
 
   set cells_to_derate [list]
   append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~gf14_*"]
