@@ -82,6 +82,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_concentrate_static.v
   $basejump_stl_dir/bsg_misc/bsg_counter_clear_up.v
   $basejump_stl_dir/bsg_misc/bsg_counter_set_down.v
+  $basejump_stl_dir/bsg_misc/bsg_counter_set_en.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down_variable.v
   $basejump_stl_dir/bsg_misc/bsg_crossbar_o_by_i.v
@@ -94,6 +95,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_dff_en.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
+  $basejump_stl_dir/bsg_misc/bsg_edge_detect.v
   $basejump_stl_dir/bsg_misc/bsg_encode_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_expand_bitmask.v
   $basejump_stl_dir/bsg_misc/bsg_hash_bank.v
@@ -128,7 +130,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_common_dir/src/v/bp_pma.v
   $bp_common_dir/src/v/bp_tlb.v
   $bp_common_dir/src/v/bp_tlb_replacement.v
-  $bp_common_dir/src/v/bsg_fifo_1r1w_fence.v
   $bp_common_dir/src/v/bsg_fifo_1r1w_rolly.v
   $bp_be_dir/src/v/bp_be_top.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_bypass.v
@@ -201,6 +202,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bp_clint_slice.v
   $bp_top_dir/src/v/bp_clint_slice_buffered.v
   $bp_top_dir/src/v/bp_core.v
+  $bp_top_dir/src/v/bp_core_minimal.v
   $bp_top_dir/src/v/bp_core_complex.v
   $bp_top_dir/src/v/bp_io_complex.v
   $bp_top_dir/src/v/bp_io_link_to_lce.v

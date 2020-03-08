@@ -112,7 +112,7 @@ VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
 ########################################
 
 #PROG     :=hello_world
-PROG     :=hello_world
+PROG     :=cache_hammer
 DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
 DRAM_SYS :=system.ini
 
@@ -121,6 +121,9 @@ prog.nbf:
 
 prog.mem:
 	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
+
+prog.dump:
+	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).dump $(BSG_OUT_DIR)/$@
 
 dram_ch.ini:
 	@cp $(BLACKPARROT_DIR)/bp_common/test/cfg/$(DRAM_CH) $(BSG_OUT_DIR)/$@
@@ -151,7 +154,7 @@ view:
 	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
+$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem prog.dump dram_ch.ini dram_sys.ini cce_ucode.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
 
 $(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
