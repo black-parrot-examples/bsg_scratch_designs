@@ -4,8 +4,8 @@
 # toplevel will have IO drivers, and the die size is determined by the *. Only
 # certain die sizes have been implemented. Right now only 3x3mm is supported.
 
-#export BSG_TOPLEVEL_DESIGN_TYPE :=block
-export BSG_TOPLEVEL_DESIGN_TYPE :=chip_3x3
+export BSG_TOPLEVEL_DESIGN_TYPE :=block
+#export BSG_TOPLEVEL_DESIGN_TYPE :=chip_3x3
 
 # Select the backend flow style (either hier or flat). This determines if ICC2
 # is going to perform a hierarchical or flat physical implementation of the
@@ -14,8 +14,8 @@ export BSG_TOPLEVEL_DESIGN_TYPE :=chip_3x3
 # block. If there is only a single block in your design's hier.mk, this
 # variable has no affect and is effectively  forced to flat.
 
-export BSG_FLOW_STYLE :=hier
-#export BSG_FLOW_STYLE :=flat
+#export BSG_FLOW_STYLE :=hier
+export BSG_FLOW_STYLE :=flat
 
 # Select if the backend flor is going to perform Design Planning (DP). Design
 # planning is about 10 additional steps that occurs before any placement and

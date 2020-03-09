@@ -37,7 +37,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_cache/bsg_cache.v
   $basejump_stl_dir/bsg_cache/bsg_cache_dma.v
   $basejump_stl_dir/bsg_cache/bsg_cache_miss.v
-  $basejump_stl_dir/bsg_cache/bsg_cache_pkt_decode.v
+  $basejump_stl_dir/bsg_cache/bsg_cache_decode.v
   $basejump_stl_dir/bsg_cache/bsg_cache_sbuf.v
   $basejump_stl_dir/bsg_cache/bsg_cache_sbuf_queue.v
   $basejump_stl_dir/bsg_dataflow/bsg_channel_tunnel.v
@@ -67,8 +67,10 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit_banked.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_bit_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_banked.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync.v
@@ -80,6 +82,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_concentrate_static.v
   $basejump_stl_dir/bsg_misc/bsg_counter_clear_up.v
   $basejump_stl_dir/bsg_misc/bsg_counter_set_down.v
+  $basejump_stl_dir/bsg_misc/bsg_counter_set_en.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down_variable.v
   $basejump_stl_dir/bsg_misc/bsg_crossbar_o_by_i.v
@@ -92,6 +95,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_dff_en.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
+  $basejump_stl_dir/bsg_misc/bsg_edge_detect.v
   $basejump_stl_dir/bsg_misc/bsg_encode_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_expand_bitmask.v
   $basejump_stl_dir/bsg_misc/bsg_hash_bank.v
@@ -126,7 +130,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_common_dir/src/v/bp_pma.v
   $bp_common_dir/src/v/bp_tlb.v
   $bp_common_dir/src/v/bp_tlb_replacement.v
-  $bp_common_dir/src/v/bsg_fifo_1r1w_fence.v
   $bp_common_dir/src/v/bsg_fifo_1r1w_rolly.v
   $bp_be_dir/src/v/bp_be_top.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_bypass.v
@@ -180,17 +183,14 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cce/bp_cce_msg_cached.v
   $bp_me_dir/src/v/cce/bp_cce_msg_uncached.v
   $bp_me_dir/src/v/cce/bp_io_cce.v
+  $bp_me_dir/src/v/cce/bp_uce.v
   $bp_me_dir/src/v/wormhole/bp_me_addr_to_cce_id.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_id_to_cord.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_io_link_bidir.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_io_link_client.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_io_link_master.v
+  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_bidir.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_client.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_master.v
   $bp_me_dir/src/v/wormhole/bp_me_cord_to_id.v
   $bp_me_dir/src/v/wormhole/bp_me_lce_id_to_cord.v
-  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_io_cmd.v
-  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_io_resp.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_lce_cmd.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_lce_req.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_lce_resp.v
@@ -203,6 +203,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bp_clint_slice.v
   $bp_top_dir/src/v/bp_clint_slice_buffered.v
   $bp_top_dir/src/v/bp_core.v
+  $bp_top_dir/src/v/bp_core_minimal.v
   $bp_top_dir/src/v/bp_core_complex.v
   $bp_top_dir/src/v/bp_io_complex.v
   $bp_top_dir/src/v/bp_io_link_to_lce.v
@@ -210,6 +211,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bp_io_tile_node.v
   $bp_top_dir/src/v/bp_mem_complex.v
   $bp_top_dir/src/v/bp_processor.v
+  $bp_top_dir/src/v/bp_softcore.v
   $bp_top_dir/src/v/bp_tile.v
   $bp_top_dir/src/v/bp_tile_node.v
 
@@ -244,13 +246,6 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_tag/bsg_tag_client.v
   $basejump_stl_dir/bsg_tag/bsg_tag_client_unsync.v
 
-  $basejump_stl_dir/bsg_dmc/bsg_dmc_pkg.v
-  $basejump_stl_dir/bsg_dmc/bsg_dmc.v
-  $basejump_stl_dir/bsg_dmc/bsg_dmc_controller.v
-  $basejump_stl_dir/bsg_dmc/bsg_dmc_phy.v
-  $basejump_stl_dir/bsg_dataflow/bsg_make_2D_array.v
-  $basejump_stl_dir/bsg_dataflow/bsg_flatten_2D_array.v
-  
   $bsg_designs_dir/modules/bsg_chip_io_complex/bsg_chip_io_complex.v
 
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
