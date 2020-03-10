@@ -97,7 +97,7 @@ bsg_create_library $::env(BSG_DESIGNS_TESTING_LIBRARY_NAME) \
 
 # netlist filelist
 bsg_create_filelist $::env(BSG_DESIGNS_TESTING_FILELIST) \
-                    $TESTING_SOURCE_FILES
+                    $NETLIST_SOURCE_FILES
 
 # netlist library
 bsg_create_library $::env(NETLIST_LIBRARY_NAME) \
