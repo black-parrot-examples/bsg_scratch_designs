@@ -75,6 +75,10 @@ import bsg_wormhole_router_pkg::*;
   logic proc_io_cmd_v_lo, proc_io_cmd_ready_li;
   bp_cce_mem_msg_s proc_io_resp_li;
   logic proc_io_resp_v_li, proc_io_resp_yumi_lo;
+  bp_cce_mem_msg_s proc_mem_cmd_lo;
+  logic proc_mem_cmd_v_lo, proc_mem_cmd_ready_li;
+  bp_cce_mem_msg_s proc_mem_resp_li;
+  logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
 
   bp_softcore
    #(.bp_params_p(bp_params_p))
@@ -132,7 +136,7 @@ import bsg_wormhole_router_pkg::*;
    #(.bp_params_p(bp_params_p))
    host_mmio
     (.clk_i(blackparrot_clk)
-     ,.reset_i(core_reset_lo | ~tag_trace_done_lo)
+     ,.reset_i(blackparrot_reset)
   
      ,.io_cmd_i(proc_io_cmd_lo)
      ,.io_cmd_v_i(proc_io_cmd_v_lo & proc_io_cmd_ready_li)

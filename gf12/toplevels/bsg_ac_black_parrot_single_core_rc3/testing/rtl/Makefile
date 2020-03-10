@@ -19,13 +19,6 @@ export BSG_PACKAGING_DIR      ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_packaging
 export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/black-parrot
 export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
 
-export TESTING_BSG_DESIGNS_DIR        ?= $(BSG_OUT_DIR)/root
-export TESTING_BASEJUMP_STL_DIR       ?= $(BSG_OUT_DIR)/root/basejump_stl
-export TESTING_BSG_PACKAGING_DIR      ?= $(BSG_OUT_DIR)/root/bsg_packaging
-export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/black-parrot
-export TESTING_BOARD_DIR              ?= $(BSG_OUT_DIR)/root/board
-export TESTING_BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_TARGET_DIR)
-
 export BSG_PACKAGE           ?=uw_bga
 export BSG_PINOUT            ?=bsg_asic_cloud
 export BSG_PACKAGING_FOUNDRY ?=gf_14_invecas_3p3v
@@ -66,8 +59,8 @@ VCS_OPTIONS += -LDFLAGS "-L$(BLACKPARROT_DIR)/external/lib -ldramsim -Wl,-rpath=
 ## Chip and Testing Filelists and Liblists
 ########################################
 
-BSG_TOP_SIM_MODULE = bsg_asic_cloud_pcb
-BSG_CHIP_INSTANCE_PATH = bsg_asic_cloud_pcb.IC0.ASIC
+BSG_TOP_SIM_MODULE = bsg_gateway_chip
+BSG_CHIP_INSTANCE_PATH = bsg_gateway_chip.DUT
 
 VCS_OPTIONS += +define+BSG_TOP_SIM_MODULE=$(BSG_TOP_SIM_MODULE)
 VCS_OPTIONS += +define+BSG_CHIP_INSTANCE_PATH=$(BSG_CHIP_INSTANCE_PATH)
@@ -92,7 +85,7 @@ VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 $(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
-$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)/root
+$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
 
 ########################################
@@ -153,10 +146,6 @@ view:
 build: $(BSG_OUT_SIM)
 $(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
-
-$(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
-	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
-	ln -nsf $(BSG_DESIGNS_DIR)/modules $@/modules
 
 $(BSG_OUT_DIR):
 	mkdir -p $@
