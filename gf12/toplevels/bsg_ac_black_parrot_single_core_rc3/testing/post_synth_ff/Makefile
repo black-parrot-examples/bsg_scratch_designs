@@ -6,7 +6,6 @@
 
 export BSG_DESIGNS_DIR        ?= $(abspath ../../../../)
 export BSG_DESIGNS_TARGET_DIR ?= $(abspath ../../)
-export BSG_DESIGNS_TARGET_TCL_HARD_DIR ?= $(BSG_DESIGNS_TARGET_DIR)/tcl/hard/gf_14
 
 BSG_WORK_DIR := $(abspath ./)
 BSG_OUT_DIR  := $(BSG_WORK_DIR)/out
