@@ -33,8 +33,8 @@ bsg_packaging_dir    :=$(THIS_DIR)/bsg_packaging
 bsg_packaging_url    :=$(BITBUCKET)taylor-bsg/bsg_packaging
 bsg_packaging_commit :=master
 
-bp_pre_alpha_release_dir     :=$(THIS_DIR)/pre-alpha-release
-bp_pre_alpha_release_url     :=$(GITHUB)black-parrot/pre-alpha-release
+bp_pre_alpha_release_dir     :=$(THIS_DIR)/black-parrot
+bp_pre_alpha_release_url     :=$(GITHUB)black-parrot/black-parrot
 bp_pre_alpha_release_commit  :=tapeout_bp_rc3
 
 all_repos = $(subst _url,.repo,$(filter %_url,$(.VARIABLES)))

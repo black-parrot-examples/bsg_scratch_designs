@@ -81,7 +81,6 @@ import bsg_wormhole_router_pkg::*;
   logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
 
   bsg_chip
-   #(.bp_params_p(bp_params_p))
    DUT
     (.clk_i(blackparrot_clk)
      ,.reset_i(blackparrot_reset)
