@@ -57,31 +57,13 @@ VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
 VCS_OPTIONS += +warn_all,noOPD,noTMR,noTFIPC
 
+VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
+
 # DRAMSim2
 VCS_OPTIONS += -CFLAGS "-I$(BLACKPARROT_DIR)/external/include -std=c++11"
 VCS_OPTIONS += -LDFLAGS "-L$(BLACKPARROT_DIR)/external/lib -ldramsim -Wl,-rpath=$(BLACKPARROT_DIR)/external/lib"
 
-# Add extra packages that get dropped by the build system
-VCS_OPTIONS += +incdir+$(BASEJUMP_STL_DIR)/bsg_misc/
-VCS_OPTIONS += +incdir+$(BASEJUMP_STL_DIR)/bsg_noc/
-VCS_OPTIONS += +incdir+$(BLACKPARROT_COMMON_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_TOP_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_FE_DIR)/bp_fe/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_BE_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_BE_DIR)/src/include/bp_be_dcache/
-VCS_OPTIONS += +incdir+$(BLACKPARROT_ME_DIR)/src/include/v
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_pkg.vh 
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_aviary_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_rv64_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_BE_DIR)/src/include/bp_be_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_ME_DIR)/src/include/v/bp_cce_pkg.v
-VCS_OPTIONS += $(BLACKPARROT_ME_DIR)/src/include/v/bp_me_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_BE_DIR)/src/include/bp_be_dcache/bp_be_dcache_pkg.vh
-VCS_OPTIONS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_wormhole_router_pkg.v
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_cfg_link_pkg.vh
-VCS_OPTIONS += $(BSG_DESIGNS_TARGET_DIR)/v/bsg_chip_pkg.v
-
-# Additional options for RTL-Hard
+# Additional options for Post-Synth
 VCS_OPTIONS += +notimingcheck
 VCS_OPTIONS += +nospecify
 
@@ -110,7 +92,14 @@ export BSG_DESIGNS_TESTING_LIBRARY = $(BSG_OUT_DIR)/$(BSG_DESIGNS_TESTING_LIBRAR
 VCS_OPTIONS += +define+BSG_DESIGNS_TESTING_LIBRARY_NAME=$(BSG_DESIGNS_TESTING_LIBRARY_NAME)
 VCS_OPTIONS += -f $(BSG_DESIGNS_TESTING_FILELIST)
 VCS_OPTIONS += -libmap $(BSG_DESIGNS_TESTING_LIBRARY)
-VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
+
+export NETLIST_LIBRARY_NAME = netlist
+export NETLIST_FILELIST = $(BSG_OUT_DIR)/$(NETLIST_LIBRARY_NAME).filelist
+export NETLIST_LIBRARY = $(BSG_OUT_DIR)/$(NETLIST_LIBRARY_NAME).library
+
+VCS_OPTIONS += +define+NETLIST_LIBRARY_NAME=$(NETLIST_LIBRARY_NAME)
+VCS_OPTIONS += -f $(NETLIST_FILELIST)
+VCS_OPTIONS += -libmap $(NETLIST_LIBRARY)
 
 $(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)

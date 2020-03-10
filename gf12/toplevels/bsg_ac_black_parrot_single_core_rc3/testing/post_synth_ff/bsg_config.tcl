@@ -67,27 +67,30 @@ proc bsg_create_library {library_name library_file source_files {include_paths "
 source $::env(BSG_CHIP_DIR)/cad/setup/common_setup.tcl
 
 # chip source (rtl) files and include paths list
-set all_final_source_files [glob $::env(BSG_CHIP_DIR)/current_build/synth/*/results/*.mapped.v]
+source $::env(BSG_DESIGNS_TARGET_DIR)/tcl/filelist.tcl
+source $::env(BSG_DESIGNS_TARGET_DIR)/tcl/include.tcl
 
+# testing source (rtl) files and include paths list
+source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/filelist.tcl
+source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
+
+# netlist source files
+set NETLIST_SOURCE_FILES [glob $::env(BSG_CHIP_DIR)/current_build/synth/*/results/*.mapped.v]
 foreach lib [array name VERILOG_FILES] {
   if { $VERILOG_FILES($lib) != "" } {
-    set all_final_source_files [concat $all_final_source_files [join $VERILOG_FILES($lib)]]
+    set NETLIST_SOURCE_FILES [concat $NETLIST_SOURCE_FILES [join $VERILOG_FILES($lib)]]
   }
 }
 
 # chip filelist
 bsg_create_filelist $::env(BSG_CHIP_FILELIST) \
-                    $all_final_source_files
+                    $SVERILOG_SOURCE_FILES
 
 # chip library
 bsg_create_library $::env(BSG_CHIP_LIBRARY_NAME) \
                    $::env(BSG_CHIP_LIBRARY)      \
-                   $all_final_source_files       \
-                   [list]
-
-# testing source (rtl) files and include paths list
-source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/filelist.tcl
-source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
+                   $SVERILOG_SOURCE_FILES        \
+                   $SVERILOG_INCLUDE_PATHS
 
 # testing filelist
 bsg_create_filelist $::env(BSG_DESIGNS_TESTING_FILELIST) \
@@ -98,3 +101,14 @@ bsg_create_library $::env(BSG_DESIGNS_TESTING_LIBRARY_NAME) \
                    $::env(BSG_DESIGNS_TESTING_LIBRARY)      \
                    $TESTING_SOURCE_FILES                    \
                    $TESTING_INCLUDE_PATHS
+
+# netlist filelist
+bsg_create_filelist $::env(NETLIST_FILELIST) \
+                    $NETLIST_SOURCE_FILES
+
+# netlist library
+bsg_create_library $::env(NETLIST_LIBRARY_NAME) \
+                   $::env(NETLIST_LIBRARY)      \
+                   $NETLIST_SOURCE_FILES        \
+                   [list]
+
