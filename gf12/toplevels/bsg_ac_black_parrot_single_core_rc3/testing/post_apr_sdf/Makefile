@@ -14,19 +14,10 @@ BSG_OUT_SIM  := $(BSG_OUT_DIR)/simv
 include $(BSG_DESIGNS_TARGET_DIR)/bsg_cadenv/cadenv.mk
 
 # Repository setup
-export BSG_DESIGNS_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_designs
-export BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
 export BASEJUMP_STL_DIR       ?= $(BSG_DESIGNS_TARGET_DIR)/basejump_stl
 export BSG_PACKAGING_DIR      ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_packaging
-export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/pre-alpha-release
+export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/black-parrot
 export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
-
-export TESTING_BSG_DESIGNS_DIR        ?= $(BSG_OUT_DIR)/root
-export TESTING_BASEJUMP_STL_DIR       ?= $(BSG_OUT_DIR)/root/basejump_stl
-export TESTING_BSG_PACKAGING_DIR      ?= $(BSG_OUT_DIR)/root/bsg_packaging
-export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/pre-alpha-release
-export TESTING_BOARD_DIR              ?= $(BSG_OUT_DIR)/root/board
-export TESTING_BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_TARGET_DIR)
 
 export BSG_PACKAGE           ?=uw_bga
 export BSG_PINOUT            ?=bsg_asic_cloud
@@ -42,10 +33,8 @@ export BLACKPARROT_ME_DIR     ?= $(BLACKPARROT_DIR)/bp_me
 # Additional setup for RTL-Hard
 export BSG_CHIP_DIR             ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_14
 export MEMGEN_RUN_DIR           ?= $(BSG_CHIP_DIR)/sources/memgen
-export BSG_TOPLEVEL_DESIGN_TYPE ?=bsg_chip
+export BSG_TOPLEVEL_DESIGN_TYPE ?=chip_3x3
 export BSG_TARGET_PROCESS       ?=gf_14
-
-include $(BSG_CHIP_DIR)/cad/setup/Makefile.include
 
 ########################################
 ## VCS OPTIONS
@@ -55,7 +44,6 @@ include $(BSG_CHIP_DIR)/cad/setup/Makefile.include
 VCS_OPTIONS := -full64
 VCS_OPTIONS += -notice
 VCS_OPTIONS += -debug_pp
-VCS_OPTIONS += +vcs+vcdpluson
 VCS_OPTIONS += -V
 VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext
@@ -67,37 +55,20 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC
+
+VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 
 # DRAMSim2
 VCS_OPTIONS += -CFLAGS "-I$(BLACKPARROT_DIR)/external/include -std=c++11"
 VCS_OPTIONS += -LDFLAGS "-L$(BLACKPARROT_DIR)/external/lib -ldramsim -Wl,-rpath=$(BLACKPARROT_DIR)/external/lib"
 
-# Add extra packages that get dropped by the build system
-VCS_OPTIONS += +incdir+$(BASEJUMP_STL_DIR)/bsg_misc/
-VCS_OPTIONS += +incdir+$(BLACKPARROT_COMMON_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_TOP_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_FE_DIR)/bp_fe/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_BE_DIR)/src/include
-VCS_OPTIONS += +incdir+$(BLACKPARROT_BE_DIR)/src/include/bp_be_dcache/
-VCS_OPTIONS += +incdir+$(BLACKPARROT_ME_DIR)/src/include/v
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_pkg.vh 
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_cfg_link_pkg.vh 
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_aviary_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_COMMON_DIR)/src/include/bp_common_rv64_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_BE_DIR)/src/include/bp_be_pkg.vh
-VCS_OPTIONS += $(BLACKPARROT_BE_DIR)/src/include/bp_be_dcache/bp_be_dcache_pkg.vh
-VCS_OPTIONS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_wormhole_router_pkg.v
-VCS_OPTIONS += $(BLACKPARROT_ME_DIR)/src/include/v/bp_cce_pkg.v
-VCS_OPTIONS += $(BLACKPARROT_ME_DIR)/src/include/v/bp_me_pkg.vh
-VCS_OPTIONS += $(BSG_DESIGNS_TARGET_DIR)/v/bsg_chip_pkg.v
-
 ########################################
 ## Chip and Testing Filelists and Liblists
 ########################################
 
-BSG_TOP_SIM_MODULE = bsg_asic_cloud_pcb
-BSG_CHIP_INSTANCE_PATH = bsg_asic_cloud_pcb.IC0.ASIC
+BSG_TOP_SIM_MODULE = bsg_gateway_chip
+BSG_CHIP_INSTANCE_PATH = bsg_gateway_chip.DUT
 
 VCS_OPTIONS += +define+BSG_TOP_SIM_MODULE=$(BSG_TOP_SIM_MODULE)
 VCS_OPTIONS += +define+BSG_CHIP_INSTANCE_PATH=$(BSG_CHIP_INSTANCE_PATH)
@@ -118,10 +89,18 @@ VCS_OPTIONS += +define+BSG_DESIGNS_TESTING_LIBRARY_NAME=$(BSG_DESIGNS_TESTING_LI
 VCS_OPTIONS += -f $(BSG_DESIGNS_TESTING_FILELIST)
 VCS_OPTIONS += -libmap $(BSG_DESIGNS_TESTING_LIBRARY)
 
+export NETLIST_LIBRARY_NAME = netlist
+export NETLIST_FILELIST = $(BSG_OUT_DIR)/$(NETLIST_LIBRARY_NAME).filelist
+export NETLIST_LIBRARY = $(BSG_OUT_DIR)/$(NETLIST_LIBRARY_NAME).library
+
+VCS_OPTIONS += +define+NETLIST_LIBRARY_NAME=$(NETLIST_LIBRARY_NAME)
+VCS_OPTIONS += -f $(NETLIST_FILELIST)
+VCS_OPTIONS += -libmap $(NETLIST_LIBRARY)
+
 $(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
-$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)/root
+$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
 
 ########################################
@@ -135,12 +114,6 @@ $(BSG_OUT_DIR)/%_rom.v: $(BSG_WORK_DIR)/../traces/%.tr | $(BSG_OUT_DIR)
 	$(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py $< $*_rom > $@
 
 VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
-
-########################################
-## DRAM Definitions
-########################################
-
-VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 
 ########################################
 ## SDF Annotation
@@ -167,20 +140,6 @@ VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/curr
 ifdef CORNER_SS
   VCS_OPTIONS += +define+CORNER_SS=1
 endif
-
-EXPAND_VERILOG = $(BSG_DESIGNS_DIR)/util/expand_verilog_hierarchy.py
-BSG_CDC_PATH_FILE = $(BSG_OUT_DIR)/cdc_instance_list.v
-BSG_CHIP_NETLIST_V = $(BSG_OUT_DIR)/bsg_chip_chip_finish.v
-BSG_CHIP_INSTANCE_PATH = bsg_asic_cloud_pcb.IC0.ASIC
-BSG_CHIP_NETLIST_V_GZ = $(BSG_CHIP_DIR)/current_build/pnr/bsg_chip/results/bsg_chip_chip_finish.v.gz
-
-VCS_OPTIONS += +optconfigfile+$(BSG_CDC_PATH_FILE)
-
-# grab all of the sync flops
-$(BSG_CDC_PATH_FILE): $(BSG_CHIP_NETLIST_V_GZ)
-	cp $(BSG_CHIP_NETLIST_V_GZ) $(BSG_CHIP_NETLIST_V).gz
-	gzip -d $(BSG_CHIP_NETLIST_V).gz
-	$(EXPAND_VERILOG) $(BSG_CHIP_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BSG_CHIP_INSTANCE_PATH)." $$$$2 " } { noTiming };" }' | sort > $@
 
 ########################################
 ## BlackParrot test junk
@@ -225,11 +184,8 @@ view:
 	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) $(BSG_CDC_PATH_FILE) prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
+$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
-
-$(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
-	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
 
 $(BSG_OUT_DIR):
 	mkdir -p $@
@@ -243,5 +199,4 @@ clean:
 	rm -f  inter.vpd
 	rm -f  ucli.key
 	rm -f  main.riscv main_dmem.mem main_dram.mem
-
 

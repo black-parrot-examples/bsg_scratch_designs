@@ -55,7 +55,7 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn_all,noOPD,noTMR,noTFIPC
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 
