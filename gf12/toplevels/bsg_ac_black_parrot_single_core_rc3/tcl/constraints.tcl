@@ -68,15 +68,5 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
 
   # Ungrouping
   #=================
-  set_ungroup [get_cells swizzle]
-
-########################################
-##
-## Unknown design...
-##
-} else {
-
-  puts "BSG-error: No constraints found for design (${DESIGN_NAME})!"
-
-}
-
+  #set_ungroup [get_cells swizzle]
+  #set_ungroup [get_cells *softcore] true

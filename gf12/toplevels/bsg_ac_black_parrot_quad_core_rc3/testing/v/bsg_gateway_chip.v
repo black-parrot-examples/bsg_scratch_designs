@@ -418,7 +418,7 @@ import bsg_wormhole_router_pkg::*;
   logic                 cfg_resp_v_li, cfg_resp_ready_lo;
 
   bp_cce_mem_msg_s      host_cmd_li;
-  logic                 host_cmd_v_li, host_cmd_yumi_lo;
+  logic                 host_cmd_v_li, host_cmd_ready_lo;
   bp_cce_mem_msg_s      host_resp_lo;
   logic                 host_resp_v_lo, host_resp_ready_li;
 
@@ -433,7 +433,7 @@ import bsg_wormhole_router_pkg::*;
   logic                 load_resp_v_li, load_resp_yumi_lo;
   
   bp_cce_mem_msg_s      dram_cmd_lo;
-  logic                 dram_cmd_v_lo, dram_cmd_yumi_li;
+  logic                 dram_cmd_v_lo, dram_cmd_ready_li;
   bp_cce_mem_msg_s      dram_resp_li;
   logic                 dram_resp_v_li, dram_resp_ready_lo;
 
@@ -459,7 +459,7 @@ import bsg_wormhole_router_pkg::*;
 
      ,.mem_cmd_o(host_cmd_li)
      ,.mem_cmd_v_o(host_cmd_v_li)
-     ,.mem_cmd_yumi_i(host_cmd_yumi_lo)
+     ,.mem_cmd_yumi_i(host_cmd_ready_lo & host_cmd_v_li)
 
      ,.mem_resp_i(host_resp_lo)
      ,.mem_resp_v_i(host_resp_v_lo)
@@ -509,7 +509,7 @@ import bsg_wormhole_router_pkg::*;
 
      ,.mem_cmd_o(dram_cmd_lo)
      ,.mem_cmd_v_o(dram_cmd_v_lo)
-     ,.mem_cmd_yumi_i(dram_cmd_yumi_li)
+     ,.mem_cmd_yumi_i(dram_cmd_ready_li & dram_cmd_v_lo)
 
      ,.mem_resp_i(dram_resp_li)
      ,.mem_resp_v_i(dram_resp_v_li)
@@ -536,11 +536,11 @@ import bsg_wormhole_router_pkg::*;
 
      ,.mem_cmd_i(dram_cmd_lo)
      ,.mem_cmd_v_i(dram_cmd_v_lo)
-     ,.mem_cmd_yumi_o(dram_cmd_yumi_li)
+     ,.mem_cmd_ready_o(dram_cmd_ready_li)
 
      ,.mem_resp_o(dram_resp_li)
      ,.mem_resp_v_o(dram_resp_v_li)
-     ,.mem_resp_ready_i(dram_resp_ready_lo)
+     ,.mem_resp_yumi_i(dram_resp_ready_lo & dram_resp_v_li)
      );
 
   logic cfg_done_lo;
@@ -595,11 +595,11 @@ import bsg_wormhole_router_pkg::*;
   
      ,.io_cmd_i(host_cmd_li)
      ,.io_cmd_v_i(host_cmd_v_li)
-     ,.io_cmd_yumi_o(host_cmd_yumi_lo)
+     ,.io_cmd_ready_o(host_cmd_ready_lo)
   
      ,.io_resp_o(host_resp_lo)
      ,.io_resp_v_o(host_resp_v_lo)
-     ,.io_resp_ready_i(host_resp_ready_li)
+     ,.io_resp_yumi_i(host_resp_ready_li & host_resp_v_lo)
   
      ,.program_finish_o(program_finish)
      );
