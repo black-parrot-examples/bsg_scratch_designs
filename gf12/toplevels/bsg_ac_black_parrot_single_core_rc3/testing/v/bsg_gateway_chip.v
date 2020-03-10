@@ -80,7 +80,7 @@ import bsg_wormhole_router_pkg::*;
   bp_cce_mem_msg_s proc_mem_resp_li;
   logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
 
-  bp_softcore
+  bsg_chip
    #(.bp_params_p(bp_params_p))
    DUT
     (.clk_i(blackparrot_clk)
