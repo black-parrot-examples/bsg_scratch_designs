@@ -30,6 +30,7 @@ set TESTING_SOURCE_FILES [join "
   $bp_me_dir/test/common/bp_mem_storage_sync.v
   $bp_me_dir/test/common/bp_mem_utils.cpp
   $bp_top_dir/test/common/bp_nonsynth_host.v
+  $bp_top_dir/test/common/bp_monitor.cpp
   $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v
   $bsg_designs_target_dir/testing/v/bsg_gateway_chip.v
 "]
