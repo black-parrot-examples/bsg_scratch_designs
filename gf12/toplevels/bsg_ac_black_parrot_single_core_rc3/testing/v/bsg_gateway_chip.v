@@ -109,7 +109,7 @@ import bsg_wormhole_router_pkg::*;
 
   bp_mem
    #(.bp_params_p(bp_params_p)
-     ,.mem_cap_in_bytes_p(32'h10000)
+     ,.mem_cap_in_bytes_p(2**25)
      ,.mem_load_p(1)
      ,.mem_file_p("prog.mem")
      ,.mem_offset_p(32'h80000000)

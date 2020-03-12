@@ -38,7 +38,7 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
   # In2Reg
   set core_input_pins [filter_collection [all_inputs] "name!~*clk*"]
   set_driving_cell -no_design_rule -lib_cell ${driving_lib_cell} [remove_from_collection [all_inputs] [get_ports *clk*]]
-  set_input_delay ${core_input_delay_ps} -clock $core_clk_name ${core_input_pins}
+  set_input_delay ${core_input_delay_ps} -clock ${core_clk_name} ${core_input_pins}
   
   # Reg2Out
   set core_output_pins [all_outputs]
@@ -69,4 +69,6 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
   # Ungrouping
   #=================
   #set_ungroup [get_cells swizzle]
-  #set_ungroup [get_cells *softcore] true
+  set_ungroup [get_cells *softcore*] true
+  set_optimize_registers
+

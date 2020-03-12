@@ -18,13 +18,13 @@ export BSG_DESIGNS_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_designs
 export BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
 export BASEJUMP_STL_DIR       ?= $(BSG_DESIGNS_TARGET_DIR)/basejump_stl
 export BSG_PACKAGING_DIR      ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_packaging
-export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/pre-alpha-release
+export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/black-parrot
 export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
 
 export TESTING_BSG_DESIGNS_DIR        ?= $(BSG_OUT_DIR)/root
 export TESTING_BASEJUMP_STL_DIR       ?= $(BSG_OUT_DIR)/root/basejump_stl
 export TESTING_BSG_PACKAGING_DIR      ?= $(BSG_OUT_DIR)/root/bsg_packaging
-export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/pre-alpha-release
+export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/black-parrot
 export TESTING_BOARD_DIR              ?= $(BSG_OUT_DIR)/root/board
 export TESTING_BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_TARGET_DIR)
 
@@ -195,6 +195,10 @@ $(BSG_CDC_PATH_FILE): $(BSG_CHIP_NETLIST_V_GZ)
 	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_1_0)." $$$$2 " } { noTiming };" }' | sort >> $@
 	$(EXPAND_VERILOG) $(BP_TILE_NODE_NETLIST_V)| grep "_hard_sync_int" | awk '{ print "instance { $(BP_TILE_NODE_INSTANCE_PATH_1_1)." $$$$2 " } { noTiming };" }' | sort >> $@
 
+$(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
+	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
+	ln -nsf $(BSG_DESIGNS_DIR)/modules $@/modules
+
 ########################################
 ## BlackParrot test junk
 ########################################
@@ -240,9 +244,6 @@ view:
 build: $(BSG_OUT_SIM)
 $(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) $(BSG_CDC_PATH_FILE) prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
-
-$(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
-	ln -nsf $(BSG_DESIGNS_TARGET_DIR) $@
 
 $(BSG_OUT_DIR):
 	mkdir -p $@

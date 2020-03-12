@@ -55,7 +55,7 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 
@@ -136,6 +136,7 @@ VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
 VCS_OPTIONS += -negdelay
 #VCS_OPTIONS += +notimingcheck
 VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
+VCS_OPTIONS += -sdfretain
 
 ifdef CORNER_SS
   VCS_OPTIONS += +define+CORNER_SS=1
