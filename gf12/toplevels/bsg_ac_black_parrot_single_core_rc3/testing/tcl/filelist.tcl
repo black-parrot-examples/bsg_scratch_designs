@@ -29,6 +29,7 @@ set TESTING_SOURCE_FILES [join "
   $bp_me_dir/test/common/bp_mem_delay_model.v
   $bp_me_dir/test/common/bp_mem_storage_sync.v
   $bp_me_dir/test/common/bp_mem_utils.cpp
+  $bp_me_dir/test/common/bp_cce_mmio_cfg_loader.v
   $bp_top_dir/test/common/bp_nonsynth_host.v
   $bp_top_dir/test/common/bp_monitor.cpp
   $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v

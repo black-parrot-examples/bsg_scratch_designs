@@ -10,8 +10,8 @@ source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_clk_gen.const
 
 set bp_clk_name "bp_clk" ;# main clock running black parrot
 
-#set bp_clk_period_ps       1000
-set bp_clk_period_ps       1666
+set bp_clk_period_ps       1000
+#set bp_clk_period_ps       1666
 set bp_clk_uncertainty_per 3.0
 #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
 set bp_clk_uncertainty_ps 20
@@ -70,5 +70,5 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
   #=================
   #set_ungroup [get_cells swizzle]
   set_ungroup [get_cells *softcore*] true
-  set_optimize_registers
+  set_optimize_registers true -design bp_be_pipe_mul
 
