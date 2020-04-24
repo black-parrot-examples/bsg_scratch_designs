@@ -22,7 +22,7 @@ package bsg_chip_pkg;
   //
   
   localparam bp_num_core_gp     = 4;
-  localparam bp_params_e bp_cfg_gp = e_bp_quad_core_cfg;
+  localparam bp_params_e bp_cfg_gp = e_bp_quad_core_ucode_cce_cfg;
 
   localparam wh_did_width_gp = 8;
 

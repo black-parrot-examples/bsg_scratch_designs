@@ -32,7 +32,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_be_dir/src/include/bp_be_dcache/bp_be_dcache_pkg.vh
   $bp_me_dir/src/include/v/bp_me_pkg.vh
   $bp_me_dir/src/include/v/bp_cce_pkg.v
-  $bp_be_dir/test/tb/bp_be_dcache/v/bp_dcache_axe_trace_gen.v
   $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
   $basejump_stl_dir/bsg_cache/bsg_cache.v
   $basejump_stl_dir/bsg_cache/bsg_cache_dma.v
@@ -172,7 +171,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cache/bp_me_cache_dma_to_cce.v
   $bp_me_dir/src/v/cache/bp_me_cache_slice.v
   $bp_me_dir/src/v/cache/bp_me_cce_to_cache.v
-  $bp_me_dir/src/v/cache/bp_me_cce_to_cache_buffered.v
   $bp_me_dir/src/v/cce/bp_uce.v
   $bp_me_dir/src/v/cce/bp_cce.v
   $bp_me_dir/src/v/cce/bp_cce_alu.v
@@ -209,9 +207,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bsg_async_noc_link.v
   $bp_top_dir/src/v/bp_cacc_complex.v
   $bp_top_dir/src/v/bp_cfg.v
-  $bp_top_dir/src/v/bp_cfg_buffered.v
   $bp_top_dir/src/v/bp_clint_slice.v
-  $bp_top_dir/src/v/bp_clint_slice_buffered.v
   $bp_top_dir/src/v/bp_core.v
   $bp_top_dir/src/v/bp_core_complex.v
   $bp_top_dir/src/v/bp_core_minimal.v

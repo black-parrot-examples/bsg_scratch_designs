@@ -356,11 +356,11 @@ set_macro_relative_location \
 ### CCE Directory
 ###
 
-set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*cce/directory/directory/*"]
+set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*cce*directory*"]
 set directory_mem_height [get_attribute -objects [index_collection $directory_mems 0] -name height]
 set directory_mem_width [get_attribute -objects [index_collection $directory_mems 0] -name width]
 set directory_ma [create_macro_array \
-  -num_rows 4 \
+  -num_rows 8 \
   -num_cols 2 \
   -align bottom \
   -horizontal_channel_height [expr 2*$keepout_margin_y] \
