@@ -8,11 +8,11 @@ set_block_pin_constraints -allowed_layers { C4 C5 K1 K2 K3 K4 }
 set tile_mem_cmd_pins_o   [get_ports -filter "name=~mem_*_o*"]
 set tile_mem_resp_pins_i  [get_ports -filter "name=~mem_*_i*"]
 
-set tile_io_cmd_pins_o    [get_ports -filter "name=~io_*_o*"]
-set tile_io_resp_pins_i   [get_ports -filter "name=~io_*_i*"]
+set tile_io_cmd_pins_o    [get_ports -filter "name=~io_*cmd*_o*"]
+set tile_io_resp_pins_i   [get_ports -filter "name=~io_*resp*_i*"]
 
-set tile_io_cmd_pins_i    [get_ports -filter "name=~io_*_i*"]
-set tile_io_resp_pins_o   [get_ports -filter "name=~io_*_o*"]
+set tile_io_cmd_pins_i    [get_ports -filter "name=~io_*cmd*_i*"]
+set tile_io_resp_pins_o   [get_ports -filter "name=~io_*resp*_o*"]
 
 set start_x [expr 0.128*1400]
 set last_loc [bsg_pins_line_constraint $tile_mem_cmd_pins_o  "K2" top  $start_x "self" $tile_io_cmd_pins_o 1 0]

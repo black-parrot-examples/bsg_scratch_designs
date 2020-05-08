@@ -4,5 +4,5 @@ initialize_floorplan        \
   -shape R                  \
   -core_utilization 0.50    \
   -core_offset 0.0          \
-  -side_length [list 500 500]
+  -side_length [list 600 600]
 

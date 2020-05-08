@@ -16,13 +16,13 @@ include $(BSG_DESIGNS_TARGET_DIR)/bsg_cadenv/cadenv.mk
 # Repository setup
 export BASEJUMP_STL_DIR       ?= $(BSG_DESIGNS_TARGET_DIR)/basejump_stl
 export BSG_PACKAGING_DIR      ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_packaging
-export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/pre-alpha-release
+export BLACKPARROT_DIR        ?= $(BSG_DESIGNS_TARGET_DIR)/black-parrot
 export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
 
 export TESTING_BSG_DESIGNS_DIR        ?= $(BSG_OUT_DIR)/root
 export TESTING_BASEJUMP_STL_DIR       ?= $(BSG_OUT_DIR)/root/basejump_stl
 export TESTING_BSG_PACKAGING_DIR      ?= $(BSG_OUT_DIR)/root/bsg_packaging
-export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/pre-alpha-release
+export TESTING_BLACKPARROT_DIR        ?= $(BSG_OUT_DIR)/root/black-parrot
 export TESTING_BOARD_DIR              ?= $(BSG_OUT_DIR)/root/board
 export TESTING_BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_TARGET_DIR)
 
@@ -111,13 +111,13 @@ VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
 ## BlackParrot test junk
 ########################################
 
-#PROG     :=hello_world
-PROG     :=cache_hammer
+PROG     :=hello_world
+#PROG     :=cache_hammer
 DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
 DRAM_SYS :=system.ini
 
 prog.nbf:
-	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).nbf $(BSG_OUT_DIR)/$@
+	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --mem_file $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@
 
 prog.mem:
 	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
@@ -132,7 +132,7 @@ dram_sys.ini:
 	@cp $(BLACKPARROT_DIR)/bp_common/test/cfg/$(DRAM_SYS) $(BSG_OUT_DIR)/$@
 
 cce_ucode.mem:
-	@cp $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi/bp_cce_inst_rom_mesi.mem $(BSG_OUT_DIR)/$@
+	@cp $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem $(BSG_OUT_DIR)/$@
 
 ########################################
 ## Run Targets

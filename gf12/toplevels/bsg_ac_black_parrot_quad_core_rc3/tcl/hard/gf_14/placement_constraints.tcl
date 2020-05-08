@@ -96,9 +96,9 @@ set tile_blockage_box [list [list [lindex $tile2 0 0] [lindex $tile2 0 1]] [list
 create_placement_blockage -type hard -boundary $tile_blockage_box
 #create_routing_blockage -layers [get_layers] -boundary $tile_blockage_box -zero_spacing
 
-create_routing_corridor -name bypass_link_corridor -boundary $bot_box -object [get_nets *bypass_link*]
-create_routing_corridor -name prev_bypass_corridor -boundary $left_box -object [get_nets *repeated_prev*]
-create_routing_corridor -name next_bypass_corridor -boundary $right_box -object [get_nets *repeated_next*]
+#create_routing_corridor -name bypass_link_corridor -boundary $bot_box -object [get_nets *bypass_link*]
+#create_routing_corridor -name prev_bypass_corridor -boundary $left_box -object [get_nets *repeated_prev*]
+#create_routing_corridor -name next_bypass_corridor -boundary $right_box -object [get_nets *repeated_next*]
 
 ## BP Tile bounds
 current_design bp_tile_node
@@ -360,8 +360,8 @@ set directory_mems [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*cce
 set directory_mem_height [get_attribute -objects [index_collection $directory_mems 0] -name height]
 set directory_mem_width [get_attribute -objects [index_collection $directory_mems 0] -name width]
 set directory_ma [create_macro_array \
-  -num_rows 8 \
-  -num_cols 2 \
+  -num_rows 4 \
+  -num_cols 4 \
   -align bottom \
   -horizontal_channel_height [expr 2*$keepout_margin_y] \
   -vertical_channel_width [expr 2*$keepout_margin_x] \
@@ -374,7 +374,7 @@ set_macro_relative_location \
   -target_corner bl \
   -target_orientation R0 \
   -anchor_corner bl \
-  -offset [list [expr $tile_width/2-$directory_mem_width-2*$keepout_margin_x] [expr 0]]
+  -offset [list [expr $tile_width/2-2*$directory_mem_width-2*$keepout_margin_x] [expr 0]]
 
 create_keepout_margin -type hard -outer $keepout_margins $directory_mems
 
