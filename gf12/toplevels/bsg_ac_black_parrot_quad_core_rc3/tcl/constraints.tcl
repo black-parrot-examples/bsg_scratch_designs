@@ -27,8 +27,8 @@ set io_master_clk_uncertainty_ps  20
 #set io_clk_uncertainty_ps         [expr min([expr 2*${io_master_clk_period_ps}*(${io_master_clk_uncertainty_per}/100.0)], 50)]
 set io_clk_uncertainty_ps         20
 
-#set bp_clk_period_ps       1000
-set bp_clk_period_ps       1666
+set bp_clk_period_ps       1000
+#set bp_clk_period_ps       1666
 set bp_clk_uncertainty_per 3.0
 #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
 set bp_clk_uncertainty_ps 20

@@ -60,7 +60,11 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_dataflow/bsg_shift_reg.v
   $basejump_stl_dir/bsg_dataflow/bsg_two_fifo.v
   $basejump_stl_dir/bsg_mem/bsg_cam_1r1w.v
+  $basejump_stl_dir/bsg_mem/bsg_cam_1r1w_replacement.v
+  $basejump_stl_dir/bsg_mem/bsg_cam_1r1w_sync.v
+  $basejump_stl_dir/bsg_mem/bsg_cam_1r1w_tag_array.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_one_hot.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_sync.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_sync_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_synth.v
@@ -75,6 +79,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync.v
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync_synth.v
   $basejump_stl_dir/bsg_misc/bsg_adder_cin.v
+  $basejump_stl_dir/bsg_misc/bsg_adder_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_adder_ripple_carry.v
   $basejump_stl_dir/bsg_misc/bsg_arb_fixed.v
   $basejump_stl_dir/bsg_misc/bsg_array_concentrate_static.v
@@ -96,6 +101,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_dff_en.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
+  $basejump_stl_dir/bsg_misc/bsg_dff_reset_set_clear.v
   $basejump_stl_dir/bsg_misc/bsg_edge_detect.v
   $basejump_stl_dir/bsg_misc/bsg_encode_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_expand_bitmask.v
@@ -107,6 +113,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_lru_pseudo_tree_decode.v
   $basejump_stl_dir/bsg_misc/bsg_lru_pseudo_tree_encode.v
   $basejump_stl_dir/bsg_misc/bsg_mux.v
+  $basejump_stl_dir/bsg_misc/bsg_mux_bitwise.v
   $basejump_stl_dir/bsg_misc/bsg_mux_butterfly.v
   $basejump_stl_dir/bsg_misc/bsg_mux_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_mux_segmented.v
@@ -114,6 +121,8 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_priority_encode.v
   $basejump_stl_dir/bsg_misc/bsg_priority_encode_one_hot_out.v
   $basejump_stl_dir/bsg_misc/bsg_round_robin_arb.v
+  $basejump_stl_dir/bsg_misc/bsg_rotate_left.v
+  $basejump_stl_dir/bsg_misc/bsg_rotate_right.v
   $basejump_stl_dir/bsg_misc/bsg_scan.v
   $basejump_stl_dir/bsg_misc/bsg_swap.v
   $basejump_stl_dir/bsg_misc/bsg_thermometer_count.v
@@ -133,7 +142,6 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_output_control.v 
   $bp_common_dir/src/v/bp_pma.v
   $bp_common_dir/src/v/bp_tlb.v
-  $bp_common_dir/src/v/bp_tlb_replacement.v
   $bp_common_dir/src/v/bsg_fifo_1r1w_rolly.v
   $bp_be_dir/src/v/bp_be_top.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_bypass.v
@@ -146,27 +154,20 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_mul.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_ctrl.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_long.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_sys.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_regfile.v
-  $bp_be_dir/src/v/bp_be_checker/bp_be_checker_top.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_detector.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_director.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_scheduler.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_ptw.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_csr.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache.v
-  $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_lce_cmd.v
-  $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_lce.v
-  $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_lce_req.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_wbuf.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_wbuf_queue.v
-  $bp_be_dir/src/v/bp_be_mem/bp_be_mem_top.v
   $bp_fe_dir/src/v/bp_fe_bht.v
   $bp_fe_dir/src/v/bp_fe_btb.v
-  $bp_fe_dir/src/v/bp_fe_lce_cmd.v
   $bp_fe_dir/src/v/bp_fe_icache.v
   $bp_fe_dir/src/v/bp_fe_instr_scan.v
-  $bp_fe_dir/src/v/bp_fe_lce.v
-  $bp_fe_dir/src/v/bp_fe_lce_req.v
   $bp_fe_dir/src/v/bp_fe_mem.v
   $bp_fe_dir/src/v/bp_fe_pc_gen.v
   $bp_fe_dir/src/v/bp_fe_top.v
@@ -177,7 +178,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cce/bp_cce_alu.v
   $bp_me_dir/src/v/cce/bp_cce_arbitrate.v
   $bp_me_dir/src/v/cce/bp_cce_branch.v
-  $bp_me_dir/src/v/cce/bp_cce_buffered.v
   $bp_me_dir/src/v/cce/bp_cce_dir.v
   $bp_me_dir/src/v/cce/bp_cce_dir_lru_extract.v
   $bp_me_dir/src/v/cce/bp_cce_dir_segment.v
@@ -187,6 +187,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cce/bp_cce_inst_predecode.v
   $bp_me_dir/src/v/cce/bp_cce_inst_ram.v
   $bp_me_dir/src/v/cce/bp_cce_inst_stall.v
+  $bp_me_dir/src/v/cce/bp_cce_loopback.v
   $bp_me_dir/src/v/cce/bp_cce_msg.v
   $bp_me_dir/src/v/cce/bp_cce_pending_bits.v
   $bp_me_dir/src/v/cce/bp_cce_reg.v
@@ -195,6 +196,9 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/cce/bp_cce_fsm.v
   $bp_me_dir/src/v/cce/bp_cce_wrapper.v
   $bp_me_dir/src/v/cce/bp_io_cce.v
+  $bp_me_dir/src/v/lce/bp_lce.v
+  $bp_me_dir/src/v/lce/bp_lce_req.v
+  $bp_me_dir/src/v/lce/bp_lce_cmd.v
   $bp_me_dir/src/v/wormhole/bp_me_addr_to_cce_id.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_id_to_cord.v
   $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_bidir.v
@@ -219,16 +223,14 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bp_core.v
   $bp_top_dir/src/v/bp_core_complex.v
   $bp_top_dir/src/v/bp_core_minimal.v
-  $bp_top_dir/src/v/bp_clint.v
-  $bp_top_dir/src/v/bp_clint_node.v
   $bp_top_dir/src/v/bp_clint_slice.v
   $bp_top_dir/src/v/bp_io_complex.v
   $bp_top_dir/src/v/bp_io_link_to_lce.v
   $bp_top_dir/src/v/bp_io_tile.v
   $bp_top_dir/src/v/bp_io_tile_node.v
   $bp_top_dir/src/v/bp_mem_complex.v
-  $bp_top_dir/src/v/bp_processor.v
-  $bp_top_dir/src/v/bp_softcore.v
+  $bp_top_dir/src/v/bp_multicore.v
+  $bp_top_dir/src/v/bp_unicore.v
   $bp_top_dir/src/v/bp_tile.v
   $bp_top_dir/src/v/bp_tile_node.v
 

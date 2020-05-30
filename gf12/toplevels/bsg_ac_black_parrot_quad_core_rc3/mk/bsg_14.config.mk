@@ -76,7 +76,9 @@ export PDK_ENABLE_KIT_IV7P5_SLVT_C14 :=true
 export PDK_ENABLE_KIT_IV7P5_HVT_C16  :=false
 export PDK_ENABLE_KIT_IV7P5_RVT_C16  :=true
 export PDK_ENABLE_KIT_IV7P5_LVT_C16  :=true
+#export PDK_ENABLE_KIT_IV7P5_LVT_C16  :=false
 export PDK_ENABLE_KIT_IV7P5_SLVT_C16 :=true
+#export PDK_ENABLE_KIT_IV7P5_SLVT_C16 :=false
 
 export PDK_ENABLE_KIT_IV7P5_HVT_LPK  :=false
 export PDK_ENABLE_KIT_IV7P5_RVT_LPK  :=false
@@ -86,7 +88,9 @@ export PDK_ENABLE_KIT_IV7P5_SLVT_LPK :=false
 export PDK_ENABLE_KIT_IV7P5_HVT_HPK  :=false
 export PDK_ENABLE_KIT_IV7P5_RVT_HPK  :=true
 export PDK_ENABLE_KIT_IV7P5_LVT_HPK  :=true
+#export PDK_ENABLE_KIT_IV7P5_LVT_HPK  :=false
 export PDK_ENABLE_KIT_IV7P5_SLVT_HPK :=true
+#export PDK_ENABLE_KIT_IV7P5_SLVT_HPK :=false
 
 export PDK_ENABLE_KIT_IV7P5_HVT_ECO  :=false
 export PDK_ENABLE_KIT_IV7P5_RVT_ECO  :=false
@@ -100,13 +104,15 @@ export PDK_ENABLE_KIT_IV7P5_SLVT_SHIFT :=false
 
 export PDK_ENABLE_KIT_IV1P8V_GPIO :=true
 export PDK_ENABLE_KIT_MEMGEN      :=true
-export PDK_ENABLE_KIT_CDMM        := true
+export PDK_ENABLE_KIT_CDMM        :=true
 
 # Multi-VT Kits
-export PDK_ENABLE_RVT_LIB  :=true
 export PDK_ENABLE_HVT_LIB  :=false
+export PDK_ENABLE_RVT_LIB  :=true
 export PDK_ENABLE_LVT_LIB  :=true
+#export PDK_ENABLE_LVT_LIB  :=false
 export PDK_ENABLE_SLVT_LIB :=true
+#export PDK_ENABLE_SLVT_LIB :=false
 
 # Standard cell kits
 export PDK_ENABLE_LPK_LIB   :=false

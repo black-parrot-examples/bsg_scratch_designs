@@ -10,8 +10,8 @@ source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_clk_gen.const
 
 set bp_clk_name "bp_clk" ;# main clock running black parrot
 
-set bp_clk_period_ps       700
-#set bp_clk_period_ps       1000
+#set bp_clk_period_ps       900
+set bp_clk_period_ps       1000
 #set bp_clk_period_ps       1666
 set bp_clk_uncertainty_per 3.0
 #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
@@ -23,8 +23,8 @@ set core_clk_period_ps      ${bp_clk_period_ps}
 set core_clk_uncertainty_ps ${bp_clk_uncertainty_ps}
 
 
-set input_delay_per  20.0
-set output_delay_per 20.0
+set input_delay_per  5.0
+set output_delay_per 5.0
 
 set core_input_delay_ps  [expr ${core_clk_period_ps}*(${input_delay_per}/100.0)]
 set core_output_delay_ps [expr ${core_clk_period_ps}*(${output_delay_per}/100.0)]
@@ -70,6 +70,8 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
   # Ungrouping
   #=================
   #set_ungroup [get_cells swizzle]
-  set_ungroup [get_cells *softcore*] true
-  set_optimize_registers true -design bp_be_pipe_mul
+  set_ungroup [get_cells -hier *unicore*] true
+  set_optimize_registers true -design *bp_be_pipe_mul*
+  set_optimize_registers true -design *bp_fe_icache*
+  set_optimize_registers true -design *bp_be_dcache*
 

@@ -557,7 +557,9 @@ import bsg_wormhole_router_pkg::*;
     cfg_loader
     (.clk_i(blackparrot_clk)
      ,.reset_i(core_reset_lo | ~tag_trace_done_lo)
-  
+
+     ,.lce_id_i('0)  
+
      ,.io_cmd_o(cfg_cmd_lo)
      ,.io_cmd_v_o(cfg_cmd_v_lo)
      ,.io_cmd_yumi_i(cfg_cmd_ready_li & cfg_cmd_v_lo)
@@ -574,6 +576,8 @@ import bsg_wormhole_router_pkg::*;
    nbf_loader
     (.clk_i(blackparrot_clk)
      ,.reset_i(core_reset_lo | ~cfg_done_lo | ~tag_trace_done_lo)
+
+     ,.lce_id_i('0)  
 
      ,.io_cmd_o(nbf_cmd_lo)
      ,.io_cmd_v_o(nbf_cmd_v_lo)

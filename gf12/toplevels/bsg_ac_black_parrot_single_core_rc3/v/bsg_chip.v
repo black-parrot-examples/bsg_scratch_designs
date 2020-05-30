@@ -40,9 +40,9 @@ module bsg_chip
    , output                                            mem_resp_yumi_o
    );
 
-  bp_softcore
+  bp_unicore
    #(.bp_params_p(bp_params_p))
-   softcore
+   unicore
     (.*);
 
 endmodule

@@ -12,7 +12,7 @@ package bsg_chip_pkg;
   // BSG BLACKPARROT PARAMETERS
   //
   
-  localparam bp_params_e bp_cfg_gp = e_bp_softcore_cfg;
+  localparam bp_params_e bp_cfg_gp = e_bp_unicore_no_l2_cfg;
 
 endpackage // bsg_chip_pkg
 
