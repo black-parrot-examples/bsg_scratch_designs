@@ -33,4 +33,6 @@ set SVERILOG_INCLUDE_PATHS [join "
   $bp_be_dir/src/include/bp_be_dcache
   $bp_me_dir/src/include/v
   $bp_top_dir/src/include
+  $bp_dir/external/HardFloat/source
+  $bp_dir/external/HardFloat/source/RISCV
 "]

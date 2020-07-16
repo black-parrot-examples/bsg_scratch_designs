@@ -73,7 +73,8 @@ set tile_resp_pins_i_W     [index_collection $tile_resp_pins_i      [expr 3*$til
 # 0.04 = tile_height to track spacing
 # 0.08*N = N tracks of space
 # East/West pins - K1 K3
-set start_y [expr 0.00 + 0.256*850]
+#set start_y [expr 0.00 + 0.256*850]
+set start_y [expr 0.00 + 0.256*950]
 set last_loc [bsg_pins_line_constraint $tile_req_pins_i_E      "K1 K3" right $start_y               $master_tile $tile_req_pins_o_W      2 0]
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_E     "K1 K3" right [expr $last_loc+0.256] $master_tile $tile_resp_pins_o_W     2 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_E      "K1 K3" right [expr $last_loc+0.256] $master_tile $tile_cmd_pins_o_W      2 0]
@@ -82,7 +83,8 @@ set last_loc [bsg_pins_line_constraint $tile_resp_pins_o_E     "K1 K3" right [ex
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_o_E      "K1 K3" right [expr $last_loc+0.256] $master_tile $tile_cmd_pins_i_W      2 0]
 
 # North/South pins - C5, K2
-set start_x  [expr 0.00 + 0.256*850]
+#set start_x  [expr 0.00 + 0.256*850]
+set start_x  [expr 0.00 + 0.256*950]
 set last_loc [bsg_pins_line_constraint $tile_req_pins_i_N      "K2 K4" top   $start_x               $master_tile $tile_req_pins_o_S      2 0]
 set last_loc [bsg_pins_line_constraint $tile_resp_pins_i_N     "K2 K4" top   [expr $last_loc+0.256] $master_tile $tile_resp_pins_o_S     2 0]
 set last_loc [bsg_pins_line_constraint $tile_cmd_pins_i_N      "K2 K4" top   [expr $last_loc+0.256] $master_tile $tile_cmd_pins_o_S      2 0]

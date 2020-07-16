@@ -101,6 +101,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_dff_en.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
+  $basejump_stl_dir/bsg_misc/bsg_dff_reset_en_bypass.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_set_clear.v
   $basejump_stl_dir/bsg_misc/bsg_edge_detect.v
   $basejump_stl_dir/bsg_misc/bsg_encode_one_hot.v

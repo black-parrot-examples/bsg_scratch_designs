@@ -23,8 +23,8 @@ set directory_mem_height   [lindex [get_attribute [get_cell -hier $directory_mem
 #set tile_height [expr 2*$data_mem_height + 1*$tag_mem_height]
 #set tile_height $tile_width
 #set tile_width [expr 8*$data_mem_width + 4*$directory_mem_width]
-set tile_width  [round_up_to_nearest 580.000 [unit_width ]]
-set tile_height [round_up_to_nearest 581.080 [unit_height]]
+set tile_width  [round_up_to_nearest 600 [unit_width ]]
+set tile_height [round_up_to_nearest 600 [unit_height]]
 
 foreach {y} {1 0} {
   foreach {x} {0 1} {
