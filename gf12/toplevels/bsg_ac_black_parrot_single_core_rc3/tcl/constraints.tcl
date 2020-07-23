@@ -10,8 +10,9 @@ source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_clk_gen.const
 
 set bp_clk_name "bp_clk" ;# main clock running black parrot
 
-#set bp_clk_period_ps       850
-set bp_clk_period_ps       1500
+set bp_clk_period_ps       1000
+#set bp_clk_period_ps       1000
+#set bp_clk_period_ps       1500
 #set bp_clk_period_ps       1666
 set bp_clk_uncertainty_per 3.0
 #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
@@ -70,12 +71,26 @@ set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
   # Ungrouping
   #=================
   #set_ungroup [get_cells swizzle]
-  set_ungroup [get_cells -hier *unicore*] true
 
-  # We must flatten and retime FMA and AUX. For TTR, we use minimum_period_only.
-  set_ungroup [get_cells -hier *pipe*] true
-  set_optimize_registers true -design *pipe* -minimum_period_only -justification_effort high
+  set_app_var compile_keep_original_for_external_references true
 
-  # We retime caches for additional freq. 
-  set_optimize_registers true -design *cache* -minimum_period_only -justification_effort high
+  current_design *pipe_fma*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design *pipe_aux*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design *pipe_mem*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design bsg_chip
 

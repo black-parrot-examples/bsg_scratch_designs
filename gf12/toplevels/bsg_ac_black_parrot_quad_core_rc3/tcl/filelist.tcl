@@ -7,6 +7,7 @@ set basejump_stl_dir       $::env(BASEJUMP_STL_DIR)
 set bsg_designs_dir        $::env(BSG_DESIGNS_DIR)
 set bsg_designs_target_dir $::env(BSG_DESIGNS_TARGET_DIR)
 set blackparrot_dir        $::env(BLACKPARROT_DIR)
+set hardfloat_dir          $::env(BLACKPARROT_DIR)/external/HardFloat
 
 set bsg_packaging_dir $::env(BSG_PACKAGING_DIR)
 set bsg_package       $::env(BSG_PACKAGE)
@@ -29,7 +30,8 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_fe_dir/src/include/bp_fe_pkg.vh
   $bp_common_dir/src/include/bp_common_rv64_pkg.vh
   $bp_be_dir/src/include/bp_be_pkg.vh
-  $bp_be_dir/src/include/bp_be_dcache/bp_be_dcache_pkg.vh
+  $bp_be_dir/src/include/bp_be_dcache_pkg.vh
+  $bp_be_dir/src/include/bp_be_hardfloat_pkg.vh
   $bp_me_dir/src/include/v/bp_me_pkg.vh
   $bp_me_dir/src/include/v/bp_cce_pkg.v
   $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
@@ -78,6 +80,8 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_mem/bsg_mem_1rw_sync_synth.v
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync.v
   $basejump_stl_dir/bsg_mem/bsg_mem_2r1w_sync_synth.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_3r1w_sync.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_3r1w_sync_synth.v
   $basejump_stl_dir/bsg_misc/bsg_adder_cin.v
   $basejump_stl_dir/bsg_misc/bsg_adder_one_hot.v
   $basejump_stl_dir/bsg_misc/bsg_adder_ripple_carry.v
@@ -141,6 +145,20 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_decoder_dor.v
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_input_control.v  
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_output_control.v 
+  $hardfloat_dir/source/addRecFN.v
+  $hardfloat_dir/source/compareRecFN.v
+  $hardfloat_dir/source/divSqrtRecFN_small.v
+  $hardfloat_dir/source/fNToRecFN.v
+  $hardfloat_dir/source/HardFloat_primitives.v
+  $hardfloat_dir/source/HardFloat_rawFN.v
+  $hardfloat_dir/source/iNToRecFN.v
+  $hardfloat_dir/source/isSigNaNRecFN.v
+  $hardfloat_dir/source/mulAddRecFN.v
+  $hardfloat_dir/source/mulRecFN.v
+  $hardfloat_dir/source/recFNToFN.v
+  $hardfloat_dir/source/recFNToIN.v
+  $hardfloat_dir/source/recFNToRecFN.v
+  $hardfloat_dir/source/RISCV/HardFloat_specialize.v
   $bp_common_dir/src/v/bp_pma.v
   $bp_common_dir/src/v/bp_tlb.v
   $bp_common_dir/src/v/bsg_fifo_1r1w_rolly.v
@@ -148,21 +166,23 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_be_dir/src/v/bp_be_calculator/bp_be_bypass.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_calculator_top.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_instr_decoder.v
-  $bp_be_dir/src/v/bp_be_calculator/bp_be_int_alu.v
-  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_fp.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_int.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_aux.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_mem.v
-  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_mul.v
-  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_ctrl.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_fma.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_ctl.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_long.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_pipe_sys.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_regfile.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_fp_to_rec.v
+  $bp_be_dir/src/v/bp_be_calculator/bp_be_rec_to_fp.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_detector.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_director.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_scheduler.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_ptw.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_csr.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache.v
+  $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_decoder.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_wbuf.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_dcache/bp_be_dcache_wbuf_queue.v
   $bp_fe_dir/src/v/bp_fe_bht.v

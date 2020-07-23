@@ -172,7 +172,35 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
     }
   }
 
+  set_app_var compile_keep_original_for_external_references true
 
+  current_design *pipe_fma*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design *pipe_aux*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design *pipe_mem*
+  create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+  set_optimize_registers true -check_design
+  uniquify -force
+  ungroup -flatten [get_cells -hier]
+
+  current_design bp_tile_node
+
+
+  # We must flatten and retime FMA and AUX. For TTR, we use minimum_period_only.
+  #set_optimize_registers true -design [sub_designs_of -hier [get_designs -hier *calc*]] -minimum_period_only -justification_effort high
+  #set_ungroup [get_cells -hier *pipe*] true
+
+  # We retime caches for additional freq. 
+  #set_optimize_registers true -design *cache* -minimum_period_only -justification_effort high
 
 ########################################
 ##
