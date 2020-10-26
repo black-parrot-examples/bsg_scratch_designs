@@ -7,7 +7,7 @@ module bsg_chip
  import bsg_chip_pkg::*;
  #(localparam bp_params_e bp_params_p = bp_cfg_gp
    `declare_bp_proc_params(bp_params_p)
-   `declare_bp_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce_mem)
+   `declare_bp_me_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p)
    )
   (input                                               clk_i
    , input                                             reset_i

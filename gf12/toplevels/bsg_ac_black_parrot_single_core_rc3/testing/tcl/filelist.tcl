@@ -21,18 +21,43 @@ set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
 set TESTING_SOURCE_FILES [join "
+  $bp_common_dir/src/include/bp_common_rv64_pkg.vh
+  $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
+  $bp_common_dir/src/include/bp_common_aviary_pkg.vh
+  $bp_me_dir/src/include/v/bp_me_pkg.vh
+  $bp_me_dir/src/include/v/bp_cce_pkg.v
+  $bp_be_dir/src/include/bp_be_pkg.vh
+  $bp_be_dir/src/include/bp_be_dcache_pkg.vh
+  $basejump_stl_dir/bsg_tag/bsg_tag_pkg.v
+
+  $basejump_stl_dir/bsg_dataflow/bsg_flow_counter.v
+  $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_small.v
+  $basejump_stl_dir/bsg_dataflow/bsg_fifo_1r1w_small_unhardened.v
+  $basejump_stl_dir/bsg_misc/bsg_counter_up_down.v
+  $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
+  $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
+  $basejump_stl_dir/bsg_dataflow/bsg_fifo_tracker.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1r1w.v
+  $basejump_stl_dir/bsg_mem/bsg_mem_1r1w_synth.v
+  $basejump_stl_dir/bsg_misc/bsg_circular_ptr.v
+  $basejump_stl_dir/bsg_misc/bsg_decode.v
+  $basejump_stl_dir/bsg_misc/bsg_decode_with_v.v
+  $basejump_stl_dir/bsg_misc/bsg_counter_clear_up.v
+
   $basejump_stl_dir/bsg_test/bsg_nonsynth_clock_gen.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_reset_gen.v
+  $basejump_stl_dir/bsg_test/bsg_nonsynth_test_rom.v
   $basejump_stl_dir/testing/bsg_dmc/lpddr_verilog_model/mobile_ddr.v
   $bp_me_dir/test/common/bp_mem.v
   $bp_me_dir/test/common/bp_mem_transducer.v
   $bp_me_dir/test/common/bp_mem_delay_model.v
   $bp_me_dir/test/common/bp_mem_storage_sync.v
   $bp_me_dir/test/common/bp_mem_utils.cpp
-  $bp_me_dir/test/common/bp_cce_mmio_cfg_loader.v
   $bp_top_dir/test/common/bp_nonsynth_host.v
   $bp_top_dir/test/common/bp_monitor.cpp
   $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v
+
+  $bsg_designs_target_dir/v/bsg_chip_pkg.v
   $bsg_designs_target_dir/testing/v/bsg_gateway_chip.v
 "]
 

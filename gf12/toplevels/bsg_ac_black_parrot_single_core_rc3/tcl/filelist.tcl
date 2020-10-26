@@ -4,7 +4,6 @@
 #------------------------------------------------------------
 
 set basejump_stl_dir       $::env(BASEJUMP_STL_DIR)
-set bsg_designs_dir        $::env(BSG_DESIGNS_DIR)
 set bsg_designs_target_dir $::env(BSG_DESIGNS_TARGET_DIR)
 set blackparrot_dir        $::env(BLACKPARROT_DIR)
 set hardfloat_dir          $::env(BLACKPARROT_DIR)/external/HardFloat
@@ -290,8 +289,6 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_dataflow/bsg_make_2D_array.v
   $basejump_stl_dir/bsg_dataflow/bsg_flatten_2D_array.v
   
-  $bsg_designs_dir/modules/bsg_chip_io_complex/bsg_chip_io_complex.v
-
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
   $bsg_designs_target_dir/v/bsg_chip.v
   $bsg_designs_target_dir/v/bsg_clk_gen_power_domain.v

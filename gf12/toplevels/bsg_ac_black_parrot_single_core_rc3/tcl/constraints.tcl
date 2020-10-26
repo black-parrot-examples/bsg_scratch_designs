@@ -1,7 +1,7 @@
-source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_tag.constraints.tcl
-source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_chip_cdc.constraints.tcl
-source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_comm_link.constraints.tcl
-source -echo -verbose $::env(BSG_DESIGNS_DIR)/toplevels/common/bsg_clk_gen.constraints.tcl
+source -echo -verbose $::env(BSG_DESIGNS_TARGET_DIR)/../common/bsg_tag.constraints.tcl
+source -echo -verbose $::env(BSG_DESIGNS_TARGET_DIR)/../common/bsg_chip_cdc.constraints.tcl
+source -echo -verbose $::env(BSG_DESIGNS_TARGET_DIR)/../common/bsg_comm_link.constraints.tcl
+source -echo -verbose $::env(BSG_DESIGNS_TARGET_DIR)/../common/bsg_clk_gen.constraints.tcl
 
 ########################################
 ##

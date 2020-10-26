@@ -82,16 +82,6 @@ foreach lib [array name VERILOG_FILES] {
   }
 }
 
-# chip filelist
-bsg_create_filelist $::env(BSG_CHIP_FILELIST) \
-                    $SVERILOG_SOURCE_FILES
-
-# chip library
-bsg_create_library $::env(BSG_CHIP_LIBRARY_NAME) \
-                   $::env(BSG_CHIP_LIBRARY)      \
-                   $SVERILOG_SOURCE_FILES        \
-                   $SVERILOG_INCLUDE_PATHS
-
 # testing filelist
 bsg_create_filelist $::env(BSG_DESIGNS_TESTING_FILELIST) \
                     $TESTING_SOURCE_FILES

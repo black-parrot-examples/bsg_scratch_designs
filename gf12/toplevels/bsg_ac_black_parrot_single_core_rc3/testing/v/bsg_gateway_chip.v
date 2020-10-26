@@ -44,6 +44,21 @@ import bsg_wormhole_router_pkg::*;
       $vcdpluson;
       $vcdplusmemon;
       $vcdplusautoflushon;
+
+      #5000000 $finish();
+    end
+
+  initial
+    begin
+      $set_gate_level_monitoring("rtl_on");
+      $set_toggle_region(DUT);
+      $toggle_start();
+    end
+
+  final
+    begin
+      $toggle_stop();
+      $toggle_report("run.saif", 1.0e-12, DUT);
     end
 
   //////////////////////////////////////////////////
@@ -79,10 +94,10 @@ import bsg_wormhole_router_pkg::*;
   logic proc_mem_cmd_v_lo, proc_mem_cmd_ready_li;
   bp_cce_mem_msg_s proc_mem_resp_li;
   logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
-  bp_cce_mem_msg_s cfg_cmd_lo;
-  logic cfg_cmd_v_lo, cfg_cmd_yumi_li;
-  bp_cce_mem_msg_s cfg_resp_li;
-  logic cfg_resp_v_li, cfg_resp_ready_lo;
+  bp_cce_mem_msg_s nbf_cmd_lo;
+  logic nbf_cmd_v_lo, nbf_cmd_yumi_li;
+  bp_cce_mem_msg_s nbf_resp_li;
+  logic nbf_resp_v_li, nbf_resp_ready_lo;
 
   bsg_chip
    DUT
@@ -97,13 +112,13 @@ import bsg_wormhole_router_pkg::*;
      ,.io_resp_v_i(proc_io_resp_v_li)
      ,.io_resp_yumi_o(proc_io_resp_yumi_lo)
 
-     ,.io_cmd_i(cfg_cmd_lo)
-     ,.io_cmd_v_i(cfg_cmd_v_lo)
-     ,.io_cmd_yumi_o(cfg_cmd_yumi_li)
+     ,.io_cmd_i(nbf_cmd_lo)
+     ,.io_cmd_v_i(nbf_cmd_v_lo)
+     ,.io_cmd_yumi_o(nbf_cmd_yumi_li)
 
-     ,.io_resp_o(cfg_resp_li)
-     ,.io_resp_v_o(cfg_resp_v_li)
-     ,.io_resp_ready_i(cfg_resp_ready_lo)
+     ,.io_resp_o(nbf_resp_li)
+     ,.io_resp_v_o(nbf_resp_v_li)
+     ,.io_resp_ready_i(nbf_resp_ready_lo)
 
      ,.mem_cmd_o(proc_mem_cmd_lo)
      ,.mem_cmd_v_o(proc_mem_cmd_v_lo)
@@ -160,31 +175,31 @@ import bsg_wormhole_router_pkg::*;
      ,.program_finish_o(program_finish)
      );
 
-localparam cce_instr_ram_addr_width_lp = `BSG_SAFE_CLOG2(num_cce_instr_ram_els_p);
-bp_cce_mmio_cfg_loader
-  #(.bp_params_p(bp_params_p)
-    ,.inst_width_p($bits(bp_cce_inst_s))
-    ,.inst_ram_addr_width_p(cce_instr_ram_addr_width_lp)
-    ,.inst_ram_els_p(num_cce_instr_ram_els_p)
-    ,.skip_ram_init_p(1'b1)
-    ,.clear_freeze_p(1'b1)
-    )
-  cfg_loader
-  (.clk_i(blackparrot_clk)
-   ,.reset_i(blackparrot_reset)
-
-   ,.lce_id_i(4'b10)
-
-   ,.io_cmd_o(cfg_cmd_lo)
-   ,.io_cmd_v_o(cfg_cmd_v_lo)
-   ,.io_cmd_yumi_i(cfg_cmd_yumi_li)
-
-   ,.io_resp_i(cfg_resp_li)
-   ,.io_resp_v_i(cfg_resp_v_li)
-   ,.io_resp_ready_o(cfg_resp_ready_lo)
-
-   ,.done_o(cfg_done_lo)
-  );
+  localparam cce_instr_ram_addr_width_lp = `BSG_SAFE_CLOG2(num_cce_instr_ram_els_p);
+  bp_nonsynth_nbf_loader
+    #(.bp_params_p(bp_params_p)
+      ,.inst_width_p($bits(bp_cce_inst_s))
+      ,.inst_ram_addr_width_p(cce_instr_ram_addr_width_lp)
+      ,.inst_ram_els_p(num_cce_instr_ram_els_p)
+      ,.skip_ram_init_p(1'b1)
+      ,.clear_freeze_p(1'b1)
+      )
+    nbf_loader
+    (.clk_i(blackparrot_clk)
+     ,.reset_i(blackparrot_reset)
+  
+     ,.lce_id_i(4'b10)
+  
+     ,.io_cmd_o(nbf_cmd_lo)
+     ,.io_cmd_v_o(nbf_cmd_v_lo)
+     ,.io_cmd_yumi_i(nbf_cmd_yumi_li)
+  
+     ,.io_resp_i(nbf_resp_li)
+     ,.io_resp_v_i(nbf_resp_v_li)
+     ,.io_resp_ready_o(nbf_resp_ready_lo)
+  
+     ,.done_o(nbf_done_lo)
+    );
 
 
 

@@ -320,7 +320,7 @@ create_keepout_margin -type hard -outer $keepout_margins $btb_mem
 ### I CACHE STAT
 ###
 
-set icache_stat_mem [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/icache/stat_mem/*"]
+set icache_stat_mem [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/icache*stat_mem/*"]
 set icache_stat_margin 0
 set_macro_relative_location \
   -target_object $icache_stat_mem \
@@ -384,7 +384,7 @@ create_keepout_margin -type hard -outer $keepout_margins $int_regfile_mems
 ### D CACHE STAT
 ###
 
-set dcache_stat_mem [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*dcache/stat_mem*"]
+set dcache_stat_mem [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*dcache*stat_mem*"]
 set_macro_relative_location \
   -target_object $dcache_stat_mem \
   -target_corner br \
