@@ -15,11 +15,11 @@ endif
 
 basejump_stl_dir     :=$(THIS_DIR)/basejump_stl
 basejump_stl_url     :=$(GITHUB)bespoke-silicon-group/basejump_stl
-basejump_stl_commit  :=tapeout_bp_rc3
+basejump_stl_commit  :=tapeout_bp_rc5
 
 bsg_14_dir           :=$(THIS_DIR)/bsg_14
 bsg_14_url           :=$(GITHUB)bespoke-silicon-group/bsg_14
-bsg_14_commit        :=retiming
+bsg_14_commit        :=master
 
 bsg_cadenv_dir       :=$(THIS_DIR)/bsg_cadenv
 bsg_cadenv_url       :=$(BITBUCKET)taylor-bsg/bsg_cadenv
@@ -35,7 +35,7 @@ bsg_packaging_commit :=master
 
 blackparrot_dir     :=$(THIS_DIR)/black-parrot
 blackparrot_url     :=$(GITHUB)black-parrot/black-parrot
-blackparrot_commit  :=tapeout_bp_rc3
+blackparrot_commit  :=tapeout_bp_rc5
 
 all_repos = $(subst _url,.repo,$(filter %_url,$(.VARIABLES)))
 

@@ -160,6 +160,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_common_dir/src/v/bp_pma.v
   $bp_common_dir/src/v/bp_tlb.v
   $bp_common_dir/src/v/bsg_fifo_1r1w_rolly.v
+  $bp_common_dir/src/v/bsg_bus_pack.v
   $bp_be_dir/src/v/bp_be_top.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_bypass.v
   $bp_be_dir/src/v/bp_be_calculator/bp_be_calculator_top.v
@@ -176,6 +177,7 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_be_dir/src/v/bp_be_calculator/bp_be_rec_to_fp.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_detector.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_director.v
+  $bp_be_dir/src/v/bp_be_checker/bp_be_issue_queue.v
   $bp_be_dir/src/v/bp_be_checker/bp_be_scheduler.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_ptw.v
   $bp_be_dir/src/v/bp_be_mem/bp_be_csr.v
@@ -235,7 +237,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_top_dir/src/v/bp_clint_slice.v
   $bp_top_dir/src/v/bp_core.v
   $bp_top_dir/src/v/bp_core_complex.v
-  $bp_top_dir/src/v/bp_core_minimal.v
   $bp_top_dir/src/v/bp_io_complex.v
   $bp_top_dir/src/v/bp_io_link_to_lce.v
   $bp_top_dir/src/v/bp_io_tile.v

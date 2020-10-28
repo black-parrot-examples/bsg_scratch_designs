@@ -93,8 +93,6 @@ VCS_OPTIONS += +define+NETLIST_LIBRARY_NAME=$(NETLIST_LIBRARY_NAME)
 VCS_OPTIONS += -f $(NETLIST_FILELIST)
 VCS_OPTIONS += -libmap $(NETLIST_LIBRARY)
 
-$(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
-$(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
@@ -116,23 +114,12 @@ VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
 ########################################
 
 PROG     :=hello_world
-DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
-DRAM_SYS :=system.ini
 
 prog.nbf:
-	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --mem $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem 1 $(BSG_OUT_DIR)/cce_ucode.mem 0000000 0 > $(BSG_OUT_DIR)/$@
+	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 1 --config > $(BSG_OUT_DIR)/$@
 
 prog.mem:
-	@cp $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
-
-dram_ch.ini:
-	@cp $(BLACKPARROT_DIR)/bp_common/test/cfg/$(DRAM_CH) $(BSG_OUT_DIR)/$@
-
-dram_sys.ini:
-	@cp $(BLACKPARROT_DIR)/bp_common/test/cfg/$(DRAM_SYS) $(BSG_OUT_DIR)/$@
-
-cce_ucode.mem:
-	@cp $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem $(BSG_OUT_DIR)/$@
+	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@
 
 ########################################
 ## Run Targets
@@ -154,7 +141,7 @@ view:
 	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) cce_ucode.mem prog.nbf prog.mem dram_ch.ini dram_sys.ini
+$(BSG_OUT_SIM): $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.nbf prog.mem
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
 
 $(BSG_OUT_DIR):

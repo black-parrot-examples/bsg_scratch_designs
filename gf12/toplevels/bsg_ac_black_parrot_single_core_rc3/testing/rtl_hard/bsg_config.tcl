@@ -61,6 +61,13 @@ proc bsg_create_library {library_name library_file source_files {include_paths "
 
 }
 
+proc bsg_list_diff {full_list base_list} {
+  foreach elem $full_list {dict set x $elem 1}
+  foreach elem $base_list {dict unset x $elem}
+
+  return [dict keys $x]
+}
+
 # scripts for creating filelist and library
 #source $::env(BSG_TESTING_COMMON_DIR)/bsg_vcs_create_filelist_library.tcl
 
@@ -92,10 +99,10 @@ source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
 
 # testing filelist
 bsg_create_filelist $::env(BSG_DESIGNS_TESTING_FILELIST) \
-                    $TESTING_SOURCE_FILES
+                   [bsg_list_diff $TESTING_SOURCE_FILES $SVERILOG_SOURCE_FILES] \
 
 # testing library
 bsg_create_library $::env(BSG_DESIGNS_TESTING_LIBRARY_NAME) \
                    $::env(BSG_DESIGNS_TESTING_LIBRARY)      \
-                   $TESTING_SOURCE_FILES                    \
+                   [bsg_list_diff $TESTING_SOURCE_FILES $SVERILOG_SOURCE_FILES] \
                    $TESTING_INCLUDE_PATHS

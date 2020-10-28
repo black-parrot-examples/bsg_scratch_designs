@@ -30,36 +30,10 @@ import bp_me_pkg::*;
 import bsg_noc_pkg::*;
 import bsg_wormhole_router_pkg::*;
 
-#(localparam bp_params_e bp_params_p = e_bp_single_core_cfg `declare_bp_proc_params(bp_params_p))
-();
+#(localparam bp_params_e bp_params_p = e_bp_unicore_cfg `declare_bp_proc_params(bp_params_p)
+  `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce))
+  ();
 
-
-  //////////////////////////////////////////////////
-  //
-  // Waveform Dump
-  //
-
-  initial
-    begin
-      $vcdpluson;
-      $vcdplusmemon;
-      $vcdplusautoflushon;
-
-      #5000000 $finish();
-    end
-
-  initial
-    begin
-      $set_gate_level_monitoring("rtl_on");
-      $set_toggle_region(DUT);
-      $toggle_start();
-    end
-
-  final
-    begin
-      $toggle_stop();
-      $toggle_report("run.saif", 1.0e-12, DUT);
-    end
 
   //////////////////////////////////////////////////
   //
@@ -83,20 +57,54 @@ import bsg_wormhole_router_pkg::*;
 
   //////////////////////////////////////////////////
   //
+  // Waveform Dump
+  //
+
+  initial
+    begin
+      $vcdpluson;
+      $vcdplusmemon;
+      $vcdplusautoflushon;
+    end
+
+  initial
+    begin
+      $assertoff();
+      @(posedge blackparrot_clk);
+      @(negedge blackparrot_reset);
+      $asserton();
+    end
+
+  initial
+    begin
+      $set_gate_level_monitoring("rtl_on");
+      $set_toggle_region(DUT);
+      $toggle_start();
+    end
+
+  final
+    begin
+      $toggle_stop();
+      $toggle_report("run.saif", 1.0e-12, DUT);
+    end
+
+
+  //////////////////////////////////////////////////
+  //
   // DUT
   //
-  `declare_bp_me_if(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p);
-  bp_cce_mem_msg_s proc_io_cmd_lo;
+  `declare_bp_bedrock_mem_if(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce);
+  bp_bedrock_cce_mem_msg_s proc_io_cmd_lo;
   logic proc_io_cmd_v_lo, proc_io_cmd_ready_li;
-  bp_cce_mem_msg_s proc_io_resp_li;
+  bp_bedrock_cce_mem_msg_s proc_io_resp_li;
   logic proc_io_resp_v_li, proc_io_resp_yumi_lo;
-  bp_cce_mem_msg_s proc_mem_cmd_lo;
+  bp_bedrock_cce_mem_msg_s proc_mem_cmd_lo;
   logic proc_mem_cmd_v_lo, proc_mem_cmd_ready_li;
-  bp_cce_mem_msg_s proc_mem_resp_li;
+  bp_bedrock_cce_mem_msg_s proc_mem_resp_li;
   logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
-  bp_cce_mem_msg_s nbf_cmd_lo;
+  bp_bedrock_cce_mem_msg_s nbf_cmd_lo;
   logic nbf_cmd_v_lo, nbf_cmd_yumi_li;
-  bp_cce_mem_msg_s nbf_resp_li;
+  bp_bedrock_cce_mem_msg_s nbf_resp_li;
   logic nbf_resp_v_li, nbf_resp_ready_lo;
 
   bsg_chip
@@ -129,20 +137,18 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_resp_yumi_o(proc_mem_resp_yumi_lo)
      );
 
-  bp_cce_mem_msg_s dram_cmd_lo;
+  bp_bedrock_cce_mem_msg_s dram_cmd_lo;
   logic dram_cmd_v_lo, dram_cmd_ready_li;
-  bp_cce_mem_msg_s host_resp_li;
+  bp_bedrock_cce_mem_msg_s host_resp_li;
   logic host_resp_v_li, host_resp_yumi_lo;
 
   bp_mem
    #(.bp_params_p(bp_params_p)
+     ,.mem_offset_p(32'h80000000)
      ,.mem_cap_in_bytes_p(2**25)
      ,.mem_load_p(1)
      ,.mem_file_p("prog.mem")
-     ,.mem_offset_p(32'h80000000)
-
-     ,.use_max_latency_p(1)
-     ,.max_latency_p(5)
+     ,.dram_fixed_latency_p(100)
      )
    mem
     (.clk_i(blackparrot_clk)
@@ -155,6 +161,10 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_resp_o(proc_mem_resp_li)
      ,.mem_resp_v_o(proc_mem_resp_v_li)
      ,.mem_resp_yumi_i(proc_mem_resp_yumi_lo)
+
+     // TODO: Async clock?
+     ,.dram_clk_i(blackparrot_clk)
+     ,.dram_reset_i(blackparrot_reset)
      );
 
   logic [num_core_p-1:0] program_finish;
@@ -171,19 +181,23 @@ import bsg_wormhole_router_pkg::*;
      ,.io_resp_o(proc_io_resp_li)
      ,.io_resp_v_o(proc_io_resp_v_li)
      ,.io_resp_yumi_i(proc_io_resp_yumi_lo)
-  
-     ,.program_finish_o(program_finish)
+
+     ,.icache_trace_en_o()
+     ,.dcache_trace_en_o()
+     ,.lce_trace_en_o()
+     ,.cce_trace_en_o()
+     ,.dram_trace_en_o()
+     ,.vm_trace_en_o()
+     ,.cmt_trace_en_o()
+     ,.core_profile_en_o()
+     ,.branch_profile_en_o()
+     ,.pc_profile_en_o()
+     ,.cosim_en_o()
      );
 
   localparam cce_instr_ram_addr_width_lp = `BSG_SAFE_CLOG2(num_cce_instr_ram_els_p);
   bp_nonsynth_nbf_loader
-    #(.bp_params_p(bp_params_p)
-      ,.inst_width_p($bits(bp_cce_inst_s))
-      ,.inst_ram_addr_width_p(cce_instr_ram_addr_width_lp)
-      ,.inst_ram_els_p(num_cce_instr_ram_els_p)
-      ,.skip_ram_init_p(1'b1)
-      ,.clear_freeze_p(1'b1)
-      )
+    #(.bp_params_p(bp_params_p))
     nbf_loader
     (.clk_i(blackparrot_clk)
      ,.reset_i(blackparrot_reset)
@@ -197,8 +211,6 @@ import bsg_wormhole_router_pkg::*;
      ,.io_resp_i(nbf_resp_li)
      ,.io_resp_v_i(nbf_resp_v_li)
      ,.io_resp_ready_o(nbf_resp_ready_lo)
-  
-     ,.done_o(nbf_done_lo)
     );
 
 
