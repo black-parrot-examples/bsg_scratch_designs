@@ -1,32 +1,32 @@
-########################################
-##
-## Clock Setup
-##
+  ########################################
+  ##
+  ## Clock Setup
+  ##
 
-set bp_clk_name "bp_clk" ;# main clock running black parrot
-
-set bp_clk_period_ps       500
-#set bp_clk_period_ps       1000
-#set bp_clk_period_ps       1500
-#set bp_clk_period_ps       1666
-set bp_clk_uncertainty_per 3.0
-#set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
-set bp_clk_uncertainty_ps 20
-
-
-set core_clk_name           ${bp_clk_name}
-set core_clk_period_ps      ${bp_clk_period_ps}
-set core_clk_uncertainty_ps ${bp_clk_uncertainty_ps}
-
-
-set input_delay_per  5.0
-set output_delay_per 5.0
-
-set core_input_delay_ps  [expr ${core_clk_period_ps}*(${input_delay_per}/100.0)]
-set core_output_delay_ps [expr ${core_clk_period_ps}*(${output_delay_per}/100.0)]
-
-set driving_lib_cell "SC7P5T_INVX2_SSC14SL"
-set load_lib_pin     "SC7P5T_INVX8_SSC14SL/A"
+  set bp_clk_name "bp_clk" ;# main clock running black parrot
+  
+  set bp_clk_period_ps       2000
+  #set bp_clk_period_ps       1000
+  #set bp_clk_period_ps       1500
+  #set bp_clk_period_ps       1666
+  set bp_clk_uncertainty_per 3.0
+  #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
+  set bp_clk_uncertainty_ps 20
+  
+  
+  set core_clk_name           ${bp_clk_name}
+  set core_clk_period_ps      ${bp_clk_period_ps}
+  set core_clk_uncertainty_ps ${bp_clk_uncertainty_ps}
+  
+  
+  set input_delay_per  5.0
+  set output_delay_per 5.0
+  
+  set core_input_delay_ps  [expr ${core_clk_period_ps}*(${input_delay_per}/100.0)]
+  set core_output_delay_ps [expr ${core_clk_period_ps}*(${output_delay_per}/100.0)]
+  
+  set driving_lib_cell "SC7P5T_INVX2_SSC14R"
+  set load_lib_pin     "SC7P5T_INVX8_SSC14R/A"
 
   # Reg2Reg
   create_clock -period ${core_clk_period_ps} -name ${core_clk_name} [get_ports "clk_i"]

@@ -4,21 +4,8 @@
   `define BLACKPARROT_CLK_PERIOD 5000.0
 `endif
 
-`ifndef IO_MASTER_CLK_PERIOD
-  `define IO_MASTER_CLK_PERIOD 5000.0
-`endif
-
-`ifndef ROUTER_CLK_PERIOD
-  `define ROUTER_CLK_PERIOD 5000.0
-`endif
-
-`ifndef TAG_CLK_PERIOD
-  `define TAG_CLK_PERIOD 10000.0
-`endif
-
 module bsg_gateway_chip
 
-import bsg_tag_pkg::*;
 import bsg_chip_pkg::*;
 
 import bp_common_pkg::*;
@@ -107,6 +94,16 @@ import bsg_wormhole_router_pkg::*;
   bp_bedrock_cce_mem_msg_s nbf_resp_li;
   logic nbf_resp_v_li, nbf_resp_ready_lo;
 
+  bp_bedrock_cce_mem_msg_header_s mem_cmd_header_lo;
+  logic mem_cmd_header_v_lo, mem_cmd_header_ready_li;
+  logic [dword_width_p-1:0] mem_cmd_data_lo;
+  logic mem_cmd_data_v_lo, mem_cmd_data_ready_li;
+
+  bp_bedrock_cce_mem_msg_header_s mem_resp_header_li;
+  logic mem_resp_header_v_li, mem_resp_header_yumi_lo;
+  logic [dword_width_p-1:0] mem_resp_data_li;
+  logic mem_resp_data_v_li, mem_resp_data_yumi_lo;
+
   bsg_chip
    DUT
     (.clk_i(blackparrot_clk)
@@ -128,13 +125,69 @@ import bsg_wormhole_router_pkg::*;
      ,.io_resp_v_o(nbf_resp_v_li)
      ,.io_resp_ready_i(nbf_resp_ready_lo)
 
-     ,.mem_cmd_o(proc_mem_cmd_lo)
-     ,.mem_cmd_v_o(proc_mem_cmd_v_lo)
-     ,.mem_cmd_ready_i(proc_mem_cmd_ready_li)
+     ,.mem_cmd_header_o(mem_cmd_header_lo)
+     ,.mem_cmd_header_v_o(mem_cmd_header_v_lo)
+     ,.mem_cmd_header_ready_i(mem_cmd_header_ready_li)
 
-     ,.mem_resp_i(proc_mem_resp_li)
-     ,.mem_resp_v_i(proc_mem_resp_v_li)
-     ,.mem_resp_yumi_o(proc_mem_resp_yumi_lo)
+     ,.mem_cmd_data_o(mem_cmd_data_lo)
+     ,.mem_cmd_data_v_o(mem_cmd_data_v_lo)
+     ,.mem_cmd_data_ready_i(mem_cmd_data_ready_li)
+
+     ,.mem_resp_header_i(mem_resp_header_li)
+     ,.mem_resp_header_v_i(mem_resp_header_v_li)
+     ,.mem_resp_header_yumi_o(mem_resp_header_yumi_lo)
+
+     ,.mem_resp_data_i(mem_resp_data_li)
+     ,.mem_resp_data_v_i(mem_resp_data_v_li)
+     ,.mem_resp_data_yumi_o(mem_resp_data_yumi_lo)
+     );
+
+  bp_burst_to_lite
+   #(.bp_params_p(bp_params_p)
+     ,.in_data_width_p(dword_width_p)
+     ,.out_data_width_p(cce_block_width_p)
+     ,.payload_mask_p(mem_cmd_payload_mask_gp)
+     )
+   burst2lite
+    (.clk_i(blackparrot_clk)
+     ,.reset_i(blackparrot_reset)
+
+     ,.mem_header_i(mem_cmd_header_lo)
+     ,.mem_header_v_i(mem_cmd_header_v_lo)
+     ,.mem_header_ready_and_o(mem_cmd_header_ready_li)
+
+     ,.mem_data_i(mem_cmd_data_lo)
+     ,.mem_data_v_i(mem_cmd_data_v_lo)
+     ,.mem_data_ready_and_o(mem_cmd_data_ready_li)
+
+     ,.mem_o(proc_mem_cmd_lo)
+     ,.mem_v_o(proc_mem_cmd_v_lo)
+     ,.mem_ready_and_i(proc_mem_cmd_ready_li)
+     );
+
+  logic proc_mem_resp_ready_lo;
+  assign proc_mem_resp_yumi_lo = proc_mem_resp_ready_lo & proc_mem_resp_v_li;
+  bp_lite_to_burst
+   #(.bp_params_p(bp_params_p)
+     ,.in_data_width_p(cce_block_width_p)
+     ,.out_data_width_p(dword_width_p)
+     ,.payload_mask_p(mem_resp_payload_mask_gp)
+     )
+   lite2burst
+    (.clk_i(blackparrot_clk)
+     ,.reset_i(blackparrot_reset)
+
+     ,.mem_i(proc_mem_resp_li)
+     ,.mem_v_i(proc_mem_resp_v_li)
+     ,.mem_ready_and_o(proc_mem_resp_ready_lo)
+
+     ,.mem_header_o(mem_resp_header_li)
+     ,.mem_header_v_o(mem_resp_header_v_li)
+     ,.mem_header_ready_and_i(mem_resp_header_yumi_lo)
+
+     ,.mem_data_o(mem_resp_data_li)
+     ,.mem_data_v_o(mem_resp_data_v_li)
+     ,.mem_data_ready_and_i(mem_resp_data_yumi_lo)
      );
 
   bp_mem

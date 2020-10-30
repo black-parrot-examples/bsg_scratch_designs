@@ -14,8 +14,8 @@ export BSG_TOPLEVEL_DESIGN_TYPE :=block
 # block. If there is only a single block in your design's hier.mk, this
 # variable has no affect and is effectively  forced to flat.
 
-#export BSG_FLOW_STYLE :=hier
-export BSG_FLOW_STYLE :=flat
+export BSG_FLOW_STYLE :=hier
+#export BSG_FLOW_STYLE :=flat
 
 # Select if the backend flor is going to perform Design Planning (DP). Design
 # planning is about 10 additional steps that occurs before any placement and
@@ -57,72 +57,7 @@ export BSG_PACKAGING_FOUNDRY :=gf_14_invecas_1p8v
 
 export BSG_PADMAPPING :=default
 
-#=======================================
-# PDK Setup Overrides
-#=======================================
+# UNDOCUMENTED SWITCHES
 
-# Enable or disable pdk kits. Here we can turn on or turn off various kits that
-# we have in the PDK. This includes things like multi-vt cells, low power
-# cells, eco cells, level shifters, IO cells, generated IP, etc. Turning
-# certain kits off can improve TTR but you will not have access to those cells.
-# This will not affect the preparation flow, all kits will be prepared. This
-# also means that if you enable a kit that was previously disabled, you do not
-# need to redo the preparation flow.
+#export PREP_MEMGEN_JSON_FILE := $(BSG_DESIGNS_TARGET_DIR)/json/memgen.json
 
-export PDK_ENABLE_KIT_IV7P5_RVT_C14  :=true
-export PDK_ENABLE_KIT_IV7P5_LVT_C14  :=true
-export PDK_ENABLE_KIT_IV7P5_SLVT_C14 :=true
-
-export PDK_ENABLE_KIT_IV7P5_HVT_C16  :=false
-export PDK_ENABLE_KIT_IV7P5_RVT_C16  :=true
-export PDK_ENABLE_KIT_IV7P5_LVT_C16  :=true
-#export PDK_ENABLE_KIT_IV7P5_LVT_C16  :=false
-export PDK_ENABLE_KIT_IV7P5_SLVT_C16 :=true
-#export PDK_ENABLE_KIT_IV7P5_SLVT_C16 :=false
-
-export PDK_ENABLE_KIT_IV7P5_HVT_LPK  :=false
-export PDK_ENABLE_KIT_IV7P5_RVT_LPK  :=false
-export PDK_ENABLE_KIT_IV7P5_LVT_LPK  :=false
-export PDK_ENABLE_KIT_IV7P5_SLVT_LPK :=false
-
-export PDK_ENABLE_KIT_IV7P5_HVT_HPK  :=false
-export PDK_ENABLE_KIT_IV7P5_RVT_HPK  :=true
-export PDK_ENABLE_KIT_IV7P5_LVT_HPK  :=true
-#export PDK_ENABLE_KIT_IV7P5_LVT_HPK  :=false
-export PDK_ENABLE_KIT_IV7P5_SLVT_HPK :=true
-#export PDK_ENABLE_KIT_IV7P5_SLVT_HPK :=false
-
-export PDK_ENABLE_KIT_IV7P5_HVT_ECO  :=false
-export PDK_ENABLE_KIT_IV7P5_RVT_ECO  :=false
-export PDK_ENABLE_KIT_IV7P5_LVT_ECO  :=false
-export PDK_ENABLE_KIT_IV7P5_SLVT_ECO :=false
-
-export PDK_ENABLE_KIT_IV7P5_HVT_SHIFT  :=false
-export PDK_ENABLE_KIT_IV7P5_RVT_SHIFT  :=false
-export PDK_ENABLE_KIT_IV7P5_LVT_SHIFT  :=false
-export PDK_ENABLE_KIT_IV7P5_SLVT_SHIFT :=false
-
-export PDK_ENABLE_KIT_IV1P8V_GPIO :=true
-export PDK_ENABLE_KIT_MEMGEN      :=true
-export PDK_ENABLE_KIT_CDMM        :=true
-
-# Multi-VT Kits
-export PDK_ENABLE_HVT_LIB  :=false
-export PDK_ENABLE_RVT_LIB  :=true
-export PDK_ENABLE_LVT_LIB  :=true
-#export PDK_ENABLE_LVT_LIB  :=false
-export PDK_ENABLE_SLVT_LIB :=true
-#export PDK_ENABLE_SLVT_LIB :=false
-
-# Standard cell kits
-export PDK_ENABLE_LPK_LIB   :=false
-export PDK_ENABLE_HPK_LIB   :=true
-export PDK_ENABLE_ECO_LIB   :=false
-export PDK_ENABLE_SHIFT_LIB :=false
-
-# Other kits
-export PDK_ENABLE_GPIO_LIB   :=true
-export PDK_ENABLE_MEMGEN_LIB :=true
-
-#export BSG_POWER_INTENT := mv_standard_pll
-export BSG_POWER_INTENT := sv_standard

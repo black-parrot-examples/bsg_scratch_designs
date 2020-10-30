@@ -231,6 +231,8 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_lce_resp.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_cmd.v
   $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_resp.v
+  $bp_me_dir/src/v/wormhole/bp_burst_to_lite.v
+  $bp_me_dir/src/v/wormhole/bp_lite_to_burst.v
   $bp_top_dir/src/v/bsg_async_noc_link.v
   $bp_top_dir/src/v/bp_cacc_complex.v
   $bp_top_dir/src/v/bp_cfg.v
@@ -253,7 +255,6 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_async/bsg_launch_sync_sync.v
   $basejump_stl_dir/bsg_async/bsg_sync_sync.v
   $basejump_stl_dir/bsg_async/bsg_async_ptr_gray.v
-  $basejump_stl_dir/bsg_clk_gen/bsg_clk_gen.v
   $basejump_stl_dir/bsg_async/bsg_async_fifo.v
   $basejump_stl_dir/bsg_async/bsg_async_credit_counter.v
   $basejump_stl_dir/bsg_dataflow/bsg_round_robin_1_to_n.v
@@ -292,9 +293,6 @@ set SVERILOG_SOURCE_FILES [join "
   
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
   $bsg_designs_target_dir/v/bsg_chip.v
-  $bsg_designs_target_dir/v/bsg_clk_gen_power_domain.v
-  $bsg_designs_target_dir/v/bsg_clk_gen_osc.v
 
-  $bsg_packaging_dir/$bsg_package/pinouts/$bsg_pinout/common/verilog/bsg_chip_swizzle_adapter.v
 "]
 

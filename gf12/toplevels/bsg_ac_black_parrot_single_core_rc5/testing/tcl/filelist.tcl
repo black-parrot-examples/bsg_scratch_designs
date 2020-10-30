@@ -21,17 +21,19 @@ set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
 set TESTING_SOURCE_FILES [join "
+  $basejump_stl_dir/bsg_test/bsg_dramsim3_pkg.v
+  $basejump_stl_dir/bsg_tag/bsg_tag_pkg.v
+  $basejump_stl_dir/bsg_noc/bsg_noc_pkg.v
+  $basejump_stl_dir/bsg_noc/bsg_wormhole_router_pkg.v
   $bp_common_dir/src/include/bp_common_rv64_pkg.vh
   $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
   $bp_common_dir/src/include/bp_common_pkg.vh
   $bp_common_dir/src/include/bp_common_aviary_pkg.vh
   $bp_me_dir/src/include/v/bp_me_pkg.vh
   $bp_me_dir/src/include/v/bp_cce_pkg.v
+  $bp_me_dir/test/common/bp_dramsim3_pkg.v
   $bp_be_dir/src/include/bp_be_pkg.vh
   $bp_be_dir/src/include/bp_be_dcache_pkg.vh
-  $basejump_stl_dir/bsg_tag/bsg_tag_pkg.v
-  $basejump_stl_dir/bsg_noc/bsg_noc_pkg.v
-  $basejump_stl_dir/bsg_noc/bsg_wormhole_router_pkg.v
 
   $basejump_stl_dir/bsg_async/bsg_async_fifo.v
   $basejump_stl_dir/bsg_async/bsg_async_ptr_gray.v

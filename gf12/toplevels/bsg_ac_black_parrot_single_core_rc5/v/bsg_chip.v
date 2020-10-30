@@ -30,14 +30,21 @@ module bsg_chip
    , output                                            io_resp_v_o
    , input                                             io_resp_ready_i
 
-   // Memory Requests
-   , output [cce_mem_msg_width_lp-1:0]                 mem_cmd_o
-   , output                                            mem_cmd_v_o
-   , input                                             mem_cmd_ready_i
+   , output logic [cce_mem_msg_header_width_lp-1:0]    mem_cmd_header_o
+   , output logic                                      mem_cmd_header_v_o
+   , input                                             mem_cmd_header_ready_i
 
-   , input [cce_mem_msg_width_lp-1:0]                  mem_resp_i
-   , input                                             mem_resp_v_i
-   , output                                            mem_resp_yumi_o
+   , output logic [dword_width_p-1:0]                  mem_cmd_data_o
+   , output logic                                      mem_cmd_data_v_o
+   , input                                             mem_cmd_data_ready_i
+
+   , input [cce_mem_msg_header_width_lp-1:0]           mem_resp_header_i
+   , input                                             mem_resp_header_v_i
+   , output logic                                      mem_resp_header_yumi_o
+
+   , input [dword_width_p-1:0]                         mem_resp_data_i
+   , input                                             mem_resp_data_v_i
+   , output logic                                      mem_resp_data_yumi_o
    );
 
   bp_unicore
