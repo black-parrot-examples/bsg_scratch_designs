@@ -45,9 +45,12 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_dataflow/bsg_fifo_tracker.v
   $basejump_stl_dir/bsg_dataflow/bsg_flow_counter.v
   $basejump_stl_dir/bsg_dataflow/bsg_parallel_in_serial_out.v
+  $basejump_stl_dir/bsg_dataflow/bsg_parallel_in_serial_out_dynamic.v
   $basejump_stl_dir/bsg_dataflow/bsg_round_robin_1_to_n.v
   $basejump_stl_dir/bsg_dataflow/bsg_round_robin_n_to_1.v
   $basejump_stl_dir/bsg_dataflow/bsg_serial_in_parallel_out_full.v
+  $basejump_stl_dir/bsg_dataflow/bsg_serial_in_parallel_out_dynamic.v
+  $basejump_stl_dir/bsg_dataflow/bsg_one_fifo.v
   $basejump_stl_dir/bsg_dataflow/bsg_two_fifo.v
   $basejump_stl_dir/bsg_mem/bsg_cam_1r1w.v
   $basejump_stl_dir/bsg_mem/bsg_cam_1r1w_tag_array.v
@@ -64,6 +67,7 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_decode_with_v.v
   $basejump_stl_dir/bsg_misc/bsg_dff.v
   $basejump_stl_dir/bsg_misc/bsg_dff_en.v
+  $basejump_stl_dir/bsg_misc/bsg_dff_en_bypass.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_en.v
   $basejump_stl_dir/bsg_misc/bsg_dff_reset_set_clear.v
@@ -81,7 +85,6 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_strobe.v
   $basejump_stl_dir/bsg_misc/bsg_xnor.v
 
-  $basejump_stl_dir/bsg_test/bsg_dramsim3_pkg.v
 
   $basejump_stl_dir/bsg_test/bsg_nonsynth_clock_gen.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_reset_gen.v
@@ -93,6 +96,8 @@ set TESTING_SOURCE_FILES [join "
   $bp_top_dir/test/common/bp_monitor.cpp
   $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v
   $bp_common_dir/src/v/bsg_bus_pack.v
+  $bp_me_dir/src/v/wormhole/bp_burst_to_lite.v
+  $bp_me_dir/src/v/wormhole/bp_lite_to_burst.v
 
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
   $bsg_designs_target_dir/testing/v/bsg_gateway_chip.v

@@ -59,5 +59,6 @@ export BSG_PADMAPPING :=default
 
 # UNDOCUMENTED SWITCHES
 
-#export PREP_MEMGEN_JSON_FILE := $(BSG_DESIGNS_TARGET_DIR)/json/memgen.json
+export DC_RMPLUS_FLOW :=rtm_exp
+#export PREP_MEMGEN_JSON_FILE :=$(BSG_DESIGNS_TARGET_DIR)/json/memgen.json
 

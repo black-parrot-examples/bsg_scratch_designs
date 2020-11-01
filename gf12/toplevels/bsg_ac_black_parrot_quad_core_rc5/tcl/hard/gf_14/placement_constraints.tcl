@@ -11,9 +11,6 @@ remove_edit_groups -all
 remove_routing_corridors -all
 remove_placement_blockages -all
 
-#set core_height 2500
-#set core_width 2500
-
 set keepout_margin_x 2
 set keepout_margin_y 2
 set keepout_margins [list $keepout_margin_x $keepout_margin_y $keepout_margin_x $keepout_margin_y]
@@ -137,8 +134,8 @@ set_macro_relative_location \
   -target_corner bl \
   -target_orientation MY \
   -anchor_object $icache_tag_ma \
-  -anchor_corner br \
-  -offset [list 0 0]
+  -anchor_corner tl \
+  -offset [list $keepout_margin_x $keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $icache_stat_mem
 
@@ -200,8 +197,8 @@ set_macro_relative_location \
   -target_corner br \
   -target_orientation R0 \
   -anchor_object $dcache_tag_ma \
-  -anchor_corner bl \
-  -offset [list $keepout_margin_x $keepout_margin_y]
+  -anchor_corner tr \
+  -offset [list -$keepout_margin_x $keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $dcache_stat_mem
 
@@ -215,8 +212,8 @@ set l2s_data_ma_west_top [create_macro_array \
   -num_rows 2 \
   -num_cols 3 \
   -align bottom \
-  -horizontal_channel_height [expr $keepout_margin_y] \
-  -vertical_channel_width [expr $keepout_margin_x] \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
   -orientation FN \
   $l2s_data_mems_west_top]
 
@@ -235,8 +232,8 @@ set l2s_data_ma_west_bot [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
   -align bottom \
-  -horizontal_channel_height [expr $keepout_margin_y] \
-  -vertical_channel_width [expr $keepout_margin_x] \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
   -orientation FN \
   $l2s_data_mems_west_bot]
 
@@ -256,9 +253,9 @@ set l2s_data_ma_east_top [create_macro_array \
   -num_rows 2 \
   -num_cols 3 \
   -align bottom \
-  -horizontal_channel_height [expr $keepout_margin_y] \
-  -vertical_channel_width [expr $keepout_margin_x] \
-  -orientation FN \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
+  -orientation N \
   $l2s_data_mems_east_top]
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_data_mems_east_top
@@ -276,8 +273,8 @@ set l2s_data_ma_east_bot [create_macro_array \
   -num_rows 1 \
   -num_cols 2 \
   -align bottom \
-  -horizontal_channel_height [expr $keepout_margin_y] \
-  -vertical_channel_width [expr $keepout_margin_x] \
+  -horizontal_channel_height [expr 2*$keepout_margin_y] \
+  -vertical_channel_width [expr 2*$keepout_margin_x] \
   -orientation N \
   $l2s_data_mems_east_bot]
 
@@ -308,14 +305,13 @@ set l2s_tag_ma_west [create_macro_array \
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_tag_mems_west
 
-set l2s_tag_margin 0
 set_macro_relative_location \
   -target_object $l2s_tag_ma_west \
   -target_corner tl \
   -target_orientation R0 \
   -anchor_object $l2s_data_ma_west_top \
   -anchor_corner tr \
-  -offset [list -$l2s_tag_margin 0]
+  -offset [list 0 0]
 
 set l2s_tag_mems_b1 [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*l2s*tag_mem*wb_1*"]
 set l2s_tag_mems_east [concat $l2s_tag_mems_b1]
@@ -330,14 +326,13 @@ set l2s_tag_ma_east [create_macro_array \
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_tag_mems_east
 
-set l2s_tag_margin 0
 set_macro_relative_location \
   -target_object $l2s_tag_ma_east \
   -target_corner tr \
   -target_orientation R0 \
   -anchor_object $l2s_data_ma_east_top \
   -anchor_corner tl \
-  -offset [list -$l2s_tag_margin 0]
+  -offset [list 0 0]
 
 ####################################
 ### L2S STAT
@@ -349,7 +344,7 @@ set_macro_relative_location \
   -target_corner tl \
   -target_orientation FN \
   -anchor_object $l2s_tag_ma_west \
-  -anchor_corner tr \
+  -anchor_corner bl \
   -offset [list $keepout_margin_x -$keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_stat_mem
@@ -415,8 +410,8 @@ set_macro_relative_location \
   -target_corner br \
   -target_orientation R0 \
   -anchor_object $cce_instr_ma \
-  -anchor_corner br \
-  -offset [list 0 [expr $keepout_margin_y]]
+  -anchor_corner tr \
+  -offset [list -$keepout_margin_x $keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $btb_mem
 
@@ -439,7 +434,7 @@ set_macro_relative_location \
   -target_corner bl \
   -target_orientation R0 \
   -anchor_object $directory_ma \
-  -anchor_corner br \
+  -anchor_corner tl \
   -offset [list 0 0]
 
 create_keepout_margin -type hard -outer $keepout_margins $int_regfile_mems
@@ -449,8 +444,8 @@ create_keepout_margin -type hard -outer $keepout_margins $int_regfile_mems
 ####
 set fp_regfile_mems [get_cells -design bp_tile_node -hier -filter "ref_name=~gf14_* && full_name=~*/fp_regfile/*"]
 set fp_regfile_ma [create_macro_array \
-  -num_rows 3 \
-  -num_cols 1 \
+  -num_rows 1 \
+  -num_cols 3 \
   -align left \
   -horizontal_channel_height [expr 2*$keepout_margin_y] \
   -vertical_channel_width [expr 2*$keepout_margin_x] \
@@ -459,14 +454,12 @@ set fp_regfile_ma [create_macro_array \
 
 set_macro_relative_location \
   -target_object $fp_regfile_ma \
-  -target_corner bl \
+  -target_corner tl \
   -target_orientation R0 \
   -anchor_object $int_regfile_ma \
-  -anchor_corner tl \
+  -anchor_corner tr \
   -offset [list 0 0]
 
 create_keepout_margin -type hard -outer $keepout_margins $fp_regfile_mems
-
-
 
 current_design bsg_chip

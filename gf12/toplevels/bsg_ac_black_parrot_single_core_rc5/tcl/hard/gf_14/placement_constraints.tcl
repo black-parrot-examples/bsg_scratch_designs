@@ -9,8 +9,8 @@ set_locked_objects -unlock [get_cells -hier]
 remove_bounds -all
 remove_edit_groups -all
 
-set tile_height 600
-set tile_width 600
+set tile_height [core_height]
+set tile_width  [core_width]
 
 set keepout_margin_x 2
 set keepout_margin_y 2
@@ -205,7 +205,7 @@ set l2s_data_ma_east_top [create_macro_array \
   -align bottom \
   -horizontal_channel_height [expr $keepout_margin_y] \
   -vertical_channel_width [expr $keepout_margin_x] \
-  -orientation FN \
+  -orientation N \
   $l2s_data_mems_east_top]
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_data_mems_east_top
@@ -296,7 +296,7 @@ set_macro_relative_location \
   -target_corner tl \
   -target_orientation FN \
   -anchor_object $l2s_tag_ma_west \
-  -anchor_corner tr \
+  -anchor_corner bl \
   -offset [list $keepout_margin_x -$keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $l2s_stat_mem
@@ -321,14 +321,13 @@ create_keepout_margin -type hard -outer $keepout_margins $btb_mem
 ###
 
 set icache_stat_mem [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*/icache*stat_mem/*"]
-set icache_stat_margin 0
 set_macro_relative_location \
   -target_object $icache_stat_mem \
   -target_corner bl \
-  -target_orientation R0 \
+  -target_orientation MY \
   -anchor_object $icache_tag_ma \
-  -anchor_corner br \
-  -offset [list $icache_stat_margin $keepout_margin_y]
+  -anchor_corner tl \
+  -offset [list $keepout_margin_x $keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $icache_stat_mem
 
@@ -349,7 +348,7 @@ set fp_regfile_ma [create_macro_array \
   -align left \
   -horizontal_channel_height [expr $keepout_margin_y] \
   -vertical_channel_width [expr $keepout_margin_x] \
-  -orientation N \
+  -orientation FN \
   $fp_regfile_mems]
 
 set_macro_relative_location \
@@ -357,7 +356,7 @@ set_macro_relative_location \
   -target_corner bl \
   -target_orientation R0 \
   -anchor_corner bl \
-  -offset [list [expr $tile_width/2-$freg_mem_width-2*$freg_mem_width-$keepout_margin_x*2] [expr $tile_height/2]]
+  -offset [list [expr $tile_width/2-$freg_mem_width-2*$freg_mem_width-$keepout_margin_x*2] [expr $tile_height/2-$freg_mem_height/2]]
 
 create_keepout_margin -type hard -outer $keepout_margins $fp_regfile_mems
 
@@ -367,7 +366,7 @@ set int_regfile_ma [create_macro_array \
   -align left \
   -horizontal_channel_height [expr $keepout_margin_y] \
   -vertical_channel_width [expr $keepout_margin_x] \
-  -orientation N \
+  -orientation FN \
   $int_regfile_mems]
 
 set_macro_relative_location \
@@ -390,7 +389,7 @@ set_macro_relative_location \
   -target_corner br \
   -target_orientation R0 \
   -anchor_object $dcache_tag_ma \
-  -anchor_corner bl \
+  -anchor_corner tr \
   -offset [list -$keepout_margin_x $keepout_margin_y]
 
 create_keepout_margin -type hard -outer $keepout_margins $dcache_stat_mem
