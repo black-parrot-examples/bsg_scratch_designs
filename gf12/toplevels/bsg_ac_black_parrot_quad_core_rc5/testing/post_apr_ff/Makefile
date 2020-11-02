@@ -55,7 +55,7 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 
 # Additional options for Post-Synth
@@ -100,7 +100,7 @@ PROG     :=hello_world
 UCODE    := $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem
 
 prog.nbf:
-	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 1 --config --ucode $(UCODE) > $(BSG_OUT_DIR)/$@
+	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 4 --config --ucode $(UCODE) > $(BSG_OUT_DIR)/$@
 
 prog.mem:
 	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@

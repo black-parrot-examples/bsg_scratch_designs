@@ -130,7 +130,7 @@ PROG     :=hello_world
 UCODE    := $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem
 
 prog.nbf:
-	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 1 --config --ucode $(UCODE) > $(BSG_OUT_DIR)/$@
+	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 4 --config --ucode $(UCODE) > $(BSG_OUT_DIR)/$@
 
 prog.mem:
 	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@

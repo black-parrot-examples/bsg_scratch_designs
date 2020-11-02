@@ -32,7 +32,7 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   set load_lib_pin     "SC7P5T_INVX8_SSC14R/A"
 
   # Reg2Reg
-  create_clock -period ${core_clk_period_ps} -name ${core_clk_name} [get_ports "clk_i"]
+  create_clock -period ${core_clk_period_ps} -name ${core_clk_name} [get_ports *clk*]
   set_clock_uncertainty ${core_clk_uncertainty_ps} [get_clocks ${core_clk_name}]
   
   # In2Reg

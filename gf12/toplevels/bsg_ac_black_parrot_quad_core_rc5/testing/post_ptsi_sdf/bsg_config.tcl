@@ -74,6 +74,7 @@ source $::env(BSG_DESIGNS_TARGET_DIR)/tcl/include.tcl
 source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/filelist.tcl
 source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
 
+# TODO: Hack the flow to get the correct standard cell models
 set VERILOG_FILES(iv7p5_rvt_c14)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC14R.v
 
 # netlist source files

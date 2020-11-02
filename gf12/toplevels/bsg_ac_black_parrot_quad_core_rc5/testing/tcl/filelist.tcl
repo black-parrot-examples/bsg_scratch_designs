@@ -21,11 +21,14 @@ set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
 set TESTING_SOURCE_FILES [join "
+  $basejump_stl_dir/bsg_test/bsg_dramsim3_pkg.v
+
   $bp_common_dir/src/include/bp_common_rv64_pkg.vh
   $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
   $bp_common_dir/src/include/bp_common_pkg.vh
   $bp_common_dir/src/include/bp_common_aviary_pkg.vh
   $bp_me_dir/src/include/v/bp_me_pkg.vh
+  $bp_me_dir/test/common/bp_dramsim3_pkg.v
   $bp_me_dir/src/include/v/bp_cce_pkg.v
   $bp_be_dir/src/include/bp_be_pkg.vh
   $bp_be_dir/src/include/bp_be_dcache_pkg.vh
@@ -85,8 +88,6 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_adapter.v
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_adapter_in.v
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_adapter_out.v
-
-  $basejump_stl_dir/bsg_test/bsg_dramsim3_pkg.v
 
   $basejump_stl_dir/bsg_test/bsg_nonsynth_clock_gen.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_reset_gen.v

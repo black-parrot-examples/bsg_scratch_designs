@@ -4,18 +4,6 @@
   `define BLACKPARROT_CLK_PERIOD 5000.0
 `endif
 
-`ifndef IO_MASTER_CLK_PERIOD
-  `define IO_MASTER_CLK_PERIOD 5000.0
-`endif
-
-`ifndef ROUTER_CLK_PERIOD
-  `define ROUTER_CLK_PERIOD 5000.0
-`endif
-
-`ifndef TAG_CLK_PERIOD
-  `define TAG_CLK_PERIOD 10000.0
-`endif
-
 module bsg_gateway_chip
 
 import bsg_tag_pkg::*;
@@ -30,7 +18,7 @@ import bp_me_pkg::*;
 import bsg_noc_pkg::*;
 import bsg_wormhole_router_pkg::*;
 
-#(localparam bp_params_e bp_params_p = e_bp_unicore_cfg `declare_bp_proc_params(bp_params_p)
+#(localparam bp_params_e bp_params_p = bp_cfg_gp `declare_bp_proc_params(bp_params_p)
   `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce))
   ();
 
@@ -161,7 +149,7 @@ import bsg_wormhole_router_pkg::*;
      ,.reset_i(blackparrot_reset)
 
      ,.mem_cmd_i(io_cmd_lo)
-     ,.mem_cmd_v_i(io_cmd_v_lo)
+     ,.mem_cmd_v_i(io_cmd_v_lo & io_cmd_ready_li)
      ,.mem_cmd_ready_o(io_cmd_ready_li)
 
      ,.mem_resp_o(io_resp_li)
@@ -178,7 +166,7 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_cmd_yumi_i(io_cmd_ready_lo & io_cmd_v_li)
 
      ,.mem_resp_i(io_resp_lo)
-     ,.mem_resp_v_i(io_resp_v_lo)
+     ,.mem_resp_v_i(io_resp_v_lo & io_resp_ready_li)
      ,.mem_resp_ready_o(io_resp_ready_li)
 
      ,.cmd_link_i(proc_cmd_link_lo)
@@ -205,7 +193,7 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_cmd_yumi_i(dram_cmd_ready_li & dram_cmd_v_lo)
   
      ,.mem_resp_i(dram_resp_li)
-     ,.mem_resp_v_i(dram_resp_v_li)
+     ,.mem_resp_v_i(dram_resp_v_li & dram_resp_ready_lo)
      ,.mem_resp_ready_o(dram_resp_ready_lo)
   
      ,.cmd_link_i(dram_cmd_link_lo)
@@ -225,7 +213,7 @@ import bsg_wormhole_router_pkg::*;
      ,.reset_i(blackparrot_reset)
 
      ,.mem_cmd_i(dram_cmd_lo)
-     ,.mem_cmd_v_i(dram_cmd_v_lo)
+     ,.mem_cmd_v_i(dram_cmd_v_lo & dram_cmd_v_lo)
      ,.mem_cmd_ready_o(dram_cmd_ready_li)
 
      ,.mem_resp_o(dram_resp_li)
@@ -245,7 +233,7 @@ import bsg_wormhole_router_pkg::*;
      ,.reset_i(blackparrot_reset)
   
      ,.io_cmd_i(io_cmd_li)
-     ,.io_cmd_v_i(io_cmd_v_li)
+     ,.io_cmd_v_i(io_cmd_v_li & io_cmd_ready_lo)
      ,.io_cmd_ready_o(io_cmd_ready_lo)
   
      ,.io_resp_o(io_resp_lo)
@@ -272,7 +260,7 @@ import bsg_wormhole_router_pkg::*;
     (.clk_i(blackparrot_clk)
      ,.reset_i(blackparrot_reset)
   
-     ,.lce_id_i(4'b10)
+     ,.lce_id_i('1)
   
      ,.io_cmd_o(io_cmd_lo)
      ,.io_cmd_v_o(io_cmd_v_lo)

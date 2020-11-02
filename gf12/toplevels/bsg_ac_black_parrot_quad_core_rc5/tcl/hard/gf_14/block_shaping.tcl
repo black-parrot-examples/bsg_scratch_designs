@@ -19,7 +19,8 @@ set data_mem_width         [lindex [get_attribute [get_cell -hier $dcache_data_m
 set data_mem_height        [lindex [get_attribute [get_cell -hier $dcache_data_mems] height] 0]
 
 # TODO: Hack to get pins off the power grid
-set pgrid_offset_y 1.08
+#set pgrid_offset_y 1.08
+set pgrid_offset_y 1.00
 set tile_height [round_up_to_nearest [expr 7*($data_mem_height+2*$keepout_margin_y)+$pgrid_offset_y] [unit_height]]
 set tile_width [round_up_to_nearest $tile_height [unit_width]]
 
