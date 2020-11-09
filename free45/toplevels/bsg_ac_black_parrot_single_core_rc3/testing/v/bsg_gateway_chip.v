@@ -18,7 +18,7 @@ import bp_common_rv64_pkg::*;
 import bp_cce_pkg::*;
 import bp_me_pkg::*;
 import bp_common_cfg_link_pkg::*;
-  #(parameter bp_params_e bp_params_p = e_bp_unicore_cfg
+  #(parameter bp_params_e bp_params_p = e_bp_unicore_l1_small_cfg
    `declare_bp_proc_params(bp_params_p)
   
    , localparam mem_cap_in_bytes_lp = 2**28

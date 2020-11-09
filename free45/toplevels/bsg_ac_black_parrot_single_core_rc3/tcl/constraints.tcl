@@ -70,10 +70,10 @@ if { [sizeof $cells_to_derate] > 0 } {
 
 set_app_var compile_keep_original_for_external_references true
 
-current_design *pipe_mem*
-create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
-set_optimize_registers true -check_design
-uniquify -force
-ungroup -flatten [get_cells -hier]
+# current_design *pipe_mem*
+# create_clock -period ${core_clk_period_ps} [get_ports "clk_i"]
+# set_optimize_registers true -check_design
+# uniquify -force
+# ungroup -flatten [get_cells -hier]
 
 current_design bsg_chip
