@@ -15,7 +15,7 @@ endif
 
 basejump_stl_dir     :=$(THIS_DIR)/basejump_stl
 basejump_stl_url     :=$(GITHUB)bespoke-silicon-group/basejump_stl
-basejump_stl_commit  :=tapeout_bp_rc5
+basejump_stl_commit  :=target_harden
 
 bsg_14_dir           :=$(THIS_DIR)/bsg_14
 bsg_14_url           :=$(GITHUB)bespoke-silicon-group/bsg_14
