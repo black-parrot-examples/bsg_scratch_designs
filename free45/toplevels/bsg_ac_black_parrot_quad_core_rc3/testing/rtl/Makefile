@@ -4,35 +4,27 @@
 # overriden by the chip repo if this makefile is called from the chip
 # infrastructure.
 
-TOP_DIR            ?= $(shell git rev-parse --show-toplevel)
-ROOT_DIR           ?= $(abspath $(TOP_DIR)/../)
-BSG_DESIGNS_TARGET ?= $(notdir $(abspath ../../))
+export TOP_DIR                ?= $(shell git rev-parse --show-toplevel)
+export BSG_DESIGNS_DIR        ?= $(abspath $(TOP_DIR))/free45
+export BSG_DESIGNS_TARGET     ?= bsg_ac_black_parrot_quad_core_rc3
+export BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
 
 BSG_WORK_DIR := $(abspath ./)
 BSG_OUT_DIR  := $(BSG_WORK_DIR)/out
 BSG_OUT_SIM  := $(BSG_OUT_DIR)/simv
 
-include $(ROOT_DIR)/bsg_cadenv/cadenv.mk
+include $(BSG_DESIGNS_TARGET_DIR)/bsg_cadenv/cadenv.mk
 
 # Repository setup
-export BSG_DESIGNS_DIR        ?= $(ROOT_DIR)/bsg_designs
-export BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
-export BASEJUMP_STL_DIR       ?= $(ROOT_DIR)/basejump_stl
-export BSG_PACKAGING_DIR      ?= $(ROOT_DIR)/bsg_packaging
-export BLACK_PARROT_DIR       ?= $(ROOT_DIR)/pre-alpha-release
-export BOARD_DIR              ?= $(ROOT_DIR)/board
+export BASEJUMP_STL_DIR       ?= $(BSG_DESIGNS_TARGET_DIR)/basejump_stl
+export BSG_PACKAGING_DIR      ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_packaging
+export BLACK_PARROT_DIR       ?= $(BSG_DESIGNS_TARGET_DIR)/black-parrot
+export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
 
-export TESTING_BSG_DESIGNS_DIR        ?= $(BSG_OUT_DIR)/root/bsg_designs
-export TESTING_BASEJUMP_STL_DIR       ?= $(BSG_OUT_DIR)/root/basejump_stl
-export TESTING_BSG_PACKAGING_DIR      ?= $(BSG_OUT_DIR)/root/bsg_packaging
-export TESTING_BLACK_PARROT_DIR       ?= $(BSG_OUT_DIR)/root/pre-alpha-release
-export TESTING_BOARD_DIR              ?= $(BSG_OUT_DIR)/root/board
-export TESTING_BSG_DESIGNS_TARGET_DIR ?= $(TESTING_BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
-
-export BSG_PACKAGE           ?=uw_bga
-export BSG_PINOUT            ?=bsg_asic_cloud
-export BSG_PACKAGING_FOUNDRY ?=gf_14_invecas_3p3v
-export BSG_PADMAPPING        ?=default
+export BSG_PACKAGE           ?=
+export BSG_PINOUT            ?=
+export BSG_PACKAGING_FOUNDRY ?=
+export BSG_PADMAPPING        ?=
 
 export BLACK_PARROT_COMMON_DIR ?= $(BLACK_PARROT_DIR)/bp_common
 export BLACK_PARROT_TOP_DIR    ?= $(BLACK_PARROT_DIR)/bp_top
@@ -53,12 +45,16 @@ VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext
 VCS_OPTIONS += +noportcoerce
 VCS_OPTIONS += +vc
-VCS_OPTIONS += +vcs+loopreport
+VCS_OPTIONS += +memcbk
+VCS_OPTIONS += +vcs+vcdpluson
 VCS_OPTIONS += -timescale=1ps/1ps
 VCS_OPTIONS += -diag timescale 
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
+
+VCS_OPTIONS += +vcs+finish+5000000000ps
+VCS_OPTIONS += +vcs+loopdetect +vcs+loopreport
 
 # DRAMSim2
 VCS_OPTIONS += -CFLAGS "-I$(BLACK_PARROT_DIR)/external/include -std=c++11"
@@ -69,8 +65,8 @@ VCS_OPTIONS += -LDFLAGS "-L$(BLACK_PARROT_DIR)/external/lib -ldramsim -Wl,-rpath
 ## Chip and Testing Filelists and Liblists
 ########################################
 
-BSG_TOP_SIM_MODULE = bsg_asic_cloud_pcb
-BSG_CHIP_INSTANCE_PATH = bsg_asic_cloud_pcb.IC0.ASIC
+BSG_TOP_SIM_MODULE = bsg_gateway_chip
+BSG_CHIP_INSTANCE_PATH = bsg_gateway_chip.DUT
 
 VCS_OPTIONS += +define+BSG_TOP_SIM_MODULE=$(BSG_TOP_SIM_MODULE)
 VCS_OPTIONS += +define+BSG_CHIP_INSTANCE_PATH=$(BSG_CHIP_INSTANCE_PATH)
@@ -95,7 +91,7 @@ VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 $(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
-$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)/root
+$(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
 
 ########################################
@@ -119,17 +115,27 @@ DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
 DRAM_SYS :=system.ini
 
 prog.mem:
-	@cp $(BLACK_PARROT_DIR)/bp_common/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
+	@cp $(BLACK_PARROT_COMMON_DIR)/test/mem/$(PROG).mem $(BSG_OUT_DIR)/$@
+
+prog.dump:
+	@cp $(BLACK_PARROT_COMMON_DIR)/test/mem/$(PROG).dump $(BSG_OUT_DIR)/$@
 
 dram_ch.ini:
-	@cp $(BLACK_PARROT_DIR)/bp_common/test/cfg/$(DRAM_CH) $(BSG_OUT_DIR)/$@
+	@cp $(BLACK_PARROT_COMMON_DIR)/test/cfg/$(DRAM_CH) $(BSG_OUT_DIR)/$@
 
 dram_sys.ini:
-	@cp $(BLACK_PARROT_DIR)/bp_common/test/cfg/$(DRAM_SYS) $(BSG_OUT_DIR)/$@
+	@cp $(BLACK_PARROT_COMMON_DIR)/test/cfg/$(DRAM_SYS) $(BSG_OUT_DIR)/$@
 
 cce_ucode.mem:
-	@cp $(BLACK_PARROT_DIR)/bp_me/src/asm/roms/mesi/bp_cce_inst_rom_mesi_lce8_wg16_assoc8.mem $(BSG_OUT_DIR)/$@
+	@cp $(BLACK_PARROT_ME_DIR)/src/asm/roms/mesi.mem $(BSG_OUT_DIR)/$@
 
+prog.nbf: prog.mem cce_ucode.mem
+	python $(BLACK_PARROT_COMMON_DIR)/software/py/nbf.py 4 $(BSG_OUT_DIR)/cce_ucode.mem --mem=$(BSG_OUT_DIR)/prog.mem > $(BSG_OUT_DIR)/$@
+
+bootrom:
+	cp $(BLACK_PARROT_COMMON_DIR)/test/mem/bootrom.riscv $(BSG_OUT_DIR)/bootrom.riscv
+	cp $(BLACK_PARROT_COMMON_DIR)/test/mem/bootrom.mem $(BSG_OUT_DIR)/bootrom.mem
+	
 ########################################
 ## Run Targets
 ########################################
@@ -150,11 +156,8 @@ view:
 	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.mem dram_ch.ini dram_sys.ini cce_ucode.mem
+$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) $(BSG_TRACE_ROMS) prog.mem prog.dump cce_ucode.mem dram_ch.ini dram_sys.ini prog.nbf bootrom
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
-
-$(BSG_OUT_DIR)/root: | $(BSG_OUT_DIR)
-	ln -nsf $(ROOT_DIR) $@
 
 $(BSG_OUT_DIR):
 	mkdir -p $@

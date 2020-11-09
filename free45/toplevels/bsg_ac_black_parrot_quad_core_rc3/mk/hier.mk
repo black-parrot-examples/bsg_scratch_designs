@@ -13,7 +13,7 @@
 # mid-level blocks first in the MID_HIER_BLOCKS list.
 #===============================================================================
 
-export TOP_HIER_BLOCK  := bp_processor
+export TOP_HIER_BLOCK  := bsg_chip
 export MID_HIER_BLOCKS :=
 export BOT_HIER_BLOCKS := bp_tile_node
 

@@ -27,6 +27,7 @@ set SVERILOG_INCLUDE_PATHS [join "
   $basejump_stl_dir/bsg_test
   $basejump_stl_dir/bsg_noc
   $basejump_stl_dir/bsg_tag
+  $basejump_stl_dir/bsg_cache
   $black_parrot_common_dir/src/include
   $black_parrot_fe_dir/src/include
   $black_parrot_be_dir/src/include

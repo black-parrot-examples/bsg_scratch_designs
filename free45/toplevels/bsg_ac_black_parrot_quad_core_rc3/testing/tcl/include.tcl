@@ -16,6 +16,9 @@ set TESTING_INCLUDE_PATHS [join "
   $black_parrot_dir/bp_be/src/include/bp_be_dcache/
   $black_parrot_dir/bp_me/src/include/v
   $basejump_stl_dir/bsg_misc
+  $basejump_stl_dir/bsg_test
+  $basejump_stl_dir/bsg_dataflow
+  $basejump_stl_dir/bsg_mem
   $basejump_stl_dir/bsg_cache
   $basejump_stl_dir/bsg_noc
   $basejump_stl_dir/bsg_tag
