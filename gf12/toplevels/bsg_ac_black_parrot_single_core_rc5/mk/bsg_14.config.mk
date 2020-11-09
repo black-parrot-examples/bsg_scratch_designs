@@ -62,7 +62,7 @@ export BSG_PADMAPPING :=default
 export DC_RMPLUS_FLOW :=rtm_exp
 #export PREP_MEMGEN_JSON_FILE :=$(BSG_DESIGNS_TARGET_DIR)/json/memgen.json
 
-export PT_ACTIVITY_FILES   := $(abspath $(wildcard ../testing/post_apr_ff/out/*.saif))
-export PT_ACTIVITY_WEIGHTS := $(foreach _,$PT_ACTIVITY_FILES, 1.0)
-export PT_STRIP_PATH       := bsg_gateway_chip/DUT
+export PTSI_FLOW_ACTIVITY_FILE    := $(abspath $(wildcard ../testing/post_apr_ff/out/*.saif))
+export PTSI_FLOW_ACTIVITY_WEIGHTS := $(foreach _,$PT_ACTIVITY_FILES, 1.0)
+export PTSI_FLOW_STRIP_PATH       := bsg_gateway_chip/DUT
 
