@@ -42,14 +42,6 @@ set core_output_pins [all_outputs]
 set_load [load_of [get_lib_pin */${load_lib_pin}]] ${core_output_pins}
 set_output_delay ${core_output_delay_ps} -clock ${core_clk_name} ${core_output_pins}
 
-# This timing assertion for the RF is only valid in designs that do not do simultaneous read and write, or do not use the read value when it writes
-# Check your ram generator to see what it permits
-# This assertion is useful for SRAMs generated from the GF12 SRAM generator
-# foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*int_regfile*rf*"] {
-#   set_disable_timing $cell -from CLKA -to CLKB
-#   set_disable_timing $cell -from CLKB -to CLKA
-# }
-
 # Derate
 set cells_to_derate [list]
 append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~free45_*"]

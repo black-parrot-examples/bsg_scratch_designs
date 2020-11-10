@@ -95,18 +95,6 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
 
 ########################################
-## Trace Replay Roms
-########################################
-
-BSG_TRACE_FILES := $(notdir $(wildcard $(BSG_WORK_DIR)/../traces/*.tr))
-BSG_TRACE_ROMS  := $(addprefix $(BSG_OUT_DIR)/,${BSG_TRACE_FILES:.tr=_rom.v})
-
-$(BSG_OUT_DIR)/%_rom.v: $(BSG_WORK_DIR)/../traces/%.tr | $(BSG_OUT_DIR)
-	$(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py $< $*_rom > $@
-
-VCS_OPTIONS += $(addprefix -v ,$(BSG_TRACE_ROMS))
-
-########################################
 ## BlackParrot test junk
 ########################################
 
