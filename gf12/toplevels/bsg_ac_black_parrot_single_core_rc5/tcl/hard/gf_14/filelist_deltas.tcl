@@ -10,7 +10,7 @@ set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
 set HARD_SWAP_MACROS [join "
-  $bsg_designs_target_dir/memgen/bsg_2r1w_sync_macros.vh
+  $bsg_designs_target_dir/memgen/bsg_mem_2r1w_sync_macros.vh
 "]
 
 # list of files to replace

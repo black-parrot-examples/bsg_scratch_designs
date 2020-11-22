@@ -1,7 +1,7 @@
 `timescale 1ps/1ps
 
 `ifndef BLACKPARROT_CLK_PERIOD
-  `define BLACKPARROT_CLK_PERIOD 5000.0
+  `define BLACKPARROT_CLK_PERIOD 10000.0
 `endif
 
 module bsg_gateway_chip

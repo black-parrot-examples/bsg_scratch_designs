@@ -56,6 +56,7 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
+VCS_OPTIONS += +vcs+lic+wait
 
 # Additional options for RTL-Hard
 VCS_OPTIONS += +notimingcheck
