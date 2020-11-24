@@ -19,7 +19,7 @@ basejump_stl_commit  :=target_harden
 
 bsg_14_dir           :=$(THIS_DIR)/bsg_14
 bsg_14_url           :=$(GITHUB)bespoke-silicon-group/bsg_14
-bsg_14_commit        :=tt_only
+bsg_14_commit        :=target_harden
 
 bsg_cadenv_dir       :=$(THIS_DIR)/bsg_cadenv
 bsg_cadenv_url       :=$(BITBUCKET)taylor-bsg/bsg_cadenv
