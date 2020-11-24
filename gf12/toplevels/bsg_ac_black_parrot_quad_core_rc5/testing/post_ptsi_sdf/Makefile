@@ -56,12 +56,9 @@ VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
 VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF
+VCS_OPTIONS += +vcs+lic+wait
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
-
-# DRAMSim2
-VCS_OPTIONS += -CFLAGS "-I$(BLACKPARROT_DIR)/external/include -std=c++11"
-VCS_OPTIONS += -LDFLAGS "-L$(BLACKPARROT_DIR)/external/lib -ldramsim -Wl,-rpath=$(BLACKPARROT_DIR)/external/lib"
 
 ########################################
 ## Chip and Testing Filelists and Liblists

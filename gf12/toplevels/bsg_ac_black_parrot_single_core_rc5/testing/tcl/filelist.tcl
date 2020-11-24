@@ -89,6 +89,7 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_test/bsg_nonsynth_clock_gen.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_reset_gen.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_test_rom.v
+  $basejump_stl_dir/bsg_test/bsg_nonsynth_delay_line.v
   $basejump_stl_dir/testing/bsg_dmc/lpddr_verilog_model/mobile_ddr.v
   $bp_me_dir/test/common/bp_mem.v
   $bp_me_dir/test/common/bp_mem_to_dram.v

@@ -56,6 +56,7 @@ VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
 VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF,noSDFCOM_SWC,noSDFCOM_ANICD,noSDFCOM_IWSBA,noSDFCOM_NICD
+VCS_OPTIONS += +vcs+lic+wait
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 

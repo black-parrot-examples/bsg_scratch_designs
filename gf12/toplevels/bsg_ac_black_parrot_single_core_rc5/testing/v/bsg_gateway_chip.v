@@ -27,8 +27,9 @@ import bsg_wormhole_router_pkg::*;
   // Nonsynth Clock Generator(s)
   //
 
-  logic blackparrot_clk;
+  logic blackparrot_clk, blackparrot_tb_clk;
   bsg_nonsynth_clock_gen #(.cycle_time_p(`BLACKPARROT_CLK_PERIOD)) blackparrot_clk_gen (.o(blackparrot_clk));
+  bsg_nonsynth_delay_line #(.width_p(1), .delay_p(`BLACKPARROT_CLK_PERIOD/2)) clock_buf (.i(blackparrot_clk), .o(blackparrot_tb_clk));
 
   //////////////////////////////////////////////////
   //
@@ -104,6 +105,17 @@ import bsg_wormhole_router_pkg::*;
   logic [dword_width_p-1:0] mem_resp_data_li;
   logic mem_resp_data_v_li, mem_resp_data_yumi_lo;
 
+  //logic blackparrot_clk_inv, blackparrot_clk_driven;
+  //SC7P5T_INVX2_SSC14R clk_inv1 (.A(blackparrot_clk), .Z(blackparrot_clk_inv));
+  //SC7P5T_INVX2_SSC14R clk_inv2 (.A(blackparrot_clk_inv), .Z(blackparrot_clk_driven));
+  //bsg_nonsynth_delay_line
+  // #(.width_p(1), .delay_p(1))
+  // clk_buf
+  //  (.i(blackparrot_clk)
+  //   ,.o(blackparrot_clk_driven)
+  //   );
+  //assign blackparrot_clk_driven = ~blackparrot_clk;
+
   bsg_chip
    DUT
     (.clk_i(blackparrot_clk)
@@ -149,7 +161,7 @@ import bsg_wormhole_router_pkg::*;
      ,.payload_mask_p(mem_cmd_payload_mask_gp)
      )
    burst2lite
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
 
      ,.mem_header_i(mem_cmd_header_lo)
@@ -174,7 +186,7 @@ import bsg_wormhole_router_pkg::*;
      ,.payload_mask_p(mem_resp_payload_mask_gp)
      )
    lite2burst
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
 
      ,.mem_i(proc_mem_resp_li)
@@ -199,7 +211,7 @@ import bsg_wormhole_router_pkg::*;
      ,.dram_fixed_latency_p(100)
      )
    mem
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
 
      ,.mem_cmd_i(proc_mem_cmd_lo)
@@ -211,7 +223,7 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_resp_yumi_i(proc_mem_resp_yumi_lo)
 
      // TODO: Async clock?
-     ,.dram_clk_i(blackparrot_clk)
+     ,.dram_clk_i(blackparrot_tb_clk)
      ,.dram_reset_i(blackparrot_reset)
      );
 
@@ -219,7 +231,7 @@ import bsg_wormhole_router_pkg::*;
   bp_nonsynth_host
    #(.bp_params_p(bp_params_p))
    host_mmio
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
   
      ,.io_cmd_i(proc_io_cmd_lo)
@@ -247,7 +259,7 @@ import bsg_wormhole_router_pkg::*;
   bp_nonsynth_nbf_loader
     #(.bp_params_p(bp_params_p))
     nbf_loader
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
   
      ,.lce_id_i(4'b10)

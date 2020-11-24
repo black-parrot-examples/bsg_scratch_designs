@@ -9,7 +9,7 @@
   #set bp_clk_period_ps       1000
   #set bp_clk_period_ps       1500
   #set bp_clk_period_ps       1666
-  set bp_clk_uncertainty_per 3.0
+  #set bp_clk_uncertainty_per 3.0
   #set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
   set bp_clk_uncertainty_ps 20
   
@@ -19,8 +19,8 @@
   set core_clk_uncertainty_ps ${bp_clk_uncertainty_ps}
   
   
-  set input_delay_per  5.0
-  set output_delay_per 5.0
+  set input_delay_per  20.0
+  set output_delay_per 20.0
   
   set core_input_delay_ps  [expr ${core_clk_period_ps}*(${input_delay_per}/100.0)]
   set core_output_delay_ps [expr ${core_clk_period_ps}*(${output_delay_per}/100.0)]
@@ -34,7 +34,7 @@
   
   # In2Reg
   set core_input_pins [filter_collection [all_inputs] "name!~*clk*"] 
-  set_driving_cell -no_design_rule -lib_cell ${driving_lib_cell} [remove_from_collection [all_inputs] [get_ports *clk*]]
+  set_driving_cell -no_design_rule -lib_cell ${driving_lib_cell} [get_ports *clk*]
   set_input_delay ${core_input_delay_ps} -clock ${core_clk_name} ${core_input_pins}
 
   # Reg2Out

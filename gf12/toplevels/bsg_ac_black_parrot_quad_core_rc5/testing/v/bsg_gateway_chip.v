@@ -28,8 +28,9 @@ import bsg_wormhole_router_pkg::*;
   // Nonsynth Clock Generator(s)
   //
 
-  logic blackparrot_clk;
+  logic blackparrot_clk, blackparrot_tb_clk;
   bsg_nonsynth_clock_gen #(.cycle_time_p(`BLACKPARROT_CLK_PERIOD)) blackparrot_clk_gen (.o(blackparrot_clk));
+  bsg_nonsynth_delay_line #(.width_p(1), .delay_p(`BLACKPARROT_CLK_PERIOD/2)) clock_buf (.i(blackparrot_clk), .o(blackparrot_tb_clk));
 
   //////////////////////////////////////////////////
   //
@@ -145,7 +146,7 @@ import bsg_wormhole_router_pkg::*;
      ,.len_width_p(io_noc_len_width_p)
      )
    host_link
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
 
      ,.mem_cmd_i(io_cmd_lo)
@@ -184,7 +185,7 @@ import bsg_wormhole_router_pkg::*;
      ,.len_width_p(mem_noc_len_width_p)
      )
    dram_link
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
 
      ,.reset_i(blackparrot_reset)
   
@@ -209,7 +210,7 @@ import bsg_wormhole_router_pkg::*;
      ,.dram_fixed_latency_p(100)
      )
    mem
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
 
      ,.mem_cmd_i(dram_cmd_lo)
@@ -221,7 +222,7 @@ import bsg_wormhole_router_pkg::*;
      ,.mem_resp_yumi_i(dram_resp_ready_lo & dram_resp_v_li)
 
      // TODO: Async clock?
-     ,.dram_clk_i(blackparrot_clk)
+     ,.dram_clk_i(blackparrot_tb_clk)
      ,.dram_reset_i(blackparrot_reset)
      );
 
@@ -229,7 +230,7 @@ import bsg_wormhole_router_pkg::*;
   bp_nonsynth_host
    #(.bp_params_p(bp_params_p))
    host_mmio
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
   
      ,.io_cmd_i(io_cmd_li)
@@ -257,7 +258,7 @@ import bsg_wormhole_router_pkg::*;
   bp_nonsynth_nbf_loader
     #(.bp_params_p(bp_params_p))
     nbf_loader
-    (.clk_i(blackparrot_clk)
+    (.clk_i(blackparrot_tb_clk)
      ,.reset_i(blackparrot_reset)
   
      ,.lce_id_i('1)
