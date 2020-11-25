@@ -1,7 +1,8 @@
 `timescale 1ps/1ps
 
 `ifndef BLACKPARROT_CLK_PERIOD
-  `define BLACKPARROT_CLK_PERIOD 10000.0
+  `define BLACKPARROT_CLK_PERIOD 5000.0
+  `define BLACKPARROT_CLK_SHIFT 500
 `endif
 
 module bsg_gateway_chip
@@ -29,7 +30,7 @@ import bsg_wormhole_router_pkg::*;
 
   logic blackparrot_clk, blackparrot_tb_clk;
   bsg_nonsynth_clock_gen #(.cycle_time_p(`BLACKPARROT_CLK_PERIOD)) blackparrot_clk_gen (.o(blackparrot_clk));
-  bsg_nonsynth_delay_line #(.width_p(1), .delay_p(`BLACKPARROT_CLK_PERIOD/2)) clock_buf (.i(blackparrot_clk), .o(blackparrot_tb_clk));
+  bsg_nonsynth_delay_line #(.width_p(1), .delay_p(`BLACKPARROT_CLK_SHIFT)) clock_buf (.i(blackparrot_clk), .o(blackparrot_tb_clk));
 
   //////////////////////////////////////////////////
   //

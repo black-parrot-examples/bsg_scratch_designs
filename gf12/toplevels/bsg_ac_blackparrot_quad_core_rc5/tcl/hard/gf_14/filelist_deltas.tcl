@@ -10,9 +10,9 @@ set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
 set HARD_MACRO_HEADERS [join "
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_bit.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_byte.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync.vh
+  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_bit_macros.vh
+  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_byte_macros.vh
+  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_macros.vh
   $bsg_designs_target_dir/memgen/bsg_mem_1r1w_sync_macros.vh
   $bsg_designs_target_dir/memgen/bsg_mem_2r1w_sync_macros.vh
   $bsg_designs_target_dir/memgen/bsg_mem_3r1w_sync_macros.vh

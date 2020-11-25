@@ -34,7 +34,7 @@
   
   # In2Reg
   set core_input_pins [filter_collection [all_inputs] "name!~*clk*"] 
-  set_driving_cell -no_design_rule -lib_cell ${driving_lib_cell} [get_ports *clk*]
+  set_driving_cell -no_design_rule -lib_cell ${driving_lib_cell} [remove_from_collection [all_inputs] [get_ports *clk*]]
   set_input_delay ${core_input_delay_ps} -clock ${core_clk_name} ${core_input_pins}
 
   # Reg2Out

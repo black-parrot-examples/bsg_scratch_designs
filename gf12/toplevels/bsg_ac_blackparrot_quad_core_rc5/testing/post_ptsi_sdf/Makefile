@@ -49,13 +49,13 @@ VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext
 VCS_OPTIONS += +noportcoerce
 VCS_OPTIONS += +vc
-VCS_OPTIONS += +vcs+loopreport
+#VCS_OPTIONS += +vcs+loopreport
 VCS_OPTIONS += -timescale=1ps/1ps
 VCS_OPTIONS += -diag timescale 
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF,noSDFCOM_SWC,noSDFCOM_ANICD,noSDFCOM_IWSBA,noSDFCOM_NICD
 VCS_OPTIONS += +vcs+lic+wait
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
@@ -97,27 +97,14 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 ########################################
 
 sdf_corner = max
-
-#corner = sspg0p72v125c
-#rc_corner = SigCmax
-
-ifndef corner
-  corner = tt_0p80v_25c
-endif
-
-ifndef rc_corner
-  rc_corner = nominal
-endif
+corner 	   = tt_0p80v_25c
+rc_corner  = nominal
 
 VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
 VCS_OPTIONS += -negdelay
 #VCS_OPTIONS += +notimingcheck
 VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
 VCS_OPTIONS += -sdfretain
-
-ifdef CORNER_SS
-  VCS_OPTIONS += +define+CORNER_SS=1
-endif
 
 ########################################
 ## BlackParrot test junk

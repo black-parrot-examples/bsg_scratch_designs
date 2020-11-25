@@ -102,6 +102,7 @@ rc_corner  = nominal
 
 VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
 VCS_OPTIONS += -negdelay
+#VCS_OPTIONS += +notimingcheck
 VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
 VCS_OPTIONS += -sdfretain
 
