@@ -9,24 +9,15 @@ set bp_fe_dir     ${blackparrot_dir}/bp_fe
 set bp_be_dir     ${blackparrot_dir}/bp_be
 set bp_me_dir     ${blackparrot_dir}/bp_me
 
-set HARD_MACRO_HEADERS [join "
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_bit_macros.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_mask_write_byte_macros.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_1rw_sync_macros.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_1r1w_sync_macros.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_2r1w_sync_macros.vh
-  $bsg_designs_target_dir/memgen/bsg_mem_3r1w_sync_macros.vh
-"]
-
 # list of files to replace
 set HARD_SWAP_FILELIST [join "
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync.v
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_1r1w_sync.v
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_2r1w_sync.v
-  $basejump_stl_dir/hard/gf_14/bsg_mem/bsg_mem_3r1w_sync.v
-  $basejump_stl_dir/hard/gf_14/bsg_misc/bsg_mux.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_1r1w_sync.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_2r1w_sync.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_mem/bsg_mem_3r1w_sync.v
+  $bsg_designs_target_dir/hard/gf_14/bsg_misc/bsg_mux.v
 "]
 
 set NETLIST_SOURCE_FILES [join "

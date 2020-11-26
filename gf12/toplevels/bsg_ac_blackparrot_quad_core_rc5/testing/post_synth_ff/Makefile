@@ -111,7 +111,7 @@ prog.mem:
 ########################################
 
 run: clean $(BSG_OUT_SIM)
-	cd $(BSG_OUT_DIR); ./simv +vcs+initreg+0 | tee -i $(BSG_OUT_DIR)/run.log
+	cd $(BSG_OUT_DIR); ./simv | tee -i $(BSG_OUT_DIR)/run.log
 
 run-no-tee: clean $(BSG_OUT_SIM)
 	cd $(BSG_OUT_DIR); ./simv
@@ -127,7 +127,7 @@ view:
 
 build: $(BSG_OUT_SIM)
 $(BSG_OUT_SIM): $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) prog.nbf prog.mem
-	$(VCS) $(VCS_OPTIONS) +vcs+initreg+random | tee -i $(BSG_OUT_DIR)/build.log
+	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
 
 $(BSG_OUT_DIR):
 	mkdir -p $@
