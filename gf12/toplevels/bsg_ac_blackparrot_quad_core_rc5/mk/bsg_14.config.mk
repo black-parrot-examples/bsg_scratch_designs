@@ -59,7 +59,7 @@ export BSG_PADMAPPING :=default
 
 # UNDOCUMENTED SWITCHES
 
-export DC_RMPLUS_FLOW :=rtm_exp
+export DC_FLOW_RMPLUS_FLOW :=rtm_exp
 
 export PREP_MEMGEN_JSON_FILE :=$(BSG_DESIGNS_TARGET_DIR)/scripts/harden/bsg_14.memgen.json
 
