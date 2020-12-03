@@ -27,12 +27,6 @@ export BSG_FLOW_STYLE :=hier
 export BSG_FLOW_USE_DP :=true
 #export BSG_FLOW_USE_DP :=false
 
-# Select the target process. This variable is used to reference the various
-# 'hardened' directories in our other repos. This variable can also be queried
-# for code that is process specific. Currently, only gf_14 is supported.
-
-export BSG_TARGET_PROCESS :=gf_14
-
 # Select the target package. Inside of bsg_packaging there multiple packages to
 # choose from that determine the intended package for the ASIC.
 
