@@ -68,10 +68,8 @@ proc bsg_list_diff {full_list base_list} {
   return [dict keys $x]
 }
 
-# scripts for creating filelist and library
-#source $::env(BSG_TESTING_COMMON_DIR)/bsg_vcs_create_filelist_library.tcl
-
-source $::env(BSG_CHIP_DIR)/cad/setup/common_setup.tcl
+# Basic CAD flow setup
+source $::env(BSG_CAD_SETUP_SCRIPT)
 
 # chip source (rtl) files and include paths list
 source $::env(BSG_DESIGNS_TARGET_DIR)/tcl/filelist.tcl
