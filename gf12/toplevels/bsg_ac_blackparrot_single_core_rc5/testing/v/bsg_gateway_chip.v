@@ -2,7 +2,7 @@
 
 `ifndef BLACKPARROT_CLK_PERIOD
   `define BLACKPARROT_CLK_PERIOD 5000.0
-  `define BLACKPARROT_CLK_SHIFT 1000.0
+  `define BLACKPARROT_CLK_SHIFT 2000.0
 `endif
 
 module bsg_gateway_chip
