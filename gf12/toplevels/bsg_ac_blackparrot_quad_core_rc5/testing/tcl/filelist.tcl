@@ -23,15 +23,15 @@ set bp_me_dir     ${blackparrot_dir}/bp_me
 set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_test/bsg_dramsim3_pkg.v
 
-  $bp_common_dir/src/include/bp_common_rv64_pkg.vh
-  $bp_common_dir/src/include/bp_common_cfg_link_pkg.vh
-  $bp_common_dir/src/include/bp_common_pkg.vh
-  $bp_common_dir/src/include/bp_common_aviary_pkg.vh
-  $bp_me_dir/src/include/v/bp_me_pkg.vh
-  $bp_me_dir/test/common/bp_dramsim3_pkg.v
-  $bp_me_dir/src/include/v/bp_cce_pkg.v
-  $bp_be_dir/src/include/bp_be_pkg.vh
-  $bp_be_dir/src/include/bp_be_dcache_pkg.vh
+  $bp_common_dir/src/include/bp_common_rv64_pkg.sv
+  $bp_common_dir/src/include/bp_common_cfg_link_pkg.sv
+  $bp_common_dir/src/include/bp_common_pkg.sv
+  $bp_common_dir/src/include/bp_common_aviary_pkg.sv
+  $bp_me_dir/src/include/v/bp_me_pkg.sv
+  $bp_me_dir/test/common/bp_dramsim3_pkg.sv
+  $bp_me_dir/src/include/v/bp_cce_pkg.sv
+  $bp_be_dir/src/include/bp_be_pkg.sv
+  $bp_be_dir/src/include/bp_be_dcache_pkg.sv
   $basejump_stl_dir/bsg_tag/bsg_tag_pkg.v
   $basejump_stl_dir/bsg_noc/bsg_noc_pkg.v
   $basejump_stl_dir/bsg_noc/bsg_wormhole_router_pkg.v
@@ -94,17 +94,17 @@ set TESTING_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_test/bsg_nonsynth_delay_line.v
   $basejump_stl_dir/bsg_test/bsg_nonsynth_test_rom.v
   $basejump_stl_dir/testing/bsg_dmc/lpddr_verilog_model/mobile_ddr.v
-  $bp_me_dir/test/common/bp_mem.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_bidir.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_master.v
-  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_client.v
-  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_cmd.v
-  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_resp.v
-  $bp_me_dir/test/common/bp_mem_to_dram.v
-  $bp_top_dir/test/common/bp_nonsynth_host.v
+  $bp_me_dir/test/common/bp_mem.sv
+  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_bidir.sv
+  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_master.sv
+  $bp_me_dir/src/v/wormhole/bp_me_cce_to_mem_link_client.sv
+  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_cmd.sv
+  $bp_me_dir/src/v/wormhole/bp_me_wormhole_packet_encode_mem_resp.sv
+  $bp_me_dir/test/common/bp_mem_to_dram.sv
+  $bp_top_dir/test/common/bp_nonsynth_host.sv
   $bp_top_dir/test/common/bp_monitor.cpp
-  $bp_top_dir/test/common/bp_nonsynth_nbf_loader.v
-  $bp_common_dir/src/v/bsg_bus_pack.v
+  $bp_top_dir/test/common/bp_nonsynth_nbf_loader.sv
+  $bp_common_dir/src/v/bsg_bus_pack.sv
 
   $bsg_designs_target_dir/v/bsg_chip_pkg.v
   $bsg_designs_target_dir/testing/v/bsg_gateway_chip.v
