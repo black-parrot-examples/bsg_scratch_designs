@@ -126,8 +126,6 @@ prog.mem:
 ## Run Targets
 ########################################
 
-$(error This target does not work as of c54c1f9e)
-
 run: clean $(BSG_OUT_SIM)
 	cd $(BSG_OUT_DIR); ./simv | tee -i $(BSG_OUT_DIR)/run.log
 

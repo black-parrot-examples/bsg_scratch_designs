@@ -45,13 +45,20 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   set_load [load_of [get_lib_pin */${load_lib_pin}]] ${core_output_pins}
   set_output_delay ${core_output_delay_ps} -clock ${core_clk_name} ${core_output_pins}
 
-  # This timing assertion for the RF is only valid in designs that do not do simultaneous read and write, or do not use the read value when it writes
+  # This timing assertion for the RF is only valid in designs that do not do simultaneous read and write to the same address,
+  # or do not use the read value when it writes
   # Check your ram generator to see what it permits
   foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*_regfile*rf*"] {
     set_disable_timing $cell -from CLKA -to CLKB
     set_disable_timing $cell -from CLKB -to CLKA
   }
 
+  foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*btb*tag_mem*"] {
+    set_disable_timing $cell -from CLKA -to CLKB
+    set_disable_timing $cell -from CLKB -to CLKA
+  }
+
+  # These are statically programmed values
   set_false_path -from [get_ports *did*]
   set_false_path -from [get_ports *cord*]
 
