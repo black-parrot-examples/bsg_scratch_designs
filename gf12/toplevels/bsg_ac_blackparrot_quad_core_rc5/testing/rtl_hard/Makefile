@@ -1,4 +1,5 @@
-.DEFAULT_GOAL=run
+.DEFAULT_GOAL=run_all
+.SECONDARY:
 
 # Note: most variables that are file/dir paths are ?= because they can be
 # overriden by the chip repo if this makefile is called from the chip
@@ -102,36 +103,42 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 ## BlackParrot test junk
 ########################################
 
-PROG     :=hello_world
-UCODE    := $(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem
+PROG_LIST :=hello_world cache_hammer aha-compress ns qsort towers
+UCODE     :=$(BLACKPARROT_DIR)/bp_me/src/asm/roms/mesi.mem
 
-prog.nbf:
-	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 4 --config --ucode $(UCODE) > $(BSG_OUT_DIR)/$@
+%/prog.nbf:
+	mkdir -p $(@D)
+	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 4 --ucode $(UCODE) --config > $@
 
-prog.mem:
-	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@
+%/prog.mem:
+	mkdir -p $(@D)
+	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(lastword $(subst /, ,$(@D))).mem > $@
 
 ########################################
 ## Run Targets
 ########################################
 
-run: clean $(BSG_OUT_SIM)
-	cd $(BSG_OUT_DIR); ./simv | tee -i $(BSG_OUT_DIR)/run.log
+BSG_RUN_DIRS := $(addsuffix /run, $(addprefix $(BSG_OUT_DIR)/, $(PROG_LIST)))
+run_all: $(BSG_OUT_SIM)
+	$(MAKE) $(BSG_RUN_DIRS)
 
-run-no-tee: clean $(BSG_OUT_SIM)
-	cd $(BSG_OUT_DIR); ./simv
+%/run: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
+	cd $(@D); ../simv | tee -i $(@D)/run.log
 
-rerun: $(BSG_OUT_SIM)
-	cd $(BSG_OUT_DIR); ./simv | tee -i $(BSG_OUT_DIR)/run.log
+%/run-no-tee: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
+	cd $(@D); ../simv
 
-rerun-no-tee: $(BSG_OUT_SIM)
-	cd $(BSG_OUT_DIR); ./simv
+%/rerun: $(BSG_OUT_SIM)
+	cd $(@D); ../simv | tee -i $(@D)/run.log
 
-view:
-	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
+%/rerun-no-tee: $(BSG_OUT_SIM)
+	cd $(@D); ../simv
+
+%/view:
+	cd $(@D); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
-$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY) prog.nbf prog.mem
+$(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY)
 	$(VCS) $(VCS_OPTIONS) | tee -i $(BSG_OUT_DIR)/build.log
 
 $(BSG_OUT_DIR):
@@ -139,11 +146,4 @@ $(BSG_OUT_DIR):
 
 clean:
 	rm -rf $(BSG_OUT_DIR)
-	rm -rf DVEfiles
-	rm -rf stack.info.*
-	rm -f  vc_hdrs.h
-	rm -f  vcdplus.vpd
-	rm -f  inter.vpd
-	rm -f  ucli.key
-	rm -f  main.riscv main_dmem.mem main_dram.mem
 

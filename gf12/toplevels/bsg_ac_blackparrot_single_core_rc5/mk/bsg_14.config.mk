@@ -130,10 +130,11 @@ export DC_FLOW_INCREMENTAL_COMPILE_FLATTEN_DESIGN :=false
 export DC_FLOW_INCREMENTAL_COMPILE_DISABLE_RETIMING :=false
 
 # The path to a set of SAIF files to use for power analysis in PTSI.
-export PTSI_FLOW_ACTIVITY_FILE    :=$(abspath $(wildcard ../testing/post_apr_ff/out/*.saif))
+#export PTSI_FLOW_ACTIVITY_FILE    :=$(abspath $(wildcard ../testing/post_apr_ff/out/*/*.saif))
+export PTSI_FLOW_ACTIVITY_FILE    :=$(abspath $(wildcard ../testing/post_ptsi_sdf/out/*/*.saif))
 
 # The relative weights of each activity file. Does not need to be normalized.
-export PTSI_FLOW_ACTIVITY_WEIGHTS :=$(foreach _,$PT_ACTIVITY_FILES, 1.0)
+export PTSI_FLOW_ACTIVITY_WEIGHTS :=$(foreach _,$(PTSI_FLOW_ACTIVITY_FILE), 1.0)
 
 # The module hierarchy to strip from the SAIF file.
 # Most often this is the path to the DUT starting from the testbench.
