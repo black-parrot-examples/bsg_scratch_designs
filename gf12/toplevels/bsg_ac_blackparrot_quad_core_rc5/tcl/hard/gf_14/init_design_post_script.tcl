@@ -18,4 +18,18 @@ bsg_dont_touch_regexp */cdt/*
 bsg_dont_touch_regexp */fdt/*
 bsg_dont_touch_regexp *BSG_BAL41MUX*
 bsg_dont_touch_regexp_type *SYNC*SDFF*
+} elseif { $DESIGN_NAME == "bp_tile_node" } {
+  # TODO: These constraints are only needed because they get dropped by the hierarchical SDC reading the top-level only
+  # This timing assertion for the RF is only valid in designs that do not do simultaneous read and write to the same address,
+  # or do not use the read value when it writes
+  # Check your ram generator to see what it permits
+  foreach_in_collection cell [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*regfile*rf*"] {
+    set_disable_timing $cell -from CLKA -to CLKB
+    set_disable_timing $cell -from CLKB -to CLKA
+  }
+
+  foreach_in_collection cell [get_cells -hier -filter "ref_name=~gf14_* && full_name=~*btb*tag_mem*"] {
+    set_disable_timing $cell -from CLKA -to CLKB
+    set_disable_timing $cell -from CLKB -to CLKA
+  }
 }

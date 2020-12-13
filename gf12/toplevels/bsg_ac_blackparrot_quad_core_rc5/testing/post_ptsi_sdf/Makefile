@@ -96,6 +96,16 @@ $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
 
+sdf_corner = max
+corner     = tt_0p80v_25c
+rc_corner  = nominal
+
+VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
+VCS_OPTIONS += -negdelay
+#VCS_OPTIONS += +notimingchk
+VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
+VCS_OPTIONS += -sdfretain
+
 ########################################
 ## BlackParrot test junk
 ########################################

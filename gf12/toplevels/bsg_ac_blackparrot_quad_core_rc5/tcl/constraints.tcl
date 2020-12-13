@@ -9,33 +9,6 @@ set bp_clk_period_ps       2000
 set bp_clk_uncertainty_per 3.0
 set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 50)]
 
-# This timing assertion for the RF is only valid in designs that do not do simultaneous read and write to the same address,
-# or do not use the read value when it writes
-# Check your ram generator to see what it permits
-foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*_regfile*rf*"] {
-  set_disable_timing $cell -from CLKA -to CLKB
-  set_disable_timing $cell -from CLKB -to CLKA
-}
-
-foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*btb*tag_mem*"] {
-  set_disable_timing $cell -from CLKA -to CLKB
-  set_disable_timing $cell -from CLKB -to CLKA
-}
-
-# Derate
-set cells_to_derate [list]
-append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~gf14_*"]
-append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~IN12LP_*"]
-if { [sizeof $cells_to_derate] > 0 } {
-  foreach_in_collection cell $cells_to_derate {
-    set_timing_derate -cell_delay -early 0.97 $cell
-    set_timing_derate -cell_delay -late  1.03 $cell
-    set_timing_derate -cell_check -early 0.97 $cell
-    set_timing_derate -cell_check -late  1.03 $cell
-  }
-}
-#report_timing_derate
-
 ########################################
 ##
 ## BP Tile Constraints
@@ -73,6 +46,19 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   # These are statically programmed values
   set_false_path -from [get_ports *did*]
   set_false_path -from [get_ports *cord*]
+
+  # This timing assertion for the RF is only valid in designs that do not do simultaneous read and write to the same address,
+  # or do not use the read value when it writes
+  # Check your ram generator to see what it permits
+  foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*_regfile*rf*"] {
+    set_disable_timing $cell -from CLKA -to CLKB
+    set_disable_timing $cell -from CLKB -to CLKA
+  }
+
+  foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*btb*tag_mem*"] {
+    set_disable_timing $cell -from CLKA -to CLKB
+    set_disable_timing $cell -from CLKB -to CLKA
+  }
 
   set_app_var compile_keep_original_for_external_references true
 
@@ -149,4 +135,18 @@ if { ${DESIGN_NAME} == "bp_tile_node" } {
   puts "BSG-error: No constraints found for design (${DESIGN_NAME})!"
 
 }
+
+# Derate
+set cells_to_derate [list]
+append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~gf14_*"]
+append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~IN12LP_*"]
+if { [sizeof $cells_to_derate] > 0 } {
+  foreach_in_collection cell $cells_to_derate {
+    set_timing_derate -cell_delay -early 0.97 $cell
+    set_timing_derate -cell_delay -late  1.03 $cell
+    set_timing_derate -cell_check -early 0.97 $cell
+    set_timing_derate -cell_check -late  1.03 $cell
+  }
+}
+#report_timing_derate
 
