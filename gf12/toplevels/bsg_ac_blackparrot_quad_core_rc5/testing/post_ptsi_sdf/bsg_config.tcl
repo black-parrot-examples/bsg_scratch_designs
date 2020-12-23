@@ -73,7 +73,7 @@ source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/filelist.tcl
 source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
 
 # netlist source files
-set NETLIST_SOURCE_FILES [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*chip_finish.v.gz]
+set NETLIST_SOURCE_FILES [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*chip_finish.pt.v.gz]
 
 foreach lib [array name VERILOG_FILES] {
   if { $VERILOG_FILES($lib) != "" } {

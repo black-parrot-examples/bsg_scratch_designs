@@ -121,13 +121,13 @@ run_all: $(BSG_OUT_SIM)
 	$(MAKE) $(BSG_RUN_DIRS)
 
 %/run: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
-	cd $(@D); ../simv | tee -i $(@D)/run.log
+	cd $(@D); ../simv | tee -i run.log
 
 %/run-no-tee: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
 	cd $(@D); ../simv
 
 %/rerun: $(BSG_OUT_SIM)
-	cd $(@D); ../simv | tee -i $(@D)/run.log
+	cd $(@D); ../simv | tee -i run.log
 
 %/rerun-no-tee: $(BSG_OUT_SIM)
 	cd $(@D); ../simv

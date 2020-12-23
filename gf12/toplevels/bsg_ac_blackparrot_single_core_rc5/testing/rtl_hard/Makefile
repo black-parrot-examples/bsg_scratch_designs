@@ -122,19 +122,19 @@ run_all: $(BSG_OUT_SIM)
 	$(MAKE) $(BSG_RUN_DIRS)
 
 %/run: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
-	cd $(@D); ../simv | tee -i $(BSG_OUT_DIR)/run.log
+	cd $(@D); ../simv | tee -i $(@D)/run.log
 
 %/run-no-tee: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
 	cd $(@D); ../simv
 
 %/rerun: $(BSG_OUT_SIM)
-	cd $(@D); ../simv | tee -i $(BSG_OUT_DIR)/run.log
+	cd $(@D); ../simv | tee -i $(@D)/run.log
 
 %/rerun-no-tee: $(BSG_OUT_SIM)
 	cd $(@D); ../simv
 
-view:
-	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
+%/view:
+	cd $(@D); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
 $(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY)

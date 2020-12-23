@@ -72,10 +72,8 @@ source $::env(BSG_DESIGNS_TARGET_DIR)/tcl/include.tcl
 source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/filelist.tcl
 source $::env(BSG_DESIGNS_TARGET_DIR)/testing/tcl/include.tcl
 
-set VERILOG_FILES(iv7p5_rvt_c14)  /gro/cad/pdk/gf_14/bsg/verilog/IN14LPP_SC7P5T_84CPP_BASE_SSC14R.v
-
 # netlist source files
-set NETLIST_SOURCE_FILES [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*chip_finish.v.gz]
+set NETLIST_SOURCE_FILES [glob $::env(BSG_CHIP_DIR)/current_build/pnr/*/results/*chip_finish.pt.v.gz]
 foreach lib [array name VERILOG_FILES] {
   if { $VERILOG_FILES($lib) != "" } {
     set NETLIST_SOURCE_FILES [concat $NETLIST_SOURCE_FILES [join $VERILOG_FILES($lib)]]

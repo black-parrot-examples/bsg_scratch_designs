@@ -47,7 +47,7 @@ include $(BSG_CHIP_DIR)/cad/setup/Makefile.include
 # Common VCS Options (will be used most of the time by all corners)
 VCS_OPTIONS := -full64
 VCS_OPTIONS += -notice
-#VCS_OPTIONS += -debug_pp
+VCS_OPTIONS += -debug_pp
 VCS_OPTIONS += -V
 VCS_OPTIONS += +v2k
 VCS_OPTIONS += -sverilog -assert svaext
@@ -59,7 +59,7 @@ VCS_OPTIONS += -diag timescale
 VCS_OPTIONS += -o $(BSG_OUT_SIM)
 VCS_OPTIONS += -Mdir=$(BSG_OUT_DIR)
 VCS_OPTIONS += -top bsg_config bsg_config.v
-VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF,noSDFCOM_SWC,noSDFCOM_ANICD,noSDFCOM_IWSBA,noSDFCOM_NICD
+VCS_OPTIONS += +warn=all,noOPD,noTMR,noTFIPC,noIWNF,noSDFCOM_SWC,noSDFCOM_ANICD,noSDFCOM_IWSBA,noSDFCOM_NICD,noSDFCOM_INF
 VCS_OPTIONS += +vcs+lic+wait
 
 VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
@@ -90,8 +90,6 @@ VCS_OPTIONS += +define+NETLIST_LIBRARY_NAME=$(NETLIST_LIBRARY_NAME)
 VCS_OPTIONS += -f $(NETLIST_FILELIST)
 VCS_OPTIONS += -libmap $(NETLIST_LIBRARY)
 
-$(BSG_CHIP_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
-$(BSG_CHIP_LIBRARY): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_FILELIST): $(BSG_DESIGNS_TESTING_LIBRARY)
 $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 	/usr/bin/tclsh bsg_config.tcl
@@ -101,12 +99,12 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 ########################################
 
 sdf_corner = max
-corner 	   = tt_0p80v_25c
+corner     = tt_0p80v_25c
 rc_corner  = nominal
 
 VCS_OPTIONS += +sdfverbose +neg_tchk +overlap +multisource_int_delays
 VCS_OPTIONS += -negdelay
-#VCS_OPTIONS += +notimingcheck
+#VCS_OPTIONS += +notimingchk
 VCS_OPTIONS += -sdf $(sdf_corner):$(BSG_CHIP_INSTANCE_PATH):$(BSG_CHIP_DIR)/current_build/ptsi/bsg_chip/$(corner)_$(rc_corner)/results/bsg_chip.sdf.gz
 VCS_OPTIONS += -sdfretain
 
@@ -133,19 +131,19 @@ run_all: $(BSG_OUT_SIM)
 	$(MAKE) $(BSG_RUN_DIRS)
 
 %/run: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
-	cd $(@D); ../simv | tee -i $(BSG_OUT_DIR)/run.log
+	cd $(@D); ../simv | tee -i run.log
 
 %/run-no-tee: $(BSG_OUT_SIM) %/prog.mem %/prog.nbf
 	cd $(@D); ../simv
 
 %/rerun: $(BSG_OUT_SIM)
-	cd $(@D); ../simv | tee -i $(BSG_OUT_DIR)/run.log
+	cd $(@D); ../simv | tee -i run.log
 
 %/rerun-no-tee: $(BSG_OUT_SIM)
 	cd $(@D); ../simv
 
-view:
-	cd $(BSG_OUT_DIR); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
+%/view:
+	cd $(@D); $(VCS_BIN)/dve -full64 -vpd vcdplus.vpd
 
 build: $(BSG_OUT_SIM)
 $(BSG_OUT_SIM): $(BSG_CHIP_FILELIST) $(BSG_CHIP_LIBRARY) $(BSG_DESIGNS_TESTING_FILELIST) $(BSG_DESIGNS_TESTING_LIBRARY)
@@ -156,5 +154,4 @@ $(BSG_OUT_DIR):
 
 clean:
 	rm -rf $(BSG_OUT_DIR)
-
 

@@ -22,7 +22,7 @@ export BOARD_DIR              ?= $(BSG_DESIGNS_TARGET_DIR)/board
 
 export BSG_PACKAGE           ?=uw_bga
 export BSG_PINOUT            ?=bsg_asic_cloud
-export BSG_PACKAGING_FOUNDRY ?=gf_14_invecas_3p3v
+export BSG_PACKAGING_FOUNDRY ?=gf_14_invecas_1p8v
 export BSG_PADMAPPING        ?=default
 
 export BLACKPARROT_COMMON_DIR ?= $(BLACKPARROT_DIR)/bp_common
