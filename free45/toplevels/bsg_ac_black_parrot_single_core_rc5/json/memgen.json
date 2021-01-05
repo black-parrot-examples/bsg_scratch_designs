@@ -1,0 +1,20 @@
+{ "memories": [
+    { "name": "free45_1rw_d64_w50",   "width":  50, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d32_w64",   "width":  64, "depth":   32, "banks": 1, "type": "ram" },
+    { "name": "free45_1rw_d32_w66",   "width":  66, "depth":   32, "banks": 1, "type": "ram" },
+    { "name": "free45_1rw_d512_w64",  "width":  64, "depth":  512, "banks": 1 },
+    { "name": "free45_1rw_d128_w128", "width": 128, "depth":  128, "banks": 1 },
+    { "name": "free45_1rw_d64_w124",  "width": 124, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d64_w62",   "width":  62, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d64_w15",   "width":  15, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d64_w7",    "width":   7, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d64_w3",    "width":   3, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d64_w1",    "width":   1, "depth":   64, "banks": 1 },
+    { "name": "free45_1rw_d128_w116", "width": 116, "depth":  128, "banks": 1 },
+    { "name": "free45_1rw_d128_w15",  "width":  15, "depth":  128, "banks": 1 },
+    { "name": "free45_1rw_d32_w124",  "width": 124, "depth":   32, "banks": 1 },
+    { "name": "free45_1rw_d256_w34",  "width":  34, "depth":  256, "banks": 1 }
+  ],
+  "dont_compile": [
+  ]
+}
