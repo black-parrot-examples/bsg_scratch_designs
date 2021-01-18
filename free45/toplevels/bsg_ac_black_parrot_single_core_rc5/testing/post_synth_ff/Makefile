@@ -62,6 +62,7 @@ VCS_OPTIONS += +define+den2048Mb+sg5+x16+FULL_MEM
 # Additional options for Post-Synth
 VCS_OPTIONS += +notimingcheck
 VCS_OPTIONS += +nospecify
+VCS_OPTIONS += +define+TETRAMAX
 
 ########################################
 ## Chip and Testing Filelists and Liblists
@@ -97,13 +98,13 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 ## BlackParrot test junk
 ########################################
 
-PROG     :=hello_world
+PROG     ?=hello_world
 
 prog.nbf:
-	python $(BLACKPARROT_DIR)/bp_common/software/py/nbf.py --ncpus 1 --config > $(BSG_OUT_DIR)/$@
+	python $(BLACKPARROT_COMMON_DIR)/software/py/nbf.py --ncpus 1 --config > $(BSG_OUT_DIR)/$@
 
 prog.mem:
-	@sed "s/@8/@0/g" $(BLACKPARROT_DIR)/bp_common/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@
+	@sed "s/@8/@0/g" $(BLACKPARROT_COMMON_DIR)/test/mem/$(PROG).mem > $(BSG_OUT_DIR)/$@
 
 bootrom.mem:
 	@cp $(BLACKPARROT_COMMON_DIR)/test/mem/bootrom.mem $(BSG_OUT_DIR)/$@
