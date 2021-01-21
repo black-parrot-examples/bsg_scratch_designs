@@ -43,7 +43,7 @@ set tag_clk_uncertainty_ns     0.0020
 ## BP Tile Constraints
 ##
 
-if { ${DESIGN_NAME} == "bp_tile_node" || ${DESIGN_NAME} == "bp_processor"} {
+if { ${DESIGN_NAME} == "bp_tile_node" || ${DESIGN_NAME} == "bp_multicore"} {
 
   set core_clk_name           ${bp_clk_name}
   set core_clk_period_ns      ${bp_clk_period_ns}
@@ -108,13 +108,6 @@ if { ${DESIGN_NAME} == "bp_tile_node" || ${DESIGN_NAME} == "bp_processor"} {
   if { [sizeof $coh_output_pins] > 0 } { set_output_delay ${core_output_delay_ns} -clock ${core_clk_name} ${coh_output_pins} }
   if { [sizeof $mem_output_pins] > 0 }  { set_output_delay ${mem_output_delay_ns} -clock ${mem_clk_name} ${mem_output_pins} }
 
-  # This timing assertion for the RF is only valid in designs that do not do simultaneous read and write, or do not use the read value when it writes
-  # Check your ram generator to see what it permits
-  foreach_in_collection cell [filter_collection [all_macro_cells] "full_name=~*int_regfile*rf*"] {
-    set_disable_timing $cell -from CLKA -to CLKB
-    set_disable_timing $cell -from CLKB -to CLKA
-  }
-
   set_false_path -from [get_ports *cord*]
 
   # Derate
@@ -151,121 +144,6 @@ if { ${DESIGN_NAME} == "bp_tile_node" || ${DESIGN_NAME} == "bp_processor"} {
       set_min_delay 0             -from $launch_clk -to $latch_clk -ignore_clock_latency
     }
   }
-
-
-
-########################################
-##
-## Top-level Constraints
-##
-
-} elseif { ${DESIGN_NAME} == "bsg_chip" } {
-
-  set_app_var timing_enable_multiple_clocks_per_reg true
-
-  #set_register_merging [get_cells -of [get_nets bp_complex/vc_reset_r]]   false
-  #set_register_merging [get_cells -of [get_nets bp_complex/mc/reset_i_r]] false
-
-  bsg_tag_clock_create ${tag_clk_name} bsg_tag_clk_i/Y bsg_tag_data_i/Y bsg_tag_en_i/Y ${tag_clk_period_ns} ${tag_clk_uncertainty_ns}
-
-  bsg_clk_gen_clock_create clk_gen_pd/clk_gen[0].clk_gen_inst/ ${bp_clk_name}        ${oscillator_period_ns} ${bp_clk_period_ns}        ${oscillator_uncertainty_ns} ${ds_uncertainty_ns} ${bp_clk_uncertainty_ns}
-  bsg_clk_gen_clock_create clk_gen_pd/clk_gen[1].clk_gen_inst/ ${io_master_clk_name} ${oscillator_period_ns} ${io_master_clk_period_ns} ${oscillator_uncertainty_ns} ${ds_uncertainty_ns} ${io_master_clk_uncertainty_ns}
-  bsg_clk_gen_clock_create clk_gen_pd/clk_gen[2].clk_gen_inst/ ${router_clk_name}    ${oscillator_period_ns} ${router_clk_period_ns}    ${oscillator_uncertainty_ns} ${ds_uncertainty_ns} ${router_clk_uncertainty_ns}
-
-  create_clock -period ${oscillator_period_ns} -name bp_clk_ext [get_ports p_clk_A_i]
-  set_clock_uncertainty $oscillator_uncertainty_ns [get_clocks bp_clk_ext]
-
-  create_clock -period ${oscillator_period_ns} -name io_master_clk_ext [get_ports p_clk_B_i]
-  set_clock_uncertainty $oscillator_uncertainty_ns [get_clocks io_master_clk_ext]
-
-  create_clock -period ${oscillator_period_ns} -name router_clk_ext [get_ports p_clk_C_i]
-  set_clock_uncertainty $oscillator_uncertainty_ns [get_clocks router_clk_ext]
-
-  # Comm Link CH0
-  #=================
-  set ch0_in_clk_port                          [get_pins -of_objects [get_cells -of_objects [get_ports p_ci_clk_i]] -filter "name==Y"]
-  set ch0_in_dv_port   [remove_from_collection [get_pins -of_objects [get_cells -of_objects [get_ports p_ci_*_i]] -filter "name==Y"] $ch0_in_clk_port]
-  set ch0_in_tkn_port                          [get_pins -of_objects [get_cells -of_objects [get_ports p_ci_tkn_o]] -filter "name==DATA"]
-  set ch0_out_clk_port                         [get_pins -of_objects [get_cells -of_objects [get_ports p_ci2_clk_o]] -filter "name==DATA"]
-  set ch0_out_dv_port  [remove_from_collection [get_pins -of_objects [get_cells -of_objects [get_ports p_ci2_*_o]] -filter "name==DATA"] $ch0_out_clk_port]
-  set ch0_out_tkn_port                         [get_pins -of_objects [get_cells -of_objects [get_ports p_ci2_tkn_i]] -filter "name==Y"]
-  
-  bsg_comm_link_timing_constraints \
-    ${io_master_clk_name}          \
-    "a"                            \
-    $ch0_in_clk_port               \
-    $ch0_in_dv_port                \
-    $ch0_in_tkn_port               \
-    $ch0_out_clk_port              \
-    $ch0_out_dv_port               \
-    $ch0_out_tkn_port              \
-    100                            \
-    100                            \
-    $io_clk_uncertainty_ns
-
-  # Comm Link CH1
-  #=================
-  set ch1_in_clk_port                          [get_pins -of_objects [get_cells -of_objects [get_ports p_co_clk_i]] -filter "name==Y"]
-  set ch1_in_dv_port   [remove_from_collection [get_pins -of_objects [get_cells -of_objects [get_ports p_co_*_i]] -filter "name==Y"] $ch1_in_clk_port]
-  set ch1_in_tkn_port                          [get_pins -of_objects [get_cells -of_objects [get_ports p_co_tkn_o]] -filter "name==DATA"]
-  set ch1_out_clk_port                         [get_pins -of_objects [get_cells -of_objects [get_ports p_co2_clk_o]] -filter "name==DATA"]
-  set ch1_out_dv_port  [remove_from_collection [get_pins -of_objects [get_cells -of_objects [get_ports p_co2_*_o]] -filter "name==DATA"] $ch1_out_clk_port]
-  set ch1_out_tkn_port                         [get_pins -of_objects [get_cells -of_objects [get_ports p_co2_tkn_i]] -filter "name==Y"]
-  
-  bsg_comm_link_timing_constraints \
-    ${io_master_clk_name}          \
-    "b"                            \
-    $ch1_in_clk_port               \
-    $ch1_in_dv_port                \
-    $ch1_in_tkn_port               \
-    $ch1_out_clk_port              \
-    $ch1_out_dv_port               \
-    $ch1_out_tkn_port              \
-    100                            \
-    100                           \
-    $io_clk_uncertainty_ns
-
-  # CDC Paths
-  #=================
-  update_timing
-  set clocks [all_clocks]
-  foreach_in_collection launch_clk $clocks {
-    if { [get_attribute $launch_clk is_generated] } {
-      set launch_group [get_generated_clocks -filter "master_clock_name==[get_attribute $launch_clk master_clock_name]"]
-      append_to_collection launch_group [get_attribute $launch_clk master_clock]
-    } else {
-      set launch_group [get_generated_clocks -filter "master_clock_name==[get_attribute $launch_clk name]"]
-      append_to_collection launch_group $launch_clk
-    }
-    foreach_in_collection latch_clk [remove_from_collection $clocks $launch_group] {
-      set launch_period [get_attribute $launch_clk period]
-      set latch_period [get_attribute $latch_clk period]
-      set max_delay_ns [expr min($launch_period,$latch_period)/2]
-      set_max_delay $max_delay_ns -from $launch_clk -to $latch_clk -ignore_clock_latency
-      set_min_delay 0             -from $launch_clk -to $latch_clk -ignore_clock_latency
-    }
-  }
-
-  # Ungrouping
-  #=================
-  set_ungroup [get_cells swizzle]
-
-  set cells_to_derate [list]
-  append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~gf14_*"]
-  #append_to_collection cells_to_derate [get_cells -quiet -hier -filter "ref_name=~IN12LP_*"]
-  if { [sizeof $cells_to_derate] > 0 } {
-    foreach_in_collection cell $cells_to_derate {
-      set_timing_derate -cell_delay -early 0.97 $cell
-      set_timing_derate -cell_delay -late  1.03 $cell
-      set_timing_derate -cell_check -early 0.97 $cell
-      set_timing_derate -cell_check -late  1.03 $cell
-    }
-  }
-  #report_timing_derate
-
-  set_dont_touch [get_nets pwrok_lo*]
-  set_dont_touch [get_nets iopwrok_lo*]
-  set_dont_touch [get_nets retc_lo*]
 
 ########################################
 ##

@@ -6,9 +6,8 @@
 
 export TOP_DIR                ?= $(shell git rev-parse --show-toplevel)
 export BSG_DESIGNS_DIR        ?= $(abspath $(TOP_DIR))/free45
-export BSG_DESIGNS_TARGET     ?= bsg_ac_black_parrot_quad_core_rc3
+export BSG_DESIGNS_TARGET     ?= bsg_ac_black_parrot_single_core_rc3
 export BSG_DESIGNS_TARGET_DIR ?= $(BSG_DESIGNS_DIR)/toplevels/$(BSG_DESIGNS_TARGET)
-export BSG_DESIGNS_TARGET_TCL_HARD_DIR ?= $(BSG_DESIGNS_TARGET_DIR)/tcl/hard/free_45
 
 BSG_WORK_DIR := $(abspath ./)
 BSG_OUT_DIR  := $(BSG_WORK_DIR)/out
@@ -32,13 +31,6 @@ export BLACK_PARROT_TOP_DIR    ?= $(BLACK_PARROT_DIR)/bp_top
 export BLACK_PARROT_FE_DIR     ?= $(BLACK_PARROT_DIR)/bp_fe
 export BLACK_PARROT_BE_DIR     ?= $(BLACK_PARROT_DIR)/bp_be
 export BLACK_PARROT_ME_DIR     ?= $(BLACK_PARROT_DIR)/bp_me
-
-
-# Additional setup for RTL-Hard
-export BSG_CHIP_DIR             ?= $(BSG_DESIGNS_TARGET_DIR)/bsg_45
-export MEMGEN_RUN_DIR           ?= $(BSG_CHIP_DIR)/sources/memgen
-export BSG_TOPLEVEL_DESIGN_TYPE ?= block
-export BSG_TARGET_PROCESS       ?= free45
 
 ########################################
 ## VCS OPTIONS
@@ -67,10 +59,6 @@ VCS_OPTIONS += +vcs+loopdetect +vcs+loopreport
 # DRAMSim2
 VCS_OPTIONS += -CFLAGS "-I$(BLACK_PARROT_DIR)/external/include -std=c++11"
 VCS_OPTIONS += -LDFLAGS "-L$(BLACK_PARROT_DIR)/external/lib -ldramsim -Wl,-rpath=$(BLACK_PARROT_DIR)/external/lib"
-
-# Additional options for RTL-Hard
-VCS_OPTIONS += +notimingcheck
-VCS_OPTIONS += +nospecify
 
 ########################################
 ## Chip and Testing Filelists and Liblists
@@ -110,7 +98,7 @@ $(BSG_DESIGNS_TESTING_LIBRARY): $(BSG_OUT_DIR)
 ########################################
 
 PROG     :=hello_world
-DRAM_CH  :=DDR2_micron_16M_8b_x8_sg3E.ini
+DRAM_CH  :=DDR3_micron_32M_8B_x8_sg25E.ini
 DRAM_SYS :=system.ini
 
 prog.mem:
@@ -129,7 +117,7 @@ cce_ucode.mem:
 	@cp $(BLACK_PARROT_ME_DIR)/src/asm/roms/mesi.mem $(BSG_OUT_DIR)/$@
 
 prog.nbf: prog.mem cce_ucode.mem
-	python $(BLACK_PARROT_COMMON_DIR)/software/py/nbf.py 4 $(BSG_OUT_DIR)/cce_ucode.mem --mem=$(BSG_OUT_DIR)/prog.mem > $(BSG_OUT_DIR)/$@
+	python $(BLACK_PARROT_COMMON_DIR)/software/py/nbf.py 1 $(BSG_OUT_DIR)/cce_ucode.mem --mem=$(BSG_OUT_DIR)/prog.mem > $(BSG_OUT_DIR)/$@
 
 bootrom:
 	cp $(BLACK_PARROT_COMMON_DIR)/test/mem/bootrom.riscv $(BSG_OUT_DIR)/bootrom.riscv
