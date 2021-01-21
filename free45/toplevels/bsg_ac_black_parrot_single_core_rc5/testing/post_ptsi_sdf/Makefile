@@ -4,6 +4,8 @@
 # overriden by the chip repo if this makefile is called from the chip
 # infrastructure.
 
+$(error "Flow unspported! Use at your own peril!")
+
 export BSG_DESIGNS_DIR        ?= $(abspath ../../../../)
 export BSG_DESIGNS_TARGET_DIR ?= $(abspath ../../)
 
