@@ -5,28 +5,31 @@ module bsg_chip
  import bp_me_pkg::*;
  import bp_cce_pkg::*;
  import bsg_chip_pkg::*;
- #(localparam bp_params_e bp_params_p = bp_cfg_gp
+ #(parameter bp_params_e bp_params_p = bp_cfg_gp
    `declare_bp_proc_params(bp_params_p)
+   , localparam uce_mem_data_width_lp = `BSG_MAX(icache_fill_width_p, dcache_fill_width_p)
    `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce)
+   `declare_bp_bedrock_mem_if_widths(paddr_width_p, uce_mem_data_width_lp, lce_id_width_p, lce_assoc_p, uce)
+   `declare_bp_bedrock_mem_if_widths(paddr_width_p, dword_width_p, lce_id_width_p, lce_assoc_p, xce)
    )
   (input                                               clk_i
    , input                                             reset_i
 
    // Outgoing I/O
-   , output [cce_mem_msg_width_lp-1:0]                 io_cmd_o
+   , output [uce_mem_msg_width_lp-1:0]                 io_cmd_o
    , output                                            io_cmd_v_o
    , input                                             io_cmd_ready_i
 
-   , input [cce_mem_msg_width_lp-1:0]                  io_resp_i
+   , input [uce_mem_msg_width_lp-1:0]                  io_resp_i
    , input                                             io_resp_v_i
    , output                                            io_resp_yumi_o
 
    // Incoming I/O
-   , input [cce_mem_msg_width_lp-1:0]                  io_cmd_i
+   , input [uce_mem_msg_width_lp-1:0]                  io_cmd_i
    , input                                             io_cmd_v_i
    , output                                            io_cmd_yumi_o
 
-   , output [cce_mem_msg_width_lp-1:0]                 io_resp_o
+   , output [uce_mem_msg_width_lp-1:0]                 io_resp_o
    , output                                            io_resp_v_o
    , input                                             io_resp_ready_i
 

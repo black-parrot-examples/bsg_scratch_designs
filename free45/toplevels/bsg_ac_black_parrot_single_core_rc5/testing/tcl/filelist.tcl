@@ -93,7 +93,6 @@ set TESTING_SOURCE_FILES [join "
   $bp_me_dir/test/common/bp_mem.sv
   $bp_me_dir/test/common/bp_mem_to_dram.sv
   $bp_top_dir/test/common/bp_nonsynth_host.sv
-  $bp_top_dir/test/common/bp_nonsynth_watchdog.sv
   $bp_top_dir/test/common/bp_monitor.cpp
   $bp_top_dir/test/common/bp_nonsynth_nbf_loader.sv
   $bp_common_dir/src/v/bsg_bus_pack.sv

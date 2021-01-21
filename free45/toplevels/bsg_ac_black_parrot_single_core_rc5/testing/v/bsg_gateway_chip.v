@@ -19,7 +19,11 @@ import bsg_wormhole_router_pkg::*;
 
 #(localparam bp_params_e bp_params_p = e_bp_unicore_cfg 
   `declare_bp_proc_params(bp_params_p)
-  `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce))
+
+  , localparam uce_mem_data_width_lp = `BSG_MAX(icache_fill_width_p, dcache_fill_width_p)
+  `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce)
+  `declare_bp_bedrock_mem_if_widths(paddr_width_p, uce_mem_data_width_lp, lce_id_width_p, lce_assoc_p, uce)
+  )
   ();
 
 
@@ -37,7 +41,7 @@ import bsg_wormhole_router_pkg::*;
   //
 
   logic blackparrot_reset;
-  bsg_nonsynth_reset_gen #(.num_clocks_p(1),.reset_cycles_lo_p(10),.reset_cycles_hi_p(5))
+  bsg_nonsynth_reset_gen #(.num_clocks_p(1),.reset_cycles_lo_p(10),.reset_cycles_hi_p(10))
     blackparrot_reset_gen
       (.clk_i(blackparrot_clk)
       ,.async_reset_o(blackparrot_reset)
@@ -82,49 +86,62 @@ import bsg_wormhole_router_pkg::*;
   // DUT
   //
   `declare_bp_bedrock_mem_if(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce);
-  bp_bedrock_cce_mem_msg_s proc_io_cmd_lo;
-  logic proc_io_cmd_v_lo, proc_io_cmd_ready_li;
-  bp_bedrock_cce_mem_msg_s proc_io_resp_li;
-  logic proc_io_resp_v_li, proc_io_resp_yumi_lo;
+  `declare_bp_bedrock_mem_if(paddr_width_p, uce_mem_data_width_lp, lce_id_width_p, lce_assoc_p, uce);
+
   bp_bedrock_cce_mem_msg_s proc_mem_cmd_lo;
   logic proc_mem_cmd_v_lo, proc_mem_cmd_ready_li;
   bp_bedrock_cce_mem_msg_s proc_mem_resp_li;
   logic proc_mem_resp_v_li, proc_mem_resp_yumi_lo;
-  bp_bedrock_cce_mem_msg_s nbf_cmd_lo;
-  logic nbf_cmd_v_lo, nbf_cmd_yumi_li;
-  bp_bedrock_cce_mem_msg_s nbf_resp_li;
-  logic nbf_resp_v_li, nbf_resp_ready_lo;
 
-  bp_bedrock_cce_mem_msg_header_s mem_cmd_header_lo;
+  bp_bedrock_cce_mem_msg_s proc_io_cmd_lo;
+  logic proc_io_cmd_v_lo, proc_io_cmd_ready_li;
+  bp_bedrock_cce_mem_msg_s proc_io_resp_li;
+  logic proc_io_resp_v_li, proc_io_resp_yumi_lo;
+
+  bp_bedrock_cce_mem_msg_s load_cmd_lo;
+  logic load_cmd_v_lo, load_cmd_yumi_li;
+  bp_bedrock_cce_mem_msg_s load_resp_li;
+  logic load_resp_v_li, load_resp_ready_lo;
+
+  bp_bedrock_uce_mem_msg_s io_cmd_lo, io_cmd_li;
+  bp_bedrock_uce_mem_msg_s io_resp_lo, io_resp_li;
+
+  bp_bedrock_uce_mem_msg_header_s mem_cmd_header_lo;
   logic mem_cmd_header_v_lo, mem_cmd_header_ready_li;
   logic [dword_width_p-1:0] mem_cmd_data_lo;
   logic mem_cmd_data_v_lo, mem_cmd_data_ready_li;
 
-  bp_bedrock_cce_mem_msg_header_s mem_resp_header_li;
+  bp_bedrock_uce_mem_msg_header_s mem_resp_header_li;
   logic mem_resp_header_v_li, mem_resp_header_yumi_lo;
   logic [dword_width_p-1:0] mem_resp_data_li;
   logic mem_resp_data_v_li, mem_resp_data_yumi_lo;
 
+  assign proc_io_cmd_lo = io_cmd_lo;
+  assign io_resp_li = proc_io_resp_li;
+  assign io_cmd_li = load_cmd_lo;
+  assign load_resp_li = io_resp_lo;
+
   bsg_chip
+    #(.bp_params_p(bp_params_p))
    DUT
     (.clk_i(blackparrot_clk)
      ,.reset_i(blackparrot_reset)
 
-     ,.io_cmd_o(proc_io_cmd_lo)
+     ,.io_cmd_o(io_cmd_lo)
      ,.io_cmd_v_o(proc_io_cmd_v_lo)
      ,.io_cmd_ready_i(proc_io_cmd_ready_li)
 
-     ,.io_resp_i(proc_io_resp_li)
+     ,.io_resp_i(io_resp_li)
      ,.io_resp_v_i(proc_io_resp_v_li)
      ,.io_resp_yumi_o(proc_io_resp_yumi_lo)
 
-     ,.io_cmd_i(nbf_cmd_lo)
-     ,.io_cmd_v_i(nbf_cmd_v_lo)
-     ,.io_cmd_yumi_o(nbf_cmd_yumi_li)
+     ,.io_cmd_i(io_cmd_li)
+     ,.io_cmd_v_i(load_cmd_v_lo)
+     ,.io_cmd_yumi_o(load_cmd_yumi_li)
 
-     ,.io_resp_o(nbf_resp_li)
-     ,.io_resp_v_o(nbf_resp_v_li)
-     ,.io_resp_ready_i(nbf_resp_ready_lo)
+     ,.io_resp_o(io_resp_lo)
+     ,.io_resp_v_o(load_resp_v_li)
+     ,.io_resp_ready_i(load_resp_ready_lo)
 
      ,.mem_cmd_header_o(mem_cmd_header_lo)
      ,.mem_cmd_header_v_o(mem_cmd_header_v_lo)
@@ -253,36 +270,18 @@ import bsg_wormhole_router_pkg::*;
   
      ,.lce_id_i(4'b10)
   
-     ,.io_cmd_o(nbf_cmd_lo)
-     ,.io_cmd_v_o(nbf_cmd_v_lo)
-     ,.io_cmd_yumi_i(nbf_cmd_yumi_li)
+     ,.io_cmd_o(load_cmd_lo)
+     ,.io_cmd_v_o(load_cmd_v_lo)
+     ,.io_cmd_yumi_i(load_cmd_yumi_li)
   
-     ,.io_resp_i(nbf_resp_li)
-     ,.io_resp_v_i(nbf_resp_v_li)
-     ,.io_resp_ready_o(nbf_resp_ready_lo)
+     ,.io_resp_i(load_resp_li)
+     ,.io_resp_v_i(load_resp_v_li)
+     ,.io_resp_ready_o(load_resp_ready_lo)
 
      ,.done_o()
     );
-
-  // Binding for rtl netlists
-  // bind bp_be_top
-  //   bp_nonsynth_watchdog
-  //   #(.bp_params_p(bp_params_p)
-  //    ,.timeout_cycles_p(100000)
-  //    ,.heartbeat_instr_p(100000)
-  //    )
-  //    watchdog
-  //    (.clk_i(be.clk_i)
-  //    ,.reset_i(be.reset_i)
-
-  //    ,.freeze_i(calculator.pipe_sys.csr.cfg_bus_cast_i.freeze)
-  //    ,.mhartid_i(calculator.pipe_sys.csr.cfg_bus_cast_i.core_id)
-
-  //    ,.npc_i(director.npc_r)
-  //    ,.instret_i(calculator.commit_pkt.instret)
-  //    );
-
-  localparam num_cycles_lp = 5000;
+  
+  localparam num_cycles_lp = 500000;
   logic [`BSG_SAFE_CLOG2(num_cycles_lp)-1:0] watchdog_cnt;
   bsg_counter_clear_up
    #(.max_val_p(num_cycles_lp), .init_val_p(0))
@@ -301,23 +300,5 @@ import bsg_wormhole_router_pkg::*;
       $finish;
     end
    end
-
-  // Binding for post-synth netlists
-  // bind bsg_chip_bp_be_top_02_0
-  //  bp_nonsynth_watchdog
-  //  #(.bp_params_p(bp_params_e'(2))
-  //   ,.timeout_cycles_p(100000)
-  //   ,.heartbeat_instr_p(100000)
-  //   )
-  //   watchdog
-  //   (.clk_i(clk_i)
-  //   ,.reset_i(reset_i)
-
-  //   ,.freeze_i(calculator.pipe_sys.csr.cfg_bus_i[25])
-  //   ,.mhartid_i(calculator.pipe_sys.csr.cfg_bus_i[24])
-
-  //   ,.npc_i(director.npc_r)
-  //   ,.instret_i(calculator.commit_pkt_o[121])
-  //   );
 
 endmodule
