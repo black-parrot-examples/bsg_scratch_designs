@@ -5,7 +5,7 @@ package bsg_chip_pkg;
 
   `include "bsg_defines.v"
 
-  import bp_common_aviary_pkg::*;
+  import bp_common_pkg::*;
 
   //////////////////////////////////////////////////
   //

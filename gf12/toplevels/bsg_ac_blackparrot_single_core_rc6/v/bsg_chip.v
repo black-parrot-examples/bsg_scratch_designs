@@ -1,13 +1,14 @@
 
+`include "bp_common_defines.svh"
+`include "bp_me_defines.svh"
+
 module bsg_chip
  import bp_common_pkg::*;
- import bp_common_aviary_pkg::*;
  import bp_me_pkg::*;
- import bp_cce_pkg::*;
  import bsg_chip_pkg::*;
  #(localparam bp_params_e bp_params_p = bp_cfg_gp
    `declare_bp_proc_params(bp_params_p)
-   `declare_bp_bedrock_mem_if_widths(paddr_width_p, cce_block_width_p, lce_id_width_p, lce_assoc_p, cce)
+   `declare_bp_bedrock_mem_if_widths(paddr_width_p, dword_width_gp, lce_id_width_p, lce_assoc_p, cce)
    )
   (input                                               clk_i
    , input                                             reset_i
@@ -34,7 +35,7 @@ module bsg_chip
    , output logic                                      mem_cmd_header_v_o
    , input                                             mem_cmd_header_ready_i
 
-   , output logic [dword_width_p-1:0]                  mem_cmd_data_o
+   , output logic [dword_width_gp-1:0]                 mem_cmd_data_o
    , output logic                                      mem_cmd_data_v_o
    , input                                             mem_cmd_data_ready_i
 
@@ -42,7 +43,7 @@ module bsg_chip
    , input                                             mem_resp_header_v_i
    , output logic                                      mem_resp_header_yumi_o
 
-   , input [dword_width_p-1:0]                         mem_resp_data_i
+   , input [dword_width_gp-1:0]                        mem_resp_data_i
    , input                                             mem_resp_data_v_i
    , output logic                                      mem_resp_data_yumi_o
    );

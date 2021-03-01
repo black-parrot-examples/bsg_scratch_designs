@@ -38,8 +38,7 @@ set_clock_uncertainty ${bp_clk_uncertainty_ps} [get_clocks ${bp_clk_name}]
 
 ########################################
 ## In2Reg
-set bp_input_pins [filter_collection [filter_collection [all_inputs] "name=~*links*" ] "name!~*clk*"]
-add_to_collection $bp_input_pins [get_ports reset_i]
+set bp_input_pins [filter_collection [all_inputs] "name!~*clk*"]
 set_input_delay -min ${bp_input_delay_min_ps} -clock ${bp_clk_name} ${bp_input_pins}
 set_input_delay -max ${bp_input_delay_max_ps} -clock ${bp_clk_name} ${bp_input_pins}
 set_driving_cell -min -no_design_rule -lib_cell $LIB_CELLS(invx2) [all_inputs]
@@ -47,8 +46,9 @@ set_driving_cell -max -no_design_rule -lib_cell $LIB_CELLS(invx8) [all_inputs]
 
 ########################################
 ## Reg2Out
-set_output_delay -min ${bp_output_delay_min_ps} -clock ${bp_clk_name} ${bp_input_pins}
-set_output_delay -max ${bp_output_delay_max_ps} -clock ${bp_clk_name} ${bp_input_pins}
+set bp_output_pins [all_outputs]
+set_output_delay -min ${bp_output_delay_min_ps} -clock ${bp_clk_name} ${bp_output_pins}
+set_output_delay -max ${bp_output_delay_max_ps} -clock ${bp_clk_name} ${bp_output_pins}
 set_load -min [load_of [get_lib_pin */$LIB_CELLS(invx2,load_pin)]] [all_outputs]
 set_load -max [load_of [get_lib_pin */$LIB_CELLS(invx8,load_pin)]] [all_outputs]
 
