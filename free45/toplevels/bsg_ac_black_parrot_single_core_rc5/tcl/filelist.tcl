@@ -6,7 +6,7 @@
 set basejump_stl_dir       $::env(BASEJUMP_STL_DIR)
 set bsg_designs_target_dir $::env(BSG_DESIGNS_TARGET_DIR)
 set blackparrot_dir        $::env(BLACKPARROT_DIR)
-set hardfloat_dir          $::env(BLACKPARROT_DIR)/external/HardFloat
+set hardfloat_dir          $bsg_designs_target_dir/HardFloat
 
 set bsg_packaging_dir $::env(BSG_PACKAGING_DIR)
 set bsg_package       $::env(BSG_PACKAGE)
@@ -91,6 +91,7 @@ set SVERILOG_SOURCE_FILES [join "
   $basejump_stl_dir/bsg_misc/bsg_idiv_iterative.v
   $basejump_stl_dir/bsg_misc/bsg_idiv_iterative_controller.v
   $basejump_stl_dir/bsg_misc/bsg_lfsr.v
+  $basejump_stl_dir/bsg_misc/bsg_lru_pseudo_tree_backup.v
   $basejump_stl_dir/bsg_misc/bsg_lru_pseudo_tree_decode.v
   $basejump_stl_dir/bsg_misc/bsg_lru_pseudo_tree_encode.v
   $basejump_stl_dir/bsg_misc/bsg_mux.v

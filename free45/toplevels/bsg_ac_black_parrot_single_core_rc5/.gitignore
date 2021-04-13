@@ -8,3 +8,4 @@ bsg_packaging/
 out/
 vc_hdrs.h
 .swp
+HardFloat/
