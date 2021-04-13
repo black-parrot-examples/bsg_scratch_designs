@@ -26,7 +26,7 @@ bsg_fakeram_url      :=$(GITHUB)bespoke-silicon-group/bsg_fakeram
 bsg_fakeram_commit   :=master
 
 bsg_cadenv_dir       :=$(THIS_DIR)/bsg_cadenv
-bsg_cadenv_url       :=$(BITBUCKET)taylor-bsg/bsg_cadenv
+bsg_cadenv_url       :=$(GITHUB)bespoke-silicon-group/bsg_cadenv
 bsg_cadenv_commit    :=master
 
 board_dir            :=$(THIS_DIR)/board
@@ -34,7 +34,7 @@ board_url            :=$(BITBUCKET)taylor-bsg/board
 board_commit         :=master
 
 bsg_packaging_dir    :=$(THIS_DIR)/bsg_packaging
-bsg_packaging_url    :=$(BITBUCKET)taylor-bsg/bsg_packaging
+bsg_packaging_url    :=$(GITHUB)bespoke-silicon-group/bsg_packaging
 bsg_packaging_commit :=master
 
 black_parrot_dir     :=$(THIS_DIR)/black-parrot
