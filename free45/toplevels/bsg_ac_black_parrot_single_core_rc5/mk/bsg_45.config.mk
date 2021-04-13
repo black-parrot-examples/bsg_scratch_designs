@@ -60,4 +60,4 @@ export BSG_POWER_INTENT :=sv_standard
 export PDK_ENABLE_KIT_STDCELL :=true
 export PDK_ENABLE_KIT_MEMGEN  :=true
 
-export MEMGEN_JSON_FILE :=$(BSG_DESIGNS_TARGET_DIR)/json/memgen.json
+export MEMGEN_JSON_FILE :=$(BSG_DESIGNS_TARGET_DIR)/scripts/harden/bsg_45.memgen.json
