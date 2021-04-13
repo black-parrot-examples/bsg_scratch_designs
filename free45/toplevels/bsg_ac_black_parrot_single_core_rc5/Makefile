@@ -15,7 +15,7 @@ endif
 
 basejump_stl_dir     :=$(THIS_DIR)/basejump_stl
 basejump_stl_url     :=$(GITHUB)bespoke-silicon-group/basejump_stl
-basejump_stl_commit  :=tapeout_bp_rc5
+basejump_stl_commit  :=master
 
 bsg_45_dir           :=$(THIS_DIR)/bsg_45
 bsg_45_url           :=$(GITHUB)stdavids/bsg_45
@@ -28,14 +28,6 @@ bsg_fakeram_commit   :=master
 bsg_cadenv_dir       :=$(THIS_DIR)/bsg_cadenv
 bsg_cadenv_url       :=$(GITHUB)bespoke-silicon-group/bsg_cadenv
 bsg_cadenv_commit    :=master
-
-board_dir            :=$(THIS_DIR)/board
-board_url            :=$(BITBUCKET)taylor-bsg/board
-board_commit         :=master
-
-bsg_packaging_dir    :=$(THIS_DIR)/bsg_packaging
-bsg_packaging_url    :=$(GITHUB)bespoke-silicon-group/bsg_packaging
-bsg_packaging_commit :=master
 
 black_parrot_dir     :=$(THIS_DIR)/black-parrot
 black_parrot_url     :=$(GITHUB)black-parrot/black-parrot
@@ -52,6 +44,7 @@ all: $(all_repos)
 
 clean: are_you_sure
 	rm -rf $(subst .repo,,$(all_repos))
+	rm -rf black-parrot
 
 DISABLE_SAFETY_PROMPT ?= false
 are_you_sure:
