@@ -11,12 +11,12 @@ set bp_me_dir     ${blackparrot_dir}/bp_me
 
 # list of files to replace
 set HARD_SWAP_FILELIST [join "
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync.v
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_1r1w_sync.v
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_2r1w_sync.v
-  $basejump_stl_dir/hard/free_45/bsg_mem/bsg_mem_3r1w_sync.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_1rw_sync.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_1r1w_sync.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_2r1w_sync.v
+  $bsg_designs_target_dir/v/hard/free_45/bsg_mem/bsg_mem_3r1w_sync.v
 "]
 
 set NETLIST_SOURCE_FILES [join "
