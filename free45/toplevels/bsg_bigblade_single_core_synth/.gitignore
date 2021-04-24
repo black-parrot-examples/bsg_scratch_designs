@@ -1,0 +1,12 @@
+bsg_manycore/
+black-parrot/
+bsg_45/
+bsg_fakeram/
+basejump_stl/
+board/
+bsg_cadenv/
+bsg_packaging/
+out/
+vc_hdrs.h
+.swp
+HardFloat/
