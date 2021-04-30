@@ -1,8 +1,8 @@
 puts "BSG-info: Running script [info script]\n"
 set HB_LINK_WIDTH_P       154
 set HB_RUCHE_LINK_WIDTH_P 140
-#set_app_var sh_continue_on_error false
-#error
+set_app_var sh_continue_on_error false
+error
 # core clk
 set clk_name            "manycore_clk"
 set clk_period_ns       3.75
@@ -153,16 +153,16 @@ set_ungroup [get_designs -filter "hdl_template==bsg_transpose"] true
 set_ungroup [get_designs -filter "hdl_template==bsg_concentrate_static"] true
 set_ungroup [get_designs -filter "hdl_template==bsg_array_concentrate_static"] true
 set_ungroup [get_designs -filter "hdl_template==bsg_unconcentrate_static"] true
-set_ungroup [get_designs fpu_float_fma] false
-set_ungroup [get_designs fpu_float_fma_round] false
-ungroup [get_cells proc/*] -flatten
-ungroup [get_cells proc/h.z/vcore/fpu_int0/*] -flatten
-ungroup [get_cells proc/h.z/vcore/fpu_float0/fma1/*] -flatten
-ungroup [get_cells proc/h.z/vcore/fpu_float0/fma2/*] -flatten
-ungroup [get_cells proc/h.z/vcore/fpu_float0/aux0/*] -flatten
-ungroup [get_cells proc/h.z/vcore/fpu_fdiv_fsqrt0/*] -flatten
-ungroup [get_cells proc/h.z/vcore/idiv0/*] -flatten
+set_ungroup [get_designs -hier fma1] false
+set_ungroup [get_designs -hier fma2] false
+ungroup [get_cells u_tile/proc/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/fpu_int0/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/fpu_float0/fma1/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/fpu_float0/fma2/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/fpu_float0/aux0/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/fpu_fdiv_fsqrt0/*] -flatten
+ungroup [get_cells u_tile/proc/h.z/vcore/idiv0/*] -flatten
 # Retiming
-set_optimize_registers true -designs [get_designs fpu_float_fma] -check_design -verbose
-set_optimize_registers true -designs [get_designs fpu_float_fma_round] -check_design -verbose
+set_optimize_registers true -designs [get_designs -hier fma1] -check_design -verbose
+set_optimize_registers true -designs [get_designs -hier fma2] -check_design -verbose
 puts "BSG-info: Completed script [info script]\n"

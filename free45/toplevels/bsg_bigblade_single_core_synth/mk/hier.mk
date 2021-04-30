@@ -13,7 +13,7 @@
 # mid-level blocks first in the MID_HIER_BLOCKS list.
 #===============================================================================
 
-export TOP_HIER_BLOCK  := bsg_manycore_tile_compute_ruche_wrapper
+export TOP_HIER_BLOCK  := bsg_tile
 export MID_HIER_BLOCKS :=
 export BOT_HIER_BLOCKS :=
 

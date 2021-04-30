@@ -18,7 +18,8 @@ set SVERILOG_PACKAGE_FILES [join "
 
 set SVERILOG_SOURCE_FILES [join "
   $SVERILOG_PACKAGE_FILES
-  $bsg_designs_target_dir/v/bsg_manycore_tile_compute_ruche_wrapper.v
+  $bsg_designs_target_dir/v/bsg_tile_pkg.v
+  $bsg_designs_target_dir/v/bsg_tile.v
   $basejump_stl_dir/bsg_misc/bsg_counter_clear_up.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down_variable.v
   $basejump_stl_dir/bsg_misc/bsg_counter_up_down.v

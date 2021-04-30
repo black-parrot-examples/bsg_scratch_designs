@@ -1,24 +1,13 @@
 /**
- *  bsg_manycore_tile_compute_ruche_wrapper.v
+ *  bsg_tile.v
  *
  */
 
-module bsg_manycore_tile_compute_ruche_wrapper
+module bsg_tile
   import bsg_noc_pkg::*; // { P=0, W,E,N,S }
   import bsg_manycore_pkg::*;
-  #(parameter dmem_size_p = 1024
-    , parameter vcache_size_p =2048
-    , parameter icache_entries_p = 1024
-    , parameter icache_tag_width_p = 12
-    , parameter x_cord_width_p = 7
-    , parameter y_cord_width_p = 7
-    , parameter pod_x_cord_width_p = 3
-    , parameter pod_y_cord_width_p = 4
-
-    // Number of tiles in a pod
-    , parameter num_tiles_x_p=16
-    , parameter num_tiles_y_p=8
-    , parameter x_subcord_width_lp = `BSG_SAFE_CLOG2(num_tiles_x_p)
+  import bsg_tile_pkg::*;
+  #(parameter x_subcord_width_lp = `BSG_SAFE_CLOG2(num_tiles_x_p)
     , parameter y_subcord_width_lp = `BSG_SAFE_CLOG2(num_tiles_y_p)
 
     , parameter ruche_factor_X_p = 3
@@ -79,7 +68,7 @@ module bsg_manycore_tile_compute_ruche_wrapper
     .vcache_block_size_in_words_p(8),
     .vcache_sets_p(64),
     .num_vcache_rows_p(1)
-  ) u_bsg_manycore_tile_compute_ruche (
+  ) u_tile (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
     ,.reset_o(reset_o)
