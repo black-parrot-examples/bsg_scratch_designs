@@ -17,13 +17,13 @@ set_app_var case_analysis_propagate_through_icg true
 ########################################
 ## Clock Setup
 set bp_clk_name "bp_clk" ;# main clock running black parrot
-set bp_clk_period_ps       1000
+set bp_clk_period_ps       800
 set bp_clk_uncertainty_per 3.0
 set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 20)]
 
 set bp_input_delay_min_per 2.0
 set bp_input_delay_min_ps  [expr ${bp_clk_period_ps}*(${bp_input_delay_min_per}/100.0)]
-set bp_input_delay_max_per 70.0
+set bp_input_delay_max_per 60.0
 set bp_input_delay_max_ps  [expr ${bp_clk_period_ps}*(${bp_input_delay_max_per}/100.0)]
 
 set bp_output_delay_min_per 2.0
@@ -56,6 +56,9 @@ set_load -max [load_of [get_lib_pin */$LIB_CELLS(invx8,load_pin)]] [all_outputs]
 ## Disabled or false paths
 bsg_chip_disable_1r1w_paths {"*regfile*rf*"}
 bsg_chip_disable_1r1w_paths {"*btb*tag_mem*"}
+
+## This is a hack, should be multicycle or latched
+set_false_path -from [get_ports "reset_i"]
 
 ########################################
 ## CDC Paths
