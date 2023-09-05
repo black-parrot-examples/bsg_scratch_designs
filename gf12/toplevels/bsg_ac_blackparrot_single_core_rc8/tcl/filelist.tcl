@@ -161,7 +161,6 @@ set SVERILOG_SOURCE_FILES [join "
   $hardfloat_dir/source/recFNToFN.v
   $hardfloat_dir/source/recFNToIN.v
   $hardfloat_dir/source/recFNToRecFN.v
-  $hardfloat_dir/source/roundRecFNtoRecFN.v
   $hardfloat_dir/source/RISCV/HardFloat_specialize.v
   $bp_common_dir/src/v/bp_mmu.sv
   $bp_common_dir/src/v/bp_pma.sv

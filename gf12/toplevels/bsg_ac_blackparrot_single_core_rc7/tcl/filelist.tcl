@@ -201,7 +201,6 @@ set SVERILOG_SOURCE_FILES [join "
   $bp_me_dir/src/v/dev/bp_me_cce_to_cache.sv
   $bp_me_dir/src/v/dev/bp_me_bedrock_register.sv
   $bp_me_dir/src/v/network/bp_me_xbar_stream.sv
-  $bp_me_dir/src/v/network/bp_me_xbar_stream_buffered.sv
   $bp_me_dir/src/v/cce/bp_uce.sv
   $bp_me_dir/src/v/lce/bp_lce.sv
   $bp_me_dir/src/v/lce/bp_lce_req.sv

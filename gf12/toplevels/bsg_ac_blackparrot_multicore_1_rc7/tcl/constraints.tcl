@@ -109,7 +109,7 @@ set_ungroup [get_designs -filter "hdl_template==recFNToRecFN"                   
 set_ungroup [get_designs -filter "hdl_template==reverse"                         ] true
 set_ungroup [get_designs -filter "hdl_template==lowMaskHiLo"                     ] true
 set_ungroup [get_designs -filter "hdl_template==lowMaskLoHi"                     ] true
-set_ungroup [get_designs -filter "hdl_template==countLeadingZeros"               ] true
+set_ungroup [get_designs -filter "hdl_template==bsg_counting_leading_zeros"      ] true
 set_ungroup [get_designs -filter "hdl_template==compressBy2"                     ] true
 set_ungroup [get_designs -filter "hdl_template==compressBy4"                     ] true
 

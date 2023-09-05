@@ -18,8 +18,12 @@ set_app_var case_analysis_propagate_through_icg true
 ########################################
 ## Clock Setup
 set bp_clk_name "bp_clk" ;# main clock running black parrot
+#set bp_clk_period_ps       2000
 set bp_clk_period_ps       1000
+#set bp_clk_period_ps       900
 #set bp_clk_period_ps       800
+#set bp_clk_period_ps       750
+#set bp_clk_period_ps       700
 set bp_clk_uncertainty_per 3.0
 set bp_clk_uncertainty_ps  [expr min([expr ${bp_clk_period_ps}*(${bp_clk_uncertainty_per}/100.0)], 20)]
 
@@ -82,7 +86,9 @@ bsg_chip_disable_1r1w_paths {"*btb*tag_mem*"}
 bsg_chip_disable_1r1w_paths {"*bht*mem*"}
 
 ## This is a hack, should be multicycle or latched
-set_false_path -from [get_ports "reset_i"]
+#set_false_path -from [get_ports "my_did_i"]
+##set_false_path -from [get_ports "host_did_i"]
+#set_false_path -from [get_ports "my_cord_i"]
 
 ########################################
 ## CDC Paths
@@ -119,7 +125,7 @@ set_ungroup [get_designs -filter "hdl_template==bp_tlb"                         
 #set_ungroup [get_designs -filter "hdl_template==bsg_bus_pack"                    ] true
 
 set_ungroup [get_designs -filter "hdl_template==compareRecFN"                    ] true 
-set_ungroup [get_designs -filter "hdl_template==divSqrtRecFNToRaw_small"         ] true
+set_ungroup [get_designs -filter "hdl_template==divSqrtRecFNToRaw_medium"        ] true
 set_ungroup [get_designs -filter "hdl_template==fNToRecFN"                       ] true
 set_ungroup [get_designs -filter "hdl_template==recFNToRawFN"                    ] true
 set_ungroup [get_designs -filter "hdl_template==roundAnyRawFNToRecFN"            ] true
@@ -142,6 +148,8 @@ set_ungroup [get_designs -filter "hdl_template==compressBy4"                    
 ## Retiming
 set_optimize_registers true -designs [get_designs bp_be_pipe_aux* ] -check_design -verbose
 set_optimize_registers true -designs [get_designs bp_be_pipe_fma* ] -check_design -verbose
+set_optimize_registers true -designs [get_designs bp_be_dcache*   ] -check_design -verbose
+set_optimize_registers true -designs [get_designs bp_fe_icache*   ] -check_design -verbose
 set_optimize_registers true -designs [get_designs bp_be_pipe_long*] -check_design -verbose
 update_timing
 
